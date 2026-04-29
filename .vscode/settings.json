@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "barberia_catracha",
+            "database": "barberia_catracha",
+            "username": "postgres"
+        }
+    ]
+}
