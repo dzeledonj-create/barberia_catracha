@@ -1,4 +1,4 @@
-/* Variables de color para fácil edición */
+
 :root {
     --dark-bg: #0a0a0a;
     --gold: #d99c2b;
@@ -17,10 +17,15 @@ body {
     background-color: #1a1a1a; /* Fondo temporal para ver el header */
 }
 
+/* Estilos del Header */
+
+
 .main-header {
     background-color: var(--dark-bg);
-    padding: 20px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #222;
+    height: 80px;
+    overflow: hidden;
 }
 
 .container {
@@ -30,6 +35,8 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+    align-items: center;
+    height: 100%;
 }
 
 /* Logo Estilo */
@@ -42,7 +49,19 @@ body {
     gap: 10px;
 }
 
-.logo .icon { color: var(--gold); font-size: 1.8rem; }
+.icon {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.icon img {
+    height: 100%;       
+    max-height: 120px;   
+    width: auto;        
+    display: block;
+}
+
 .logo .text-white { color: var(--white); }
 .logo .text-gold { color: var(--gold); }
 
@@ -85,4 +104,75 @@ body {
 /* Responsivo básico */
 @media (max-width: 768px) {
     .nav-menu { display: none; } /* Ocultar menú en móviles por simplicidad */
+}
+
+/* Estilos para el Contenido */
+
+.container-contenido {
+    position: relative;
+    height: 90vh; 
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                url('img/barberia.png'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    padding: 0 20px;
+}
+
+.direccion{
+    color: var(--gold);
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.contenido-titulo{
+    font-size: clamp(2.5rem, 8vw, 5rem); /* Tamaño fluido que se adapta al móvil */
+    line-height: 1.1;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.contenido-description{
+    max-width: 700px;
+    margin: 0 auto 40px;
+    font-size: 1.1rem;
+    color: var(--gray-text);
+    line-height: 1.6;
+}
+
+.buttons{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-reservas{
+    background-color: var(--gold);
+    color: #000;
+    padding: 15px 35px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-servicios{
+    border: 2px solid var(--white);
+    color: var(--white);
+    padding: 15px 35px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-servicios:hover{
+    background-color: var(--white);
+    color: #000;
 }

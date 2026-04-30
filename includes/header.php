@@ -1,6 +1,6 @@
 <header class="main-header">
     <div class="container">
-        <section class="imagen-logo">
+        <section class="icon">
             <img src="assets/img/logo.png" alt="logo barberia">
         </section>
         <section class="logo">
