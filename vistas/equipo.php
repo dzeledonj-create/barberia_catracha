@@ -1,3 +1,8 @@
+<?php
+require_once 'clases/BD.php';
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,8 +13,7 @@
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<?php include_once 'includes/header.php'; 
-require_once 'BD.php'; ?>
+<?php include_once 'includes/header.php';  ?>
 
 <main class="">
 
