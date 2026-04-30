@@ -187,9 +187,112 @@ body {
     color: #000;
 }
 
+/* PARTE DE EXPLORAR SERVICIOS */
+
+.explore {
+    background-color: #0a0a0a;
+    padding: 80px 0 0 0; /* Padding inferior 0 porque la barra dorada cierra la sección */
+    text-align: center;
+}
+
+.container-small {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-subtitle {
+    color: var(--gold);
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    color: var(--white);
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.title-underline {
+    width: 50px;
+    height: 3px;
+    background-color: var(--gold);
+    margin: 20px auto 50px;
+}
+
+/* El Grid de tarjetas */
+.explore-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Crea columnas automáticas */
+    gap: 20px;
+    margin-bottom: 60px;
+}
+
+.explore-card {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.explore-card:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--gold);
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    font-size: 24px;
+    color: var(--gold);
+    margin-right: 20px;
+    width: 40px;
+}
+
+.card-info h3 {
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.card-info p {
+    color: var(--gray-text);
+    font-size: 0.85rem;
+}
+
+.card-arrow {
+    margin-left: auto;
+    color: var(--gray-text);
+    font-size: 1.5rem;
+}
+
+/* Barra inferior dorada */
+.bottom-cta-bar {
+    background-color: var(--gold);
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.bottom-cta-bar a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    display: block;
+}
 
 
 /* Estilos para el Footer */
+
+
+
 .footer {
     background-color: #0a0a0a;
     color: #b3b3b3;
@@ -209,6 +312,12 @@ body {
 .footer-col {
     flex: 1;
     min-width: 200px;
+}
+
+.footer-letras{
+    margin-left: 10px;
+    flex: 1;
+    min-width: 100px;
 }
 
 .footer h3 {

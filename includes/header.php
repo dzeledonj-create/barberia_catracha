@@ -10,6 +10,7 @@
 
         <nav class="nav-menu">
             <ul>
+                <li><a href="../index.php">INICIO</a></li>
                 <li><a href="vistas/servicios.php">SERVICIOS</a></li>
                 <li><a href="vistas/equipo.php">EQUIPO</a></li>
                 <li><a href="vistas/galeria.php">GALERÍA</a></li>
