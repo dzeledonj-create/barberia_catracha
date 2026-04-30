@@ -307,7 +307,45 @@ body {
     line-height: 1.6;
 }
 
-/* Grid de Imágenes */
+/* --- NAVEGACIÓN DE CATEGORÍAS --- */
+.categorias-nav {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #222;
+    padding-bottom: 20px;
+}
+
+.categorias-lista {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.categorias-lista li a {
+    text-decoration: none;
+    color: var(--gray-text);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+}
+
+.categorias-lista li a:hover {
+    color: var(--gold);
+}
+
+.categorias-lista li a.active {
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+}
+
+/* --- GRID DE IMÁGENES --- */
 .galeria-grid-container {
     padding: 40px 20px 80px;
     background-color: var(--dark-bg);
@@ -381,7 +419,19 @@ body {
     line-height: 1.4;
 }
 
-/* Call to Action Final */
+/* --- MENSAJES DE ERROR / VACÍO --- */
+.no-data-msg {
+    grid-column: 1 / -1;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.no-data {
+    color: var(--gray-text);
+    font-style: italic;
+    text-align: center;
+}
+
 .galeria-cta {
     padding: 80px 20px;
     background-color: #0d0d0d;
@@ -399,61 +449,4 @@ body {
     color: var(--white);
     margin-bottom: 30px;
     font-size: 2rem;
-}
-
-.no-data {
-    color: var(--gray-text);
-    text-align: center;
-    grid-column: 1 / -1;
-}
-
-/* --- NAVEGACIÓN DE CATEGORÍAS --- */
-
-.categorias-nav {
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid #222;
-    padding-bottom: 20px;
-}
-
-.categorias-lista {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-}
-
-.categorias-lista li a {
-    text-decoration: none;
-    color: var(--gray-text);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    padding: 10px 20px;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-    text-transform: uppercase;
-}
-
-.categorias-lista li a:hover {
-    color: var(--gold);
-}
-
-/* Estado activo para saber en qué categoría estamos */
-.categorias-lista li a.active {
-    color: var(--gold);
-    border-bottom: 2px solid var(--gold);
-}
-
-.no-data-msg {
-    grid-column: 1 / -1;
-    padding: 60px 0;
-    text-align: center;
-}
-
-.no-data {
-    color: var(--gray-text);
-    font-style: italic;
 }

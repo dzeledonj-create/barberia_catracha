@@ -1,14 +1,16 @@
 <?php
 require_once '../clases/MuralSugerencia.php';
 
-// Capturamos la categoría de la URL. Si no hay ninguna, por defecto es 'todos'.
+// 1. Obtener las categorías reales desde la base de datos
+$categorias_db = MuralSugerencia::obtenerCategoriasRecientes();
+
+// 2. Capturar la categoría seleccionada
 $categoria_actual = isset($_GET['categoria']) ? $_GET['categoria'] : 'todos';
 
-// Lógica para filtrar los resultados de la base de datos
+// 3. Filtrar los cortes
 if ($categoria_actual === 'todos') {
     $sugerencias = MuralSugerencia::obtenerActivas();
 } else {
-    // Usamos el método que ya tienes en la clase para buscar por nombre de estilo
     $sugerencias = MuralSugerencia::obtenerPorEstilo($categoria_actual);
 }
 ?>
@@ -18,7 +20,7 @@ if ($categoria_actual === 'todos') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galería de Estilos - Barbería Catracha</title>
+    <title>Galería Dinámica - Barbería Catracha</title>
     <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -39,13 +41,21 @@ if ($categoria_actual === 'todos') {
 
         <nav class="categorias-nav">
             <ul class="categorias-lista">
-                <li><a href="galeria.php?categoria=todos" class="<?php echo $categoria_actual === 'todos' ? 'active' : ''; ?>">TODOS</a></li>
-                <li><a href="galeria.php?categoria=fades" class="<?php echo $categoria_actual === 'fades' ? 'active' : ''; ?>">FADES</a></li>
-                <li><a href="galeria.php?categoria=clasicos" class="<?php echo $categoria_actual === 'clasicos' ? 'active' : ''; ?>">CLÁSICOS</a></li>
-                <li><a href="galeria.php?categoria=diseños" class="<?php echo $categoria_actual === 'diseños' ? 'active' : ''; ?>">DISEÑOS</a></li>
-                <li><a href="galeria.php?categoria=modernos" class="<?php echo $categoria_actual === 'modernos' ? 'active' : ''; ?>">MODERNOS</a></li>
-                <li><a href="galeria.php?categoria=cortos" class="<?php echo $categoria_actual === 'cortos' ? 'active' : ''; ?>">CORTOS</a></li>
-                <li><a href="galeria.php?categoria=tendencia" class="<?php echo $categoria_actual === 'tendencia' ? 'active' : ''; ?>">TENDENCIA</a></li>
+                <li>
+                    <a href="galeria.php?categoria=todos" 
+                       class="<?php echo $categoria_actual === 'todos' ? 'active' : ''; ?>">
+                       TODOS
+                    </a>
+                </li>
+
+                <?php foreach ($categorias_db as $cat): ?>
+                    <li>
+                        <a href="galeria.php?categoria=<?php echo urlencode(strtolower($cat)); ?>" 
+                           class="<?php echo strtolower($categoria_actual) === strtolower($cat) ? 'active' : ''; ?>">
+                            <?php echo strtoupper(htmlspecialchars($cat)); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </nav>
     </section>
@@ -54,7 +64,7 @@ if ($categoria_actual === 'todos') {
         <section class="galeria-grid">
             <?php if (empty($sugerencias)): ?>
                 <section class="no-data-msg">
-                    <p class="no-data">No se han encontrado estilos en la categoría "<?php echo htmlspecialchars($categoria_actual); ?>".</p>
+                    <p class="no-data">No hay cortes disponibles en esta categoría.</p>
                 </section>
             <?php else: ?>
                 <?php foreach ($sugerencias as $corte): ?>
