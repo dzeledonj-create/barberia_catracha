@@ -18,13 +18,72 @@
                     Expertos en cortes modernos, degradados y arreglo de barba. 
                     La experiencia premium que mereces en el corazón de Zaragoza.
                 </p>
-                <div class="buttons">
-                    <a href="#" class="btn-reservas">RESERVA TU CITA AHORA</a>
-                    <a href="#" class="btn-servicios">VER SERVICIOS</a>
-                </div>
+                <section class="buttons">
+                    <a href="vistas/reservas.php" class="btn-reservas">RESERVA TU CITA AHORA</a>
+                    <a href="vistas/servicios.php" class="btn-servicios">VER SERVICIOS</a>
+                </section>
             </section>
         </section>
     </main>
+
+    <section class="explora">
+    <div class="container-small">
+        <p class="section-subtitle">EXPLORA</p>
+        <h2 class="section-title">Todo lo que necesitas saber</h2>
+        <div class="title-underline"></div>
+
+        <div class="explore-grid">
+            <a href="vistas/servicios.php" class="explore-card">
+                <div class="card-icon">✂</div>
+                <div class="card-info">
+                    <h3>SERVICIOS & PRECIOS</h3>
+                    <p>Cortes, barba y combos</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+
+            <a href="vistas/equipo.php" class="explore-card">
+                <div class="card-icon">👥</div>
+                <div class="card-info">
+                    <h3>NUESTRO EQUIPO</h3>
+                    <p>Ross, Luis y Rolando</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+
+            <a href="vistas/galeria.php" class="explore-card">
+                <div class="card-icon">🖼</div>
+                <div class="card-info">
+                    <h3>GALERÍA</h3>
+                    <p>Tendencias y estilos</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+
+            <a href="vistas/resenas.php" class="explore-card">
+                <div class="card-icon">⭐</div>
+                <div class="card-info">
+                    <h3>RESEÑAS</h3>
+                    <p>5 estrellas en Google</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+
+            <a href="vistas/ubicacion.php" class="explore-card">
+                <div class="card-icon">📍</div>
+                <div class="card-info">
+                    <h3>UBICACIÓN</h3>
+                    <p>Cómo llegar</p>
+                </div>
+                <div class="card-arrow">›</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="bottom-cta-bar">
+        <a href="vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
+    </div>
+</section>
 
     
 
