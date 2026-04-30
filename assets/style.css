@@ -289,7 +289,6 @@ body {
 }
 
 
-/* Estilos para el Footer */
 .footer {
     background-color: #0a0a0a;
     color: #b3b3b3;
@@ -297,40 +296,33 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* 🔥 AQUÍ ESTÁ LA CLAVE */
+/* CONTENEDOR PRINCIPAL */
 .footer-container {
     max-width: 1300px;
     margin: auto;
     display: grid;
     grid-template-columns: 250px 1fr 250px;
-    align-items: start;
+    align-items: start; /* 🔥 todos los títulos alineados */
 }
 
-/* LADOS */
+/* COLUMNAS LATERALES */
 .footer-lado {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
 }
 
-.footer-col {
-    flex: 1;
-    min-width: 200px;
+/* CENTRO */
+.footer-center {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
 }
 
-.footer h3 {
-    color: #fff;
-    margin-bottom: 15px;
-}
-
-.footer h3 span {
-    color: #d99c2b;
-}
-
-/* TEXTO */
+/* TEXTOS */
 .footer h4 {
     color: #d99c2b;
     margin-bottom: 15px;
+    margin-top: 0;
 }
 
 .footer p {
@@ -343,6 +335,7 @@ body {
     text-decoration: none;
     color: #b3b3b3;
     margin-bottom: 8px;
+    transition: 0.3s;
 }
 
 .footer a:hover {
@@ -354,6 +347,7 @@ body {
     width: 220px;
     height: 200px;
     border-radius: 8px;
+    border: none;
 }
 
 /* LOGO */
@@ -362,11 +356,19 @@ body {
 }
 
 .footer-logo img {
-    width: 220px;      /* igual que el mapa */
-    height: auto;      /* mantiene proporción */
+    width: 220px;          /* 🔥 mismo tamaño que mapa */
+    max-height: 200px;
+    object-fit: contain;
+    opacity: 0.9;
+    transition: 0.3s;
 }
 
-/* BOTTOM */
+.footer-logo img:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* FOOTER ABAJO */
 .footer-bottom {
     border-top: 1px solid #222;
     margin-top: 40px;
