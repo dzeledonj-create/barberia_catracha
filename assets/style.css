@@ -133,10 +133,20 @@ body {
 }
 
 .contenido-titulo{
-    font-size: clamp(2.5rem, 8vw, 5rem); /* Tamaño fluido que se adapta al móvil */
-    line-height: 1.1;
-    margin-bottom: 20px;
-    font-weight: 800;
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 30px;
+    max-width: 850px; /* Ajusta este valor para forzar el salto de línea donde prefieras */
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: balance;
+}
+
+.contenido-titulo .texto-dorado{
+    display: block; /* Esto obliga a que la parte dorada siempre empiece en una línea nueva */
+    color: var(--gold);
 }
 
 .contenido-description{
@@ -175,4 +185,66 @@ body {
 .btn-servicios:hover{
     background-color: var(--white);
     color: #000;
+}
+
+/* Estilos para el Footer */
+.footer {
+    background-color: #0a0a0a;
+    color: #b3b3b3;
+    padding: 60px 20px 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer h3 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.footer h3 span {
+    color: #d99c2b;
+}
+
+.footer h4 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.footer p {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.footer a {
+    display: block;
+    text-decoration: none;
+    color: #b3b3b3;
+    margin-bottom: 8px;
+    transition: 0.3s;
+}
+
+.footer a:hover {
+    color: #d99c2b;
+}
+
+.footer-bottom {
+    border-top: 1px solid #222;
+    margin-top: 40px;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #777;
 }

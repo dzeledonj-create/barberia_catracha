@@ -1,5 +1,5 @@
 <header class="main-header">
-    <div class="container">
+    <section class="container">
         <section class="icon">
             <img src="../assets/img/logo.png" alt="logo barberia">
         </section>
@@ -10,16 +10,16 @@
 
         <nav class="nav-menu">
             <ul>
-                <li><a href="../vistas/servicios.php">SERVICIOS</a></li>
-                <li><a href="../vistas/equipo.php">EQUIPO</a></li>
-                <li><a href="../vistas/galeria.php">GALERÍA</a></li>
-                <li><a href="../vistas/reseñas.php">RESEÑAS</a></li>
-                <li><a href="../vistas/ubicacion.php">UBICACIÓN</a></li>
+                <li><a href="vistas/servicios.php">SERVICIOS</a></li>
+                <li><a href="vistas/equipo.php">EQUIPO</a></li>
+                <li><a href="vistas/galeria.php">GALERÍA</a></li>
+                <li><a href="vistas/reseñas.php">RESEÑAS</a></li>
+                <li><a href="vistas/ubicacion.php">UBICACIÓN</a></li>
             </ul>
         </nav>
 
-        <div class="cta">
+        <section class="cta">
             <a href="#" class="btn-reserve">RESERVAR</a>
-        </div>
-    </div>
+        </section>
+    </section>
 </header>
