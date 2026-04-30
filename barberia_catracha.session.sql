@@ -56,3 +56,8 @@ CREATE TABLE mural_sugerencias (
 );
 
 
+INSERT INTO barberos (nombre, especialidad, foto_url, activo) VALUES
+('Ross', 'Barbero profesional', 'assets/img/ross.jpeg', TRUE),
+('Rolando', 'Barbero profesional', 'assets/img/rolando.jpeg', TRUE),
+('Luis', 'Barbero profesional', 'assets/img/luis.jpeg', TRUE);
+
