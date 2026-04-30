@@ -10,11 +10,11 @@
 
         <nav class="nav-menu">
             <ul>
-                <li><a href="#">SERVICIOS</a></li>
-                <li><a href="#">EQUIPO</a></li>
-                <li><a href="#">GALERÍA</a></li>
-                <li><a href="#">RESEÑAS</a></li>
-                <li><a href="#">UBICACIÓN</a></li>
+                <li><a href="servicios.php">SERVICIOS</a></li>
+                <li><a href="equipo.php">EQUIPO</a></li>
+                <li><a href="galeria.php">GALERÍA</a></li>
+                <li><a href="resenas.php">RESEÑAS</a></li>
+                <li><a href="ubicacion.php">UBICACIÓN</a></li>
             </ul>
         </nav>
 
