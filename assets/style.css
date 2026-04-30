@@ -1,0 +1,88 @@
+/* Variables de color para fácil edición */
+:root {
+    --dark-bg: #0a0a0a;
+    --gold: #d99c2b;
+    --white: #ffffff;
+    --gray-text: #b3b3b3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #1a1a1a; /* Fondo temporal para ver el header */
+}
+
+.main-header {
+    background-color: var(--dark-bg);
+    padding: 20px 0;
+    border-bottom: 1px solid #222;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+/* Logo Estilo */
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo .icon { color: var(--gold); font-size: 1.8rem; }
+.logo .text-white { color: var(--white); }
+.logo .text-gold { color: var(--gold); }
+
+/* Menú de Navegación */
+.nav-menu ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-menu ul li a {
+    text-decoration: none;
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+.nav-menu ul li a:hover {
+    color: var(--white);
+}
+
+/* Botón Reservar */
+.btn-reserve {
+    background-color: var(--gold);
+    color: #000;
+    text-decoration: none;
+    padding: 12px 30px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    display: inline-block;
+}
+
+.btn-reserve:hover {
+    background-color: #f0ad32;
+    transform: scale(1.05);
+}
+
+/* Responsivo básico */
+@media (max-width: 768px) {
+    .nav-menu { display: none; } /* Ocultar menú en móviles por simplicidad */
+}
