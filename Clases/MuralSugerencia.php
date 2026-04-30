@@ -98,6 +98,16 @@ class MuralSugerencia {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Método para obtener todas las categorías (estilos) únicas que tienen cortes activos
+public static function obtenerCategoriasRecientes(): array {
+    $db = BD::obtenerConexion();
+    // Seleccionamos estilos únicos, que no sean nulos y estén activos
+    $stmt = $db->query("SELECT DISTINCT estilo FROM mural_sugerencias 
+                        WHERE estilo IS NOT NULL AND activo = TRUE 
+                        ORDER BY estilo ASC");
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
     // Método para obtener una sugerencia por ID
     public static function obtenerPorId($sugerenciaId): ?MuralSugerencia {
         $db = BD::obtenerConexion();

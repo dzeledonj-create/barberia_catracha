@@ -2,8 +2,8 @@
 
     <section class="footer-container">
 
-        <!-- IZQUIERDA -->
-        <section class="mapa">
+        <!-- 🗺️ MAPA -->
+        <section class="footer-col">
             <h4>Ubicación</h4>
             <iframe 
     class="mapa"
@@ -16,12 +16,12 @@
         <!-- CENTRO -->
         <section class="footer-center">
 
-            <section class="footer-col">
-                <h4>Horario</h4>
-                <p>Lunes: 10:00 - 19:30</p>
-                <p>Martes - Sábado: 09:30 - 20:30</p>
-                <p>Domingo: 10:00 - 13:30</p>
-            </section>
+        <section class="footer-col">
+            <h4>Horario</h4>
+            <p>Lunes: 10:00 - 19:30</p>
+            <p>Martes - Sábado: 09:30 - 20:30</p>
+            <p>Domingo: 10:00 - 13:30</p>
+        </section>
 
             <section class="footer-col">
                 <h4>Contacto</h4>
@@ -30,18 +30,15 @@
                 <p>Tel: 600 000 000</p>
             </section>
 
-            <section class="footer-col">
-                <h4>Enlaces</h4>
-                <a href="#">Servicios</a>
-                <a href="#">Equipo</a>
-                <a href="#">Reservar</a>
-            </section>
-
+        <section class="footer-col">
+            <h4>Enlaces</h4>
+            <a href="#">Servicios</a>
+            <a href="#">Equipo</a>
+            <a href="#">Reservar</a>
         </section>
 
-        <!-- DERECHA -->
-        <section class="footer-lado footer-logo">
-            <img src="assets/img/logo.png" alt="Logo">
+        <section class="footer-col footer-logo">
+        <img src="assets/img/logo.png" alt="Logo Barbería Catracha">
         </section>
 
     </section>
