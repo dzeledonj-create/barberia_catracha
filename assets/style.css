@@ -187,6 +187,8 @@ body {
     color: #000;
 }
 
+
+
 /* Estilos para el Footer */
 .footer {
     background-color: #0a0a0a;
@@ -219,7 +221,7 @@ body {
 }
 
 .footer h4 {
-    color: #fff;
+    color: #d99c2b;
     margin-bottom: 15px;
 }
 
