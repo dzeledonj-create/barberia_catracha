@@ -89,4 +89,5 @@
 
     <script src="assets/script.js"></script>
 </body>
+    <?php include_once 'includes/footer.php'; ?>
 </html>

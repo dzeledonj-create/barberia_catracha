@@ -55,9 +55,76 @@ CREATE TABLE mural_sugerencias (
     activo BOOLEAN DEFAULT TRUE
 );
 
+CREATE TABLE horarios (
+    horario_id SERIAL PRIMARY KEY,
+    dia_semana INT, -- 0 domingo, 1 lunes...
+    hora_apertura TIME,
+    hora_cierre TIME
+);
+
+CREATE TABLE barbero_servicio (
+    barbero_id INT REFERENCES barberos(barbero_id),
+    servicio_id INT REFERENCES servicios(servicio_id),
+    PRIMARY KEY (barbero_id, servicio_id)
+);
 
 INSERT INTO barberos (nombre, especialidad, foto_url, activo) VALUES
 ('Ross', 'Barbero profesional', 'assets/img/ross.jpeg', TRUE),
 ('Rolando', 'Barbero profesional', 'assets/img/rolando.jpeg', TRUE),
 ('Luis', 'Barbero profesional', 'assets/img/luis.jpeg', TRUE);
 
+INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos) VALUES
+('Corte', 'Corte de pelo clásico o moderno', 11.00, 30),
+('Corte y barba', 'Corte de pelo más arreglo de barba', 16.00, 45),
+('Barba', 'Arreglo de barba', 7.00, 15),
+('Corte Y Cejas Con Hilo', 'Corte de pelo y cejas con hilo', 15.00, 40),
+('Barba + tinte', 'Arreglo de barba con tinte', 12.00, 30),
+('Cejas con cuchilla', 'Diseño de cejas con cuchilla', 4.00, 5),
+('Cejas con hilo', 'Diseño de cejas con hilo', 5.00, 15),
+('Tinte negro', 'Tinte negro para el pelo', 10.00, 10),
+('Tinte de colores', 'Tinte de colores', 50.00, 180),
+('Corte para jubilados', 'Corte especial para jubilados', 10.00, 30),
+('Corte y diseño', 'Corte con diseño personalizado', 12.00, 35),
+('Corte, barba y tinte De Pelo', 'Corte, barba y tinte de pelo', 25.00, 60),
+('Permanente', 'Tratamiento de permanente', 50.00, 180);
+
+INSERT INTO horarios (dia_semana, hora_apertura, hora_cierre) VALUES
+(1, '10:00', '19:30'), -- Lunes
+(2, '09:30', '20:30'), -- Martes
+(3, '09:30', '20:30'), -- Miércoles
+(4, '09:30', '20:30'), -- Jueves
+(5, '09:30', '20:30'), -- Viernes
+(6, '09:30', '20:30'), -- Sábado
+(0, '10:00', '13:30'); -- Domingo
+
+INSERT INTO barbero_servicio (barbero_id, servicio_id) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13);
+
+INSERT INTO barbero_servicio (barbero_id, servicio_id) VALUES
+(2, 4),  -- Corte y cejas con hilo
+(2, 3),  -- Barba
+(2, 6),  -- Cejas cuchilla
+(2, 2),  -- Corte y barba
+(2, 1),  -- Corte
+(2, 10), -- Corte jubilados
+(2, 11); -- Corte y diseño
+
+INSERT INTO barbero_servicio (barbero_id, servicio_id) VALUES
+(3, 4),  -- Corte y cejas con hilo
+(3, 3),  -- Barba
+(3, 2),  -- Corte y barba
+(3, 1),  -- Corte
+(3, 10), -- Corte jubilados
+(3, 11); -- Corte y diseño
