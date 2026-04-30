@@ -1,5 +1,5 @@
 <header class="main-header">
-    <div class="container">
+    <section class="container">
         <section class="icon">
             <img src="assets/img/logo.png" alt="logo barberia">
         </section>
@@ -15,11 +15,12 @@
                 <li><a href="#">GALERÍA</a></li>
                 <li><a href="#">RESEÑAS</a></li>
                 <li><a href="#">UBICACIÓN</a></li>
+                <li><a href="#">BLOG</a></li>
             </ul>
         </nav>
 
-        <div class="cta">
+        <section class="cta">
             <a href="#" class="btn-reserve">RESERVAR</a>
-        </div>
-    </div>
+        </section>
+    </section>
 </header>

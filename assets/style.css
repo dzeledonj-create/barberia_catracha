@@ -133,10 +133,20 @@ body {
 }
 
 .contenido-titulo{
-    font-size: clamp(2.5rem, 8vw, 5rem); /* Tamaño fluido que se adapta al móvil */
-    line-height: 1.1;
-    margin-bottom: 20px;
-    font-weight: 800;
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 30px;
+    max-width: 850px; /* Ajusta este valor para forzar el salto de línea donde prefieras */
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: balance;
+}
+
+.contenido-titulo .texto-dorado{
+    display: block; /* Esto obliga a que la parte dorada siempre empiece en una línea nueva */
+    color: var(--gold);
 }
 
 .contenido-description{
