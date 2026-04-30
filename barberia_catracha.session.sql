@@ -54,3 +54,5 @@ CREATE TABLE mural_sugerencias (
     estilo VARCHAR(50), -- Ej: 'Fade', 'Clásico', 'Moderno'
     activo BOOLEAN DEFAULT TRUE
 );
+
+
