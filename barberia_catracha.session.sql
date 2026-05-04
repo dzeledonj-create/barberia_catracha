@@ -136,7 +136,4 @@ INSERT INTO mural_sugerencias (nombre_corte, descripcion, imagen_url, estilo, ac
 ('Clásico con raya', 'Corte clásico con raya marcada.', 'assets/img/mural/clasico-raya.jpg', 'Clásico', TRUE),
 ('Buzz cut', 'Corte corto, práctico y fácil de mantener.', 'assets/img/mural/buzz-cut.jpg', 'Moderno', TRUE);
 
-
-UPDATE barberos SET foto_url = 'assets/img/ross.jpeg' WHERE nombre = 'Ross';
-UPDATE barberos SET foto_url = 'assets/img/rolando.jpeg' WHERE nombre = 'Rolando';
-UPDATE barberos SET foto_url = 'assets/img/luis.jpeg' WHERE nombre = 'Luis';
+SELECT * FROM horarios;
