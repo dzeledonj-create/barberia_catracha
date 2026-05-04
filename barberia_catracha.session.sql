@@ -136,4 +136,9 @@ INSERT INTO mural_sugerencias (nombre_corte, descripcion, imagen_url, estilo, ac
 ('Clásico con raya', 'Corte clásico con raya marcada.', 'assets/img/mural/clasico-raya.jpg', 'Clásico', TRUE),
 ('Buzz cut', 'Corte corto, práctico y fácil de mantener.', 'assets/img/mural/buzz-cut.jpg', 'Moderno', TRUE);
 
+INSERT INTO blog_posts (titulo, contenido, imagen_url, autor_id, etiquetas) VALUES
+('Taper fade con diseño', 'Descubre las últimas tendencias en cortes de cabello para hombres en 2026. Desde fades modernos hasta estilos clásicos renovados, te contamos todo lo que necesitas saber para lucir a la moda este año.', 'assets/img/blog1.png', 1, 'tendencias'),
+('Cómo cuidar tu barba durante el invierno', 'El invierno puede ser duro para tu barba. Aprende los mejores consejos para mantenerla suave, hidratada y saludable durante los meses fríos.', 'assets/img/blog2.png', 2, 'cuidado barba'),
+('Los mejores productos para el cuidado del cabello masculino', 'Te presentamos una selección de los mejores productos para el cuidado del cabello masculino, desde champús hasta pomadas y aceites, para que puedas mantener tu cabello en perfecto estado.', 'assets/img/blog3.png', 3, 'cuidado cabello');
+
 SELECT * FROM horarios;

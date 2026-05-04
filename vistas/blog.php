@@ -2,7 +2,6 @@
 require_once '../clases/BlogPost.php';
 require_once '../clases/Barbero.php';
 
-// Obtener todos los posts de la base de datos
 $posts = BlogPost::obtenerTodos();
 ?>
 
@@ -20,77 +19,60 @@ $posts = BlogPost::obtenerTodos();
 <?php include_once '../includes/header.php'; ?>
 
 <main class="blog-page">
-    <section class="blog-hero">
-        <div class="container-texto">
+    <header class="blog-hero">
+        <section class="container-texto">
             <p class="subtitle">TENDENCIAS Y CONSEJOS</p>
             <h1 class="titulo-principal">NUESTRO <span class="text-gold">BLOG</span></h1>
-            <div class="underline"></div>
-            <p class="descripcion-header">
-                Descubre los mejores consejos de cuidado personal, tendencias en cortes y noticias de Barbería Catracha.
-            </p>
-        </div>
-    </section>
+            <span class="underline"></span>
+            <p class="descripcion-header">Los mejores consejos de cuidado personal y estilos en Zaragoza.</p>
+        </section>
+    </header>
 
     <section class="blog-container container">
         <?php if (empty($posts)): ?>
-            <div class="no-data-msg">
-                <p>Próximamente publicaremos contenido interesante para ti.</p>
-            </div>
+            <section class="no-data-msg">
+                <i class="fas fa-feather-alt"></i>
+                <p class="alerta-visible">Próximamente publicaremos contenido interesante para ti.</p>
+            </section>
         <?php else: ?>
-            <div class="blog-grid">
+            <section class="blog-grid">
                 <?php foreach ($posts as $post): 
-                    // Creamos una instancia para usar los métodos auxiliares como resumen()
-                    $blogObj = new BlogPost(
-                        $post['titulo'], 
-                        $post['contenido'], 
-                        $post['autor_id'], 
-                        $post['imagen_url'], 
-                        $post['etiquetas'], 
-                        $post['post_id'], 
-                        $post['fecha_publicacion']
-                    );
+                    $blogObj = new BlogPost($post['titulo'], $post['contenido'], $post['autor_id'], $post['imagen_url'], $post['etiquetas'], $post['post_id'], $post['fecha_publicacion']);
                 ?>
                     <article class="blog-card">
-                        <div class="blog-img">
-                            <?php if ($blogObj->tieneImagen()): ?>
-                                <img src="../<?= htmlspecialchars($post['imagen_url']) ?>" alt="<?= htmlspecialchars($post['titulo']) ?>">
-                            <?php else: ?>
-                                <img src="../assets/img/default-blog.jpg" alt="Barbería Catracha">
-                            <?php endif; ?>
-                            
-                            <div class="blog-date">
-                                <i class="far fa-calendar-alt"></i> 
-                                <?= date('d M, Y', strtotime($post['fecha_publicacion'])) ?>
-                            </div>
-                        </div>
+                        <figure class="blog-img">
+                            <img src="<?= htmlspecialchars($post['imagen_url']) ?>" alt="<?= htmlspecialchars($post['titulo']) ?>">
+                            <time class="blog-date">
+                                <i class="far fa-calendar-alt"></i> <?= date('d M', strtotime($post['fecha_publicacion'])) ?>
+                            </time>
+                        </figure>
                         
-                        <div class="blog-content">
-                            <div class="blog-meta">
+                        <section class="blog-content">
+                            <header class="blog-meta">
                                 <span class="author"><i class="fas fa-user-edit"></i> <?= htmlspecialchars($post['nombre_autor'] ?? 'Barbero') ?></span>
-                                <div class="tags-container">
-                                    <?php 
-                                    $tags = $blogObj->obtenerEtiquetas();
-                                    foreach ($tags as $tag): ?>
+                                <nav class="tags-container">
+                                    <?php foreach ($blogObj->obtenerEtiquetas() as $tag): ?>
                                         <span class="tag">#<?= htmlspecialchars($tag) ?></span>
                                     <?php endforeach; ?>
-                                </div>
-                            </div>
+                                </nav>
+                            </header>
                             
                             <h3><?= htmlspecialchars($post['titulo']) ?></h3>
-                            <p><?= htmlspecialchars($blogObj->resumen(120)) ?></p>
+                            <p><?= htmlspecialchars($blogObj->resumen(100)) ?></p>
                             
-                            <a href="post_detalle.php?id=<?= $post['post_id'] ?>" class="btn-leer-mas">
-                                LEER ARTÍCULO <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
+                            <footer class="blog-footer">
+                                <a href="post_detalle.php?id=<?= $post['post_id'] ?>" class="btn-leer-mas">
+                                    LEER MÁS <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </footer>
+                        </section>
                     </article>
                 <?php endforeach; ?>
-            </div>
+            </section>
         <?php endif; ?>
     </section>
 </main>
 
 <?php include_once '../includes/footer.php'; ?>
-
 </body>
 </html>
