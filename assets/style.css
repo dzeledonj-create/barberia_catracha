@@ -289,9 +289,7 @@ body {
 }
 
 
-/* Estilos para el Footer */
-
-
+/* --- SECCIÓN FOOTER --- */
 
 .footer {
     background-color: #0a0a0a;
@@ -300,38 +298,33 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+/* CONTENEDOR PRINCIPAL */
 .footer-container {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: auto;
+    display: grid;
+    grid-template-columns: 250px 1fr 250px;
+    align-items: start; /* 🔥 todos los títulos alineados */
+}
+
+/* COLUMNAS LATERALES */
+.footer-lado {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 40px;
+    flex-direction: column;
 }
 
-.footer-col {
-    flex: 1;
-    min-width: 200px;
+/* CENTRO */
+.footer-center {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
 }
 
-.footer-letras{
-    margin-left: 10px;
-    flex: 1;
-    min-width: 100px;
-}
-
-.footer h3 {
-    color: #fff;
-    margin-bottom: 15px;
-}
-
-.footer h3 span {
-    color: #d99c2b;
-}
-
+/* TEXTOS */
 .footer h4 {
     color: #d99c2b;
     margin-bottom: 15px;
+    margin-top: 0;
 }
 
 .footer p {
@@ -351,23 +344,23 @@ body {
     color: #d99c2b;
 }
 
-.footer-bottom {
-    border-top: 1px solid #222;
-    margin-top: 40px;
-    padding-top: 15px;
-    text-align: center;
-    font-size: 0.8rem;
-    color: #777;
+/* MAPA */
+.mapa {
+    width: 220px;
+    height: 200px;
+    border-radius: 8px;
+    border: none;
 }
 
+/* LOGO */
 .footer-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-end;
 }
 
 .footer-logo img {
-    max-width: 220px;
+    width: 220px;          /* 🔥 mismo tamaño que mapa */
+    max-height: 200px;
+    object-fit: contain;
     opacity: 0.9;
     transition: 0.3s;
 }
@@ -377,17 +370,16 @@ body {
     transform: scale(1.05);
 }
 
-.mapa {
-    width: 100%;
-    height: 200px;
-    border: none;
-    border-radius: 8px;
-    transition: 0.3s;
+/* FOOTER ABAJO */
+.footer-bottom {
+    border-top: 1px solid #222;
+    margin-top: 40px;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #777;
 }
 
-.mapa:hover {
-    filter: grayscale(0%);
-}
 
 /* --- SECCIÓN GALERÍA --- */
 
@@ -564,6 +556,8 @@ body {
 
 
 /* --- SECCIÓN EQUIPO --- */
+
+
 .equipo-section {
     background-color: #0a0a0a;
     padding: 80px 20px;
