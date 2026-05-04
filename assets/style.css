@@ -862,107 +862,162 @@ body {
     text-align: center;
 }
 
-/* Específico para la página de Blog */
-.blog-page {
-    padding-top: 100px; /* Para que no lo tape el header fijo */
-    background-color: var(--dark-bg);
-    min-height: 100vh;
+/* --- ESTILOS DE SERVICIOS PREMIUM (ESTILO TARJETAS DOBLE COLUMNA) --- */
+
+:root {
+    --gold: #d4af37;
+    --dark-card: #111111;
+    --border-color: #222222;
+    --text-gray: #aaaaaa;
 }
 
-.blog-hero {
-    text-align: center;
+.servicios-body {
+    background-color: #050505; /* Fondo negro profundo como la imagen */
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Contenedor principal con GRID de 2 columnas */
+.servicios-main {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 60px 20px;
-}
-
-.blog-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Crea las 2 columnas */
     gap: 30px;
-    padding: 40px 0;
 }
 
-.blog-card {
-    background: #151515;
-    border: 1px solid #222;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+/* Encabezado ocupa todo el ancho */
+.servicios-header-top {
+    grid-column: 1 / -1; 
+    text-align: center;
+    margin-bottom: 50px;
 }
 
-.blog-card:hover {
-    transform: translateY(-10px);
-    border-color: var(--gold);
-}
-
-.blog-img {
-    position: relative;
-    height: 230px;
-}
-
-.blog-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.blog-date {
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    background: var(--gold);
-    color: #000;
-    padding: 5px 12px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    border-radius: 4px;
-}
-
-.blog-content {
-    padding: 25px;
-}
-
-.blog-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    font-size: 0.85rem;
-    color: var(--gray-text);
-}
-
-.blog-content h3 {
-    color: var(--white);
-    font-size: 1.4rem;
-    margin-bottom: 12px;
+.servicios-header-top .titulo-principal {
+    font-size: 3rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    font-weight: 800;
+    margin-bottom: 10px;
 }
 
-.blog-content p {
-    color: var(--gray-text);
-    line-height: 1.6;
-    margin-bottom: 20px;
+.servicios-header-top .underline {
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: var(--gold);
+    margin: 0 auto;
 }
 
-.btn-leer-mas {
-    color: var(--gold);
-    text-decoration: none;
+/* Tarjetas de Categoría (section) */
+.categoria-bloque {
+    background: var(--dark-card);
+    border: 1px solid var(--border-color);
+    padding: 40px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Resaltado para Servicios Populares */
+.categoria-bloque.destacado {
+    border: 1px solid var(--gold);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+}
+
+.categoria-nombre {
+    font-size: 1.5rem;
     font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    display: inline-flex;
+    margin-bottom: 30px;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
     align-items: center;
-    gap: 8px;
-    transition: gap 0.3s ease;
+    gap: 10px;
 }
 
-.btn-leer-mas:hover {
+/* Icono decorativo antes del título */
+.categoria-nombre::before {
+    content: '◈'; 
+    color: var(--gold);
+    font-size: 1.2rem;
+}
+
+.items-list {
+    display: flex;
+    flex-direction: column;
     gap: 15px;
 }
 
-.tag {
-    color: var(--gold);
-    font-size: 0.75rem;
-    margin-left: 5px;
+/* Filas de Servicio (article) */
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 12px;
+    border-bottom: 1px dotted #333; /* Línea punteada de la imagen */
 }
 
+.item-info h3 {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #efefef;
+    margin: 0;
+}
+
+.item-info small {
+    color: var(--gold);
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+.item-precio span {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+/* Botón de Reserva */
+.categoria-cta {
+    margin-top: auto;
+    padding-top: 30px;
+    text-align: center;
+}
+
+.btn-reserva-premium {
+    background-color: var(--gold);
+    color: black;
+    padding: 12px 30px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    display: inline-block;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+.btn-reserva-premium:hover {
+    background-color: white;
+    transform: translateY(-2px);
+}
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+    .servicios-main {
+        grid-template-columns: 1fr; /* Una sola columna en móvil */
+        padding: 40px 15px;
+    }
+    
+    .servicios-header-top .titulo-principal {
+        font-size: 2rem;
+    }
+    
+    .categoria-bloque {
+        padding: 25px;
+    }
+}
