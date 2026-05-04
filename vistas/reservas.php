@@ -18,6 +18,7 @@ $relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservas - Barbería Catracha</title>
     <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
 
@@ -91,10 +92,25 @@ $relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <section class="reserva-step" id="step-3">
                 <h2>Elige fecha y hora</h2>
 
-                <input type="datetime-local" name="fecha_hora" required>
+                <label class="label-form">Fecha</label>
+                <input type="date" name="fecha" class="input-estilo" required>
 
-                <button type="button" class="btn-atras">Atrás</button>
-                <button type="button" class="btn-siguiente">Siguiente</button>
+                <label class="label-form">Hora</label>
+                <section class="horas-grid">
+                    <?php
+                    $horas = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00'];
+                    ?>
+
+                    <?php foreach ($horas as $hora): ?>
+                        <label class="opcion-hora">
+                            <input type="radio" name="hora" value="<?= $hora ?>" required>
+                            <span><?= $hora ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                    </section>
+
+            <button type="button" class="btn-atras">Atrás</button>
+            <button type="button" class="btn-siguiente">Siguiente</button>
             </section>
 
             <!-- PASO 4: DATOS CLIENTE -->
@@ -128,6 +144,7 @@ $relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script src="../assets/script.js"></script>
 <?php include_once '../includes/footer.php'; ?>
-
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="../assets/script.js"></script>
 </body>
 </html>

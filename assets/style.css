@@ -1027,3 +1027,63 @@ body {
     color: #fff;
     border: 1px solid #fff;
 }
+
+.label-form {
+    display: block;
+    color: var(--gold);
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.input-estilo {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 25px;
+    background-color: #1b1b1b;
+    border: 1px solid #333;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.input-estilo:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.horas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.opcion-hora {
+    position: relative;
+    background: linear-gradient(135deg, #151515, #1f1f1f);
+    border: 1px solid #2a2a2a;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #fff;
+    font-weight: 800;
+}
+
+.opcion-hora input {
+    display: none;
+}
+
+.opcion-hora:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+}
+
+.opcion-hora:has(input:checked) {
+    background: rgba(217, 156, 43, 0.12);
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold);
+    color: var(--gold);
+}
+
