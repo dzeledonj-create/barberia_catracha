@@ -26,10 +26,10 @@ require_once '../clases/BD.php';
 
         <section class="equipo-grid">
             
-            <article class="barbero-card">
-                <figure class="barbero-img">
+            <section class="barbero-card">
+                <section class="barbero-img">
                     <img src="img/ross.jpg" alt="Ross - Barbero Senior">
-                </figure>
+                </section>
                 <aside class="barbero-info">
                     <h2>Ross</h2>
                     <p class="rango">BARBERO SENIOR</p>
@@ -40,12 +40,12 @@ require_once '../clases/BD.php';
                         <span>BARBA</span>
                     </nav>
                 </aside>
-            </article>
+            </section>
 
-            <article class="barbero-card">
-                <figure class="barbero-img">
-                    <img src="assets/img<?php echo htmlspecialchars($barbero['luis.jpeg']); ?>" alt="Luis - Barbero Especialista">
-                </figure>
+            <section class="barbero-card">
+                <section class="barbero-img">
+                    <img src="assets/img<?php echo htmlspecialchars($barberos['luis.jpeg']); ?>" alt="Luis - Barbero Especialista">
+                </section>
                 <aside class="barbero-info">
                     <h2>Luis</h2>
                     <p class="rango">BARBERO ESPECIALISTA</p>
@@ -56,12 +56,12 @@ require_once '../clases/BD.php';
                         <span>TINTE</span>
                     </nav>
                 </aside>
-            </article>
+            </section>
 
-            <article class="barbero-card">
-                <figure class="barbero-img">
-                    <img src="img/rolando.jpeg" alt="Rolando - Barbero Estilista">
-                </figure>
+            <section class="barbero-card">
+                <section class="barbero-img">
+                    <img src="../<?php echo htmlspecialchars($barberos['rolando.jpeg']); ?>" alt="Rolando - Barbero Estilista">
+                </section>
                 <aside class="barbero-info">
                     <h2>Rolando</h2>
                     <p class="rango">BARBERO ESTILISTA</p>
@@ -72,7 +72,7 @@ require_once '../clases/BD.php';
                         <span>TENDENCIAS</span>
                     </nav>
                 </aside>
-            </article>
+            </section>
 
         </section>
 
