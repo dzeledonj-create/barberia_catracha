@@ -128,3 +128,12 @@ INSERT INTO barbero_servicio (barbero_id, servicio_id) VALUES
 (3, 1),  -- Corte
 (3, 10), -- Corte jubilados
 (3, 11); -- Corte y diseño
+
+INSERT INTO mural_sugerencias (nombre_corte, descripcion, imagen_url, estilo, activo) VALUES
+('Fade bajo', 'Degradado bajo limpio y elegante.', 'assets/img/mural/fade-bajo.jpg', 'Fade', TRUE),
+('Fade medio', 'Degradado medio moderno y versátil.', 'assets/img/mural/fade-medio.jpg', 'Fade', TRUE),
+('Crop texturizado', 'Corte moderno con textura en la parte superior.', 'assets/img/mural/crop.jpg', 'Moderno', TRUE),
+('Clásico con raya', 'Corte clásico con raya marcada.', 'assets/img/mural/clasico-raya.jpg', 'Clásico', TRUE),
+('Buzz cut', 'Corte corto, práctico y fácil de mantener.', 'assets/img/mural/buzz-cut.jpg', 'Moderno', TRUE);
+
+SELECT * FROM horarios;

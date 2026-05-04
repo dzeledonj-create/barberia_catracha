@@ -41,7 +41,7 @@
 
         <!-- DERECHA: LOGO -->
         <section class="footer-lado footer-logo">
-            <img src="assets/img/logo.png" alt="Logo Barbería Catracha">
+            <img src="/barberia_catracha-main/barberia_catracha/assets/img/logo.png" alt="logo barberia">
         </section>
 
     </section>
