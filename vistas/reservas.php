@@ -4,6 +4,10 @@ require_once '../clases/Barbero.php';
 
 $servicios = Servicio::obtenerTodos();
 $barberos = Barbero::obtenerActivos();
+$db = BD::obtenerConexion();
+
+$stmt = $db->query("SELECT barbero_id, servicio_id FROM barbero_servicio");
+$relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -56,15 +60,24 @@ $barberos = Barbero::obtenerActivos();
             <section class="reserva-step" id="step-2">
                 <h2>Elige tu barbero</h2>
 
-                <?php foreach ($barberos as $barbero): ?>
-                    <label class="opcion-barbero">
+               <?php foreach ($barberos as $barbero): ?>
+                    <?php
+                    $serviciosBarbero = [];
+                    foreach ($relaciones as $relacion) {
+                        if ($relacion['barbero_id'] == $barbero['barbero_id']) {
+                            $serviciosBarbero[] = $relacion['servicio_id'];
+                        }
+                    }
+                    ?>
+                    <label class="opcion-barbero" data-servicios="<?= implode(',', $serviciosBarbero) ?>">
                         <input type="radio" name="barbero_id" value="<?= $barbero['barbero_id'] ?>" required>
-                        <img src="../<?= $barbero['foto_url'] ?>" alt="<?= $barbero['nombre'] ?>">
+                        <img src="../<?= htmlspecialchars($barbero['foto_url']) ?>" alt="<?= htmlspecialchars($barbero['nombre']) ?>">
                         <section>
-                            <strong><?= $barbero['nombre'] ?></strong>
-                            <small><?= $barbero['especialidad'] ?></small>
+                            <strong><?= htmlspecialchars($barbero['nombre']) ?></strong>
+                            <small><?= htmlspecialchars($barbero['especialidad']) ?></small>
                         </section>
                     </label>
+
                 <?php endforeach; ?>
 
                 <button type="button" class="btn-atras">Atrás</button>
