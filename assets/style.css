@@ -698,3 +698,104 @@ body {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.4);
 }
+
+/* --- SECCIÓN UBICACIÓN --- */
+
+.ubicacion-page {
+    background-color: var(--dark-bg);
+    padding-bottom: 80px;
+}
+
+.ubicacion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: start;
+    margin-top: 40px;
+}
+
+.info-item {
+    margin-bottom: 40px;
+}
+
+.info-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.info-header i {
+    color: var(--gold);
+    font-size: 1.5rem;
+}
+
+.info-header h2 {
+    color: var(--white);
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    font-weight: 800;
+}
+
+.info-item p {
+    color: var(--gray-text);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.horario-lista {
+    list-style: none;
+    padding: 0;
+}
+
+.horario-lista li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #222;
+    color: var(--gray-text);
+    font-size: 0.95rem;
+}
+
+.horario-lista li .dia {
+    font-weight: 600;
+}
+
+.horario-lista li .horas {
+    color: var(--white);
+}
+
+/* Contenedor del Mapa */
+.ubicacion-mapa {
+    height: 100%;
+    min-height: 500px;
+    border: 1px solid #222;
+    transition: border-color 0.3s ease;
+}
+
+.ubicacion-mapa:hover {
+    border-color: var(--gold);
+}
+
+.ubicacion-mapa iframe {
+    width: 100%;
+    height: 100%;
+    filter: grayscale(1) contrast(1.2) invert(0.9); /* Efecto mapa oscuro premium */
+}
+
+/* Responsivo para Ubicación */
+@media (max-width: 900px) {
+    .ubicacion-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .ubicacion-mapa {
+        min-height: 350px;
+        order: -1; /* Mapa arriba en móviles */
+    }
+}
+
+.equipo-cta {
+    text-align: center;
+    margin-top: 40px;
+}
