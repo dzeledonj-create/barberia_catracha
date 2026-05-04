@@ -833,3 +833,31 @@ body {
     text-align: center;
     margin-top: 40px;
 }
+
+/* --- SECCIÓN UBICACIÓN --- */
+
+.ubicacion-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.ubicacion-header .subtitle {
+    display: block;
+    color: var(--gold);
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.ubicacion-header .titulo-principal {
+    margin: 0;
+}
+
+.ubicacion-header .underline {
+    margin: 15px auto 20px;
+}
+
+.ubicacion-header .descripcion-header {
+    text-align: center;
+}

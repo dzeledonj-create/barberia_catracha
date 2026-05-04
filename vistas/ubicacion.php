@@ -15,7 +15,7 @@ require_once '../clases/BD.php';
 <?php include_once '../includes/header.php'; ?>
 
 <main class="ubicacion-page">
-    <section class="equipo-header">
+    <section class="ubicacion-header">
         <p class="subtitle">ENCUÉNTRANOS</p>
         <h1 class="titulo-principal">NUESTRA <span class="text-gold">UBICACIÓN</span></h1>
         <section class="underline"></section>
