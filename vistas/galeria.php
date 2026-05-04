@@ -22,7 +22,6 @@ if ($categoria_actual === 'todos') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galería Dinámica - Barbería Catracha</title>
     <link rel="stylesheet" href="../assets/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
@@ -43,16 +42,16 @@ if ($categoria_actual === 'todos') {
             <ul class="categorias-lista">
                 <li>
                     <a href="galeria.php?categoria=todos" 
-                       class="<?php echo $categoria_actual === 'todos' ? 'active' : ''; ?>">
+                       class="<?= $categoria_actual === 'todos' ? 'active' : '' ?>">
                        TODOS
                     </a>
                 </li>
 
                 <?php foreach ($categorias_db as $cat): ?>
                     <li>
-                        <a href="galeria.php?categoria=<?php echo urlencode(strtolower($cat)); ?>" 
-                           class="<?php echo strtolower($categoria_actual) === strtolower($cat) ? 'active' : ''; ?>">
-                            <?php echo strtoupper(htmlspecialchars($cat)); ?>
+                        <a href="galeria.php?categoria=<?= urlencode(strtolower($cat)) ?>" 
+                           class="<?= strtolower($categoria_actual) === strtolower($cat) ? 'active' : '' ?>">
+                            <?= strtoupper(htmlspecialchars($cat)) ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -70,14 +69,14 @@ if ($categoria_actual === 'todos') {
                 <?php foreach ($sugerencias as $corte): ?>
                     <section class="galeria-item">
                         <section class="image-wrapper">
-                            <img src="../<?php echo htmlspecialchars($corte['imagen_url']); ?>" alt="<?php echo htmlspecialchars($corte['nombre_corte']); ?>">
+                            <img src="../<?= htmlspecialchars($corte['imagen_url']) ?>" alt="<?= htmlspecialchars($corte['nombre_corte']) ?>">
                             <section class="overlay">
-                                <span class="tag-estilo"><?php echo htmlspecialchars($corte['estilo']); ?></span>
+                                <span class="tag-estilo"><?= htmlspecialchars($corte['estilo']) ?></span>
                             </section>
                         </section>
                         <section class="item-info">
-                            <h3><?php echo htmlspecialchars($corte['nombre_corte']); ?></h3>
-                            <p><?php echo htmlspecialchars($corte['descripcion']); ?></p>
+                            <h3><?= htmlspecialchars($corte['nombre_corte']) ?></h3>
+                            <p><?= htmlspecialchars($corte['descripcion']) ?></p>
                         </section>
                     </section>
                 <?php endforeach; ?>
