@@ -1,5 +1,7 @@
 <?php
 require_once '../clases/BD.php';
+require_once __DIR__ . '/../clases/Barbero.php';
+$barberos = Barbero::obtenerActivos();
 ?>
 
 <!DOCTYPE html>
@@ -28,8 +30,7 @@ require_once '../clases/BD.php';
             
             <section class="barbero-card">
                 <section class="barbero-img">
-                    <img src="img/ross.jpeg">
-                        <img src="../img/<?php echo $barbero['imagen']; ?>" alt="Foto de barbero">
+                    <img src="img/ross.jpg" alt="Ross - Barbero Senior">
                 </section>
                 <aside class="barbero-info">
                     <h2>Ross</h2>
@@ -45,7 +46,7 @@ require_once '../clases/BD.php';
 
             <section class="barbero-card">
                 <section class="barbero-img">
-                    <img src="../<?php echo htmlspecialchars($barberos['luis.jpeg']); ?>" alt="Luis - Barbero Especialista">
+                    <img src="assets/img<?php echo htmlspecialchars($barberos['luis.jpeg']); ?>" alt="Luis - Barbero Especialista">
                 </section>
                 <aside class="barbero-info">
                     <h2>Luis</h2>
@@ -59,21 +60,9 @@ require_once '../clases/BD.php';
                 </aside>
             </section>
 
-            <section class="barbero-card">
-                <section class="barbero-img">
-                    <img src="../<?php echo htmlspecialchars($barberos['rolando.jpeg']); ?>" alt="Rolando - Barbero Estilista">
-                </section>
-                <aside class="barbero-info">
-                    <h2>Rolando</h2>
-                    <p class="rango">BARBERO ESTILISTA</p>
-                    <p class="bio">Maestro en estilos urbanos y tendencias actuales. Referente en Zaragoza para looks vanguardistas.</p>
-                    <nav class="tags">
-                        <span>URBANO</span>
-                        <span>CROP</span>
-                        <span>TENDENCIAS</span>
-                    </nav>
-                </aside>
-            </section>
+<?php endforeach; ?>
+
+</section>
 
         </section>
 

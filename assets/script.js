@@ -30,3 +30,69 @@ document.querySelectorAll('.explore-card').forEach(card => {
     card.style.transition = 'all 0.6s ease-out';
     observer.observe(card);
 });
+
+
+// 3. Filtrado de barberos según el servicio seleccionado
+document.addEventListener('DOMContentLoaded', function () {
+
+    const servicios = document.querySelectorAll('input[name="servicio_id"]');
+    const barberos = document.querySelectorAll('.opcion-barbero');
+
+    servicios.forEach(servicio => {
+        servicio.addEventListener('change', function () {
+
+            const servicioSeleccionado = this.value;
+
+            barberos.forEach(barbero => {
+                const serviciosBarbero = barbero.dataset.servicios.split(',');
+
+                if (serviciosBarbero.includes(servicioSeleccionado)) {
+                    barbero.style.display = 'flex';
+                } else {
+                    barbero.style.display = 'none';
+
+                    const radio = barbero.querySelector('input[type="radio"]');
+                    radio.checked = false;
+                }
+            });
+
+        });
+    });
+
+});
+
+// 4. Navegación entre pasos de la reserva
+document.addEventListener('DOMContentLoaded', function () {
+    let pasoActual = 0;
+
+    const steps = document.querySelectorAll('.reserva-step');
+    const pasos = document.querySelectorAll('.paso');
+    const btnSiguiente = document.querySelectorAll('.btn-siguiente');
+    const btnAtras = document.querySelectorAll('.btn-atras');
+
+    function mostrarPaso(index) {
+        steps.forEach(step => step.classList.remove('activo'));
+        pasos.forEach(paso => paso.classList.remove('activo'));
+
+        steps[index].classList.add('activo');
+        pasos[index].classList.add('activo');
+    }
+
+    btnSiguiente.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (pasoActual < steps.length - 1) {
+                pasoActual++;
+                mostrarPaso(pasoActual);
+            }
+        });
+    });
+
+    btnAtras.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (pasoActual > 0) {
+                pasoActual--;
+                mostrarPaso(pasoActual);
+            }
+        });
+    });
+});
