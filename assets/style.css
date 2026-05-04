@@ -111,7 +111,7 @@ body {
 .container-contenido {
     position: relative;
     height: 90vh; 
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+    background: linear-gradient(rgba(0, 0, 0, 0.445), rgba(0, 0, 0, 0.658)), 
                 url('img/barberia.png'); 
     background-size: cover;
     background-position: center;
@@ -121,6 +121,26 @@ body {
     text-align: center;
     color: var(--white);
     padding: 0 20px;
+    overflow: hidden;
+}
+
+/* Esta es la capa que crea el efecto de "fundido a negro" */
+.container-contenido::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 350px; /* Ajusta este valor: más alto = difuminado más largo y suave */
+    background: linear-gradient(to top, var(--dark-bg), transparent);
+    z-index: 1;
+    pointer-events: none; /* Permite que puedas hacer clic a través del degradado */
+}
+
+/* Importante: el contenido debe estar por encima del degradado */
+.contenido {
+    position: relative;
+    z-index: 2; /* Mayor que el z-index del ::after */
 }
 
 .direccion{
@@ -189,9 +209,9 @@ body {
 
 /* PARTE DE EXPLORAR SERVICIOS */
 
-.explore {
-    background-color: #0a0a0a;
-    padding: 80px 0 0 0; /* Padding inferior 0 porque la barra dorada cierra la sección */
+.explora {
+    background-color: var(--dark-bg); 
+    padding: 120px 0 60px 0; 
     text-align: center;
 }
 
@@ -203,16 +223,18 @@ body {
 
 .section-subtitle {
     color: var(--gold);
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
+    font-weight: 800;
+    margin-bottom: 40px;
+    
 }
 
 .section-title {
     color: var(--white);
     font-size: 2.5rem;
     font-weight: 800;
+    margin-bottom: 40px;
 }
 
 .title-underline {
@@ -227,7 +249,9 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Crea columnas automáticas */
     gap: 20px;
-    margin-bottom: 60px;
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
 }
 
 .explore-card {
@@ -275,17 +299,24 @@ body {
 /* Barra inferior dorada */
 .bottom-cta-bar {
     background-color: var(--gold);
+    max-width: 500px; /* Ancho controlado */
+    margin: 0 auto;   /* CENTRADO AUTOMÁTICO */
     padding: 20px;
-    margin-top: 40px;
+    display: block;   /* Para que respete el margin auto */
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.bottom-cta-bar:hover {
+    transform: scale(1.05);
 }
 
 .bottom-cta-bar a {
     color: #000;
-    text-decoration: none;
-    font-weight: 800;
+    font-weight: 900;
+    text-transform: uppercase;
     letter-spacing: 1px;
-    font-size: 0.9rem;
-    display: block;
+    text-decoration: none;
 }
 
 

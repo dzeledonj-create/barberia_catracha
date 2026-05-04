@@ -20,7 +20,6 @@ const observer = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
-            entry.target.classList.add('fade-in-visible');
         }
     });
 }, observerOptions);
