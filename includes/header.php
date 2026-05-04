@@ -1,7 +1,7 @@
 <header class="main-header">
     <section class="container">
         <section class="icon">
-            <img src="assets/img/logo.png" alt="logo barberia">
+            <img src="/barberia_catracha-main/barberia_catracha/assets/img/logo.png" alt="logo barberia">
         </section>
         <section class="logo">
             <span class="text-white">BARBERÍA</span> 

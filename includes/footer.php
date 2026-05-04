@@ -27,21 +27,21 @@
                 <h4>Contacto</h4>
                 <p>Zaragoza</p>
                 <p>C. de Fray Julián Garcés, 3-5</p>
-                <p>Tel: 600 000 000</p>
+                <p>Tel: 876 719 599</p>
             </section>
 
             <section class="footer-col">
                 <h4>Enlaces</h4>
-                <a href="#">Servicios</a>
-                <a href="#">Equipo</a>
-                <a href="#">Reservar</a>
+                <a href="https://wa.me/34630846042" target="_blank">WhatsApp</a>
+                <a href="https://www.instagram.com/barberia.catracha/" target="_blank">Instagram</a>
+                <a href="https://www.facebook.com/rosvinjesusa/" target="_blank">Facebook</a>
             </section>
 
         </section>
 
         <!-- DERECHA: LOGO -->
         <section class="footer-lado footer-logo">
-            <img src="assets/img/logo.png" alt="Logo Barbería Catracha">
+            <img src="/barberia_catracha-main/barberia_catracha/assets/img/logo.png" alt="logo barberia">
         </section>
 
     </section>
