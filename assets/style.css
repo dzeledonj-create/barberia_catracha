@@ -926,31 +926,76 @@ body {
     margin-bottom: 25px;
 }
 
-.opcion-reserva,
-.opcion-barbero {
-    display: flex;
+.opcion-reserva {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 15px;
     align-items: center;
-    justify-content: space-between;
-    background-color: #181818;
-    border: 1px solid #292929;
-    padding: 15px;
-    margin-bottom: 12px;
+    background: linear-gradient(135deg, #151515, #1f1f1f);
+    border: 1px solid #2a2a2a;
+    padding: 18px 20px;
+    margin-bottom: 14px;
     cursor: pointer;
+    color: #fff;
+    transition: 0.3s ease;
+}
+
+.opcion-reserva input {
+    display: none;
+}
+
+.opcion-reserva section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.opcion-reserva strong {
+    font-size: 1rem;
     color: #fff;
 }
 
-.opcion-reserva:hover,
-.opcion-barbero:hover {
-    border-color: #d99c2b;
+.opcion-reserva small {
+    color: #999;
+    font-size: 0.8rem;
 }
 
-.opcion-barbero img {
-    width: 65px;
-    height: 65px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-right: 15px;
+.opcion-reserva span {
+    color: var(--gold);
+    font-weight: 800;
+    font-size: 1rem;
 }
+
+.opcion-reserva:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    background: #202020;
+}
+
+.opcion-reserva:has(input:checked) {
+    border-color: var(--gold);
+    background: rgba(217, 156, 43, 0.12);
+    box-shadow: 0 0 0 1px var(--gold);
+}
+
+.opcion-reserva:has(input:checked)::after {
+    content: "✓";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 22px;
+    height: 22px;
+    background-color: var(--gold);
+    color: #000;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+
 
 .form-reserva input[type="text"],
 .form-reserva input[type="tel"],

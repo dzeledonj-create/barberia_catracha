@@ -1,6 +1,7 @@
 <?php
-require_once '../clases/Servicio.php';
+require_once '../clases/BD.php';
 require_once '../clases/Barbero.php';
+require_once '../clases/Servicio.php';
 
 $servicios = Servicio::obtenerTodos();
 $barberos = Barbero::obtenerActivos();
@@ -44,16 +45,18 @@ $relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <?php foreach ($servicios as $servicio): ?>
                     <label class="opcion-reserva">
-                        <input type="radio" name="servicio_id" value="<?= $servicio['servicio_id'] ?>" required>
-                        <section>
-                            <strong><?= $servicio['nombre'] ?></strong>
-                            <small><?= $servicio['duracion_minutos'] ?> min</small>
-                        </section>
-                        <span><?= number_format($servicio['precio'], 2) ?> €</span>
-                    </label>
-                <?php endforeach; ?>
+                    <input type="radio" name="servicio_id" value="<?= $servicio['servicio_id'] ?>" required>
 
-                <button type="button" class="btn-siguiente">Siguiente</button>
+                    <section>
+                        <strong><?= htmlspecialchars($servicio['nombre']) ?></strong>
+                        <small><?= $servicio['duracion_minutos'] ?> min</small>
+                    </section>
+
+                    <span><?= number_format($servicio['precio'], 2) ?> €</span>
+                    </label>
+                                <?php endforeach; ?>
+
+                                <button type="button" class="btn-siguiente">Siguiente</button>
             </section>
 
             <!-- PASO 2: BARBERO -->
@@ -62,12 +65,12 @@ $relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                <?php foreach ($barberos as $barbero): ?>
                     <?php
-                    $serviciosBarbero = [];
-                    foreach ($relaciones as $relacion) {
-                        if ($relacion['barbero_id'] == $barbero['barbero_id']) {
-                            $serviciosBarbero[] = $relacion['servicio_id'];
+                        $serviciosBarbero = [];
+                        foreach ($relaciones as $relacion) {
+                            if ($relacion['barbero_id'] == $barbero['barbero_id']) {
+                                $serviciosBarbero[] = $relacion['servicio_id'];
+                            }
                         }
-                    }
                     ?>
                     <label class="opcion-barbero" data-servicios="<?= implode(',', $serviciosBarbero) ?>">
                         <input type="radio" name="barbero_id" value="<?= $barbero['barbero_id'] ?>" required>
