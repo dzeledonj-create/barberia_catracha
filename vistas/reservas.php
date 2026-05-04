@@ -1,9 +1,14 @@
 <?php
-require_once '../clases/Servicio.php';
+require_once '../clases/BD.php';
 require_once '../clases/Barbero.php';
+require_once '../clases/Servicio.php';
 
 $servicios = Servicio::obtenerTodos();
 $barberos = Barbero::obtenerActivos();
+$db = BD::obtenerConexion();
+
+$stmt = $db->query("SELECT barbero_id, servicio_id FROM barbero_servicio");
+$relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +18,7 @@ $barberos = Barbero::obtenerActivos();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservas - Barbería Catracha</title>
     <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
 
@@ -40,31 +46,42 @@ $barberos = Barbero::obtenerActivos();
 
                 <?php foreach ($servicios as $servicio): ?>
                     <label class="opcion-reserva">
-                        <input type="radio" name="servicio_id" value="<?= $servicio['servicio_id'] ?>" required>
-                        <section>
-                            <strong><?= $servicio['nombre'] ?></strong>
-                            <small><?= $servicio['duracion_minutos'] ?> min</small>
-                        </section>
-                        <span><?= number_format($servicio['precio'], 2) ?> €</span>
-                    </label>
-                <?php endforeach; ?>
+                    <input type="radio" name="servicio_id" value="<?= $servicio['servicio_id'] ?>" required>
 
-                <button type="button" class="btn-siguiente">Siguiente</button>
+                    <section>
+                        <strong><?= htmlspecialchars($servicio['nombre']) ?></strong>
+                        <small><?= $servicio['duracion_minutos'] ?> min</small>
+                    </section>
+
+                    <span><?= number_format($servicio['precio'], 2) ?> €</span>
+                    </label>
+                                <?php endforeach; ?>
+
+                                <button type="button" class="btn-siguiente">Siguiente</button>
             </section>
 
             <!-- PASO 2: BARBERO -->
             <section class="reserva-step" id="step-2">
                 <h2>Elige tu barbero</h2>
 
-                <?php foreach ($barberos as $barbero): ?>
-                    <label class="opcion-barbero">
+               <?php foreach ($barberos as $barbero): ?>
+                    <?php
+                        $serviciosBarbero = [];
+                        foreach ($relaciones as $relacion) {
+                            if ($relacion['barbero_id'] == $barbero['barbero_id']) {
+                                $serviciosBarbero[] = $relacion['servicio_id'];
+                            }
+                        }
+                    ?>
+                    <label class="opcion-barbero" data-servicios="<?= implode(',', $serviciosBarbero) ?>">
                         <input type="radio" name="barbero_id" value="<?= $barbero['barbero_id'] ?>" required>
-                        <img src="../<?= $barbero['foto_url'] ?>" alt="<?= $barbero['nombre'] ?>">
+                        <img src="../<?= htmlspecialchars($barbero['foto_url']) ?>" alt="<?= htmlspecialchars($barbero['nombre']) ?>">
                         <section>
-                            <strong><?= $barbero['nombre'] ?></strong>
-                            <small><?= $barbero['especialidad'] ?></small>
+                            <strong><?= htmlspecialchars($barbero['nombre']) ?></strong>
+                            <small><?= htmlspecialchars($barbero['especialidad']) ?></small>
                         </section>
                     </label>
+
                 <?php endforeach; ?>
 
                 <button type="button" class="btn-atras">Atrás</button>
@@ -75,10 +92,25 @@ $barberos = Barbero::obtenerActivos();
             <section class="reserva-step" id="step-3">
                 <h2>Elige fecha y hora</h2>
 
-                <input type="datetime-local" name="fecha_hora" required>
+                <label class="label-form">Fecha</label>
+                <input type="date" name="fecha" class="input-estilo" required>
 
-                <button type="button" class="btn-atras">Atrás</button>
-                <button type="button" class="btn-siguiente">Siguiente</button>
+                <label class="label-form">Hora</label>
+                <section class="horas-grid">
+                    <?php
+                    $horas = ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00'];
+                    ?>
+
+                    <?php foreach ($horas as $hora): ?>
+                        <label class="opcion-hora">
+                            <input type="radio" name="hora" value="<?= $hora ?>" required>
+                            <span><?= $hora ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                    </section>
+
+            <button type="button" class="btn-atras">Atrás</button>
+            <button type="button" class="btn-siguiente">Siguiente</button>
             </section>
 
             <!-- PASO 4: DATOS CLIENTE -->
@@ -112,6 +144,7 @@ $barberos = Barbero::obtenerActivos();
 
 <script src="../assets/script.js"></script>
 <?php include_once '../includes/footer.php'; ?>
-
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="../assets/script.js"></script>
 </body>
 </html>
