@@ -28,7 +28,8 @@ require_once '../clases/BD.php';
             
             <section class="barbero-card">
                 <section class="barbero-img">
-                    <img src="img/ross.jpg" alt="Ross - Barbero Senior">
+                    <img src="img/ross.jpeg">
+                        <img src="../img/<?php echo $barbero['imagen']; ?>" alt="Foto de barbero">
                 </section>
                 <aside class="barbero-info">
                     <h2>Ross</h2>
@@ -44,7 +45,7 @@ require_once '../clases/BD.php';
 
             <section class="barbero-card">
                 <section class="barbero-img">
-                    <img src="assets/img<?php echo htmlspecialchars($barberos['luis.jpeg']); ?>" alt="Luis - Barbero Especialista">
+                    <img src="../<?php echo htmlspecialchars($barberos['luis.jpeg']); ?>" alt="Luis - Barbero Especialista">
                 </section>
                 <aside class="barbero-info">
                     <h2>Luis</h2>
