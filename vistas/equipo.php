@@ -26,39 +26,36 @@ $barberos = Barbero::obtenerActivos();
             </p>
         </header>
 
-        <section class="equipo-grid">
-            
-            <section class="barbero-card">
-                <section class="barbero-img">
-                    <img src="img/ross.jpg" alt="Ross - Barbero Senior">
-                </section>
-                <aside class="barbero-info">
-                    <h2>Ross</h2>
-                    <p class="rango">BARBERO SENIOR</p>
-                    <p class="bio">Especialista en degradados y diseños de línea. Más de 8 años de experiencia perfeccionando cada detalle.</p>
-                    <nav class="tags">
-                        <span>FADES</span>
-                        <span>DISEÑOS</span>
-                        <span>BARBA</span>
-                    </nav>
-                </aside>
-            </section>
+       <section class="equipo-grid">
 
-            <section class="barbero-card">
-                <section class="barbero-img">
-                    <img src="assets/img<?php echo htmlspecialchars($barberos['luis.jpeg']); ?>" alt="Luis - Barbero Especialista">
-                </section>
-                <aside class="barbero-info">
-                    <h2>Luis</h2>
-                    <p class="rango">BARBERO ESPECIALISTA</p>
-                    <p class="bio">Experto en cortes clásicos y modernos. Su precisión con la navaja y tijeras es insuperable.</p>
-                    <nav class="tags">
-                        <span>CLÁSICOS</span>
-                        <span>POMPADOUR</span>
-                        <span>TINTE</span>
-                    </nav>
-                </aside>
+<?php foreach ($barberos as $barbero): ?>
+
+    <section class="barbero-card">
+
+        <section class="barbero-img">
+            <img src="../<?= htmlspecialchars($barbero['foto_url']) ?>" 
+                 alt="<?= htmlspecialchars($barbero['nombre']) ?>">
+        </section>
+
+        <section class="barbero-info">
+            <h2><?= htmlspecialchars($barbero['nombre']) ?></h2>
+
+            <p class="rango">
+                <?= htmlspecialchars($barbero['especialidad'] ?? 'Barbero') ?>
+            </p>
+
+            <p class="bio">
+                <?= htmlspecialchars($barbero['descripcion'] ?? 'Profesional de barbería.') ?>
+            </p>
+
+            <section class="tags">
+                <span>FADE</span>
+                <span>CORTE</span>
+                <span>BARBA</span>
             </section>
+        </section>
+
+    </section>
 
 <?php endforeach; ?>
 
