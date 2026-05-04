@@ -580,6 +580,8 @@ body {
     font-size: 4rem;
     font-weight: 900;
     margin: 10px 0;
+    color: var(--white);
+    text-align: center;
 }
 
 .underline {
@@ -780,7 +782,8 @@ body {
 .ubicacion-mapa iframe {
     width: 100%;
     height: 100%;
-    filter: grayscale(1) contrast(1.2) invert(0.9); /* Efecto mapa oscuro premium */
+    filter: none;
+    border: none;
 }
 
 /* Responsivo para Ubicación */
