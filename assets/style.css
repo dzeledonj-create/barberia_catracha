@@ -1246,3 +1246,117 @@ body {
     box-shadow: 0 0 0 1px var(--gold);
     color: var(--gold);
 }
+
+
+/* --- SECCIÓN RESEÑAS --- */
+
+.resenas-page {
+    background-color: var(--dark-bg);
+    color: var(--white);
+    padding: 90px 20px;
+}
+
+.resenas-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.google-rating {
+    margin-top: 20px;
+}
+
+.stars {
+    color: var(--gold);
+    letter-spacing: 3px;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.google-rating h3 {
+    color: var(--white);
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.google-rating p {
+    color: var(--gray-text);
+    font-size: 0.85rem;
+}
+
+.resenas-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.resena-card {
+    background-color: #151515;
+    border: 1px solid #252525;
+    padding: 25px;
+    transition: 0.3s;
+}
+
+.resena-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+}
+
+.comentario {
+    color: var(--gray-text);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.resena-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.resena-footer strong {
+    color: var(--gold);
+    font-size: 0.85rem;
+}
+
+.resena-footer span {
+    color: #777;
+    font-size: 0.75rem;
+}
+
+.resenas-cta {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.resenas-cta p {
+    color: var(--gray-text);
+    margin-bottom: 25px;
+}
+
+.resenas-botones {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-google,
+.btn-resenas-reserva {
+    padding: 16px 30px;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.btn-google {
+    border: 1px solid var(--gold);
+    color: var(--gold);
+}
+
+.btn-resenas-reserva {
+    background-color: var(--gold);
+    color: #000;
+}
