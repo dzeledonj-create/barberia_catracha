@@ -47,3 +47,51 @@ stateDiagram-v2
     pagado --> [*]
     reembolsado --> [*]
 ```
+```mermaid
+stateDiagram-v2
+    direction LR
+
+    [*] --> Activo : "new Barbero()"
+    
+    state "Barbero Activo" as Activo
+    state "Barbero Inactivo" as Inactivo
+
+    Activo --> Inactivo : "$barbero->desactivar()"
+    note right of Inactivo
+        No aparece en el 
+        listado de reservas.
+    end note
+
+    Inactivo --> Activo : "$barbero->activar()"
+    note right of Activo
+        Disponible para 
+        atender clientes.
+    end note
+
+    Activo --> [*] : "$barbero->eliminar()"
+    Inactivo --> [*] : "$barbero->eliminar()"
+```
+```mermaid
+stateDiagram-v2
+    direction LR
+
+    [*] --> Activa : "new MuralSugerencia()"
+    
+    state "Sugerencia Visible" as Activa
+    state "Sugerencia Oculta" as Inactiva
+
+    Activa --> Inactiva : "$sugerencia->desactivar()"
+    note right of Inactiva
+        No aparece en la 
+        Galería de la Web.
+    end note
+
+    Inactiva --> Activa : "$sugerencia->activar()"
+    note right of Activa
+        Se muestra en el Mural
+        para los clientes.
+    end note
+
+    Activa --> [*] : "$sugerencia->eliminar()"
+    Inactiva --> [*] : "$sugerencia->eliminar()"
+```

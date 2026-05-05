@@ -39,3 +39,46 @@ graph TD
     style D fill:#2d2d2d,stroke:#d4af37,color:#fff
     style J fill:#2d2d2d,stroke:#d4af37,color:#fff
 ```
+
+```mermaid
+graph TD
+    A([Inicio: Login Administrador]) --> B{Autenticación}
+    B -- Fallida --> A
+    B -- Exitosa --> C[Dashboard Principal]
+
+    %% Ramas de gestión
+    C --> D{¿Qué desea gestionar?}
+
+    %% Rama de Barberos
+    D --> |Barberos| E[Ver Listado de Barberos]
+    E --> F{Acción}
+    F --> |Nuevo| G[Registrar Barbero]
+    F --> |Editar| H[Modificar datos/foto]
+    F --> |Estado| I[Activar/Desactivar Barbero]
+    G & H & I --> J[Guardar Cambios en BD]
+
+    %% Rama de Mural
+    D --> |Mural| K[Gestionar Galería]
+    K --> L{Acción}
+    L --> |Subir| M[Nueva Foto de Corte]
+    L --> |Ocultar| N[Desactivar Sugerencia]
+    M & N --> J
+
+    %% Rama de Reservas
+    D --> |Reservas| O[Ver Agenda del Día]
+    O --> P{Acción sobre Reserva}
+    P --> |Confirmar| Q[Cambiar estado a 'Confirmada']
+    P --> |Cobrar| R[Generar Pago y Ticket]
+    P --> |Cancelar| S[Anular cita]
+    Q & R & S --> J
+
+    J --> T{¿Continuar?}
+    T -- Sí --> C
+    T -- No --> U([Cerrar Sesión])
+
+    %% Estilos "Barbería Catracha"
+    style A fill:#1a1a1a,stroke:#d4af37,color:#fff
+    style U fill:#1a1a1a,stroke:#d4af37,color:#fff
+    style C fill:#2d2d2d,stroke:#d4af37,color:#fff
+    style D fill:#d4af37,stroke:#000,color:#000
+```
