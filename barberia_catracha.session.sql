@@ -162,3 +162,20 @@ UPDATE servicios SET limite = 'corte' WHERE nombre = 'Corte para jubilados';
 UPDATE servicios SET limite = 'corte' WHERE nombre = 'Corte y diseño';
 
 UPDATE servicios SET limite = 'permanente' WHERE nombre = 'Permanente';
+
+
+CREATE TABLE usuarios (
+    usuario_id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    rol VARCHAR(20) NOT NULL CHECK (rol IN ('admin', 'barbero')),
+    barbero_id INT REFERENCES barberos(barbero_id),
+    activo BOOLEAN DEFAULT TRUE
+);
+
+INSERT INTO usuarios (nombre, email, password, rol, barbero_id) VALUES
+('Administrador', 'admin@barberia.com', '1234', 'admin', NULL),
+('Ross', 'ross@barberia.com', '1234', 'barbero', 1),
+('Rolando', 'rolando@barberia.com', '1234', 'barbero', 2),
+('Luis', 'luis@barberia.com', '1234', 'barbero', 3);

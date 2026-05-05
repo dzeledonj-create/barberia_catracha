@@ -28,7 +28,7 @@ foreach ($serviciosRaw as $s) {
 
 <main class="servicios-main">
     <header class="servicios-header-top">
-        <p class="subtitle">LISTA DE PRECIOS PREMIUM</p>
+        <p class="subtitle">LISTA DE PRECIOS</p>
         <h1 class="titulo-principal">Nuestros Servicios</h1>
         <span class="underline"></span>
     </header>
