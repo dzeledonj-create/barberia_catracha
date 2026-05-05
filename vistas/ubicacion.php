@@ -9,6 +9,7 @@ require_once '../clases/BD.php';
     <title>Ubicación - Barbería Catracha</title>
     <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
 </head>
 <body class="bg-dark">
 

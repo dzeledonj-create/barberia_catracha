@@ -19,6 +19,7 @@ $relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Reservas - Barbería Catracha</title>
     <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
 </head>
 <body>
 

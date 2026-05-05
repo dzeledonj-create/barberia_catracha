@@ -22,6 +22,7 @@ if ($categoria_actual === 'todos') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galería Dinámica - Barbería Catracha</title>
     <link rel="stylesheet" href="../assets/style.css">
+    <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
 </head>
 <body>
 

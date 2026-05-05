@@ -17,7 +17,7 @@ include_once '../includes/header.php';
 
     <section class="resenas-header">
         <p class="subtitle">LO QUE DICEN NUESTROS CLIENTES</p>
-        <h1 class="titulo-principal">Reseñas Reales</h1>
+        <h1 class="titulo-principal">Reseñas</h1>
         <section class="underline"></section>
     </section>
 
