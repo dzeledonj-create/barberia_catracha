@@ -7,13 +7,15 @@ class Servicio {
     public ?string $descripcion;
     public float $precio;
     public int $duracionMinutos;
+    public ?string $limite;
 
-    public function __construct($nombre, $descripcion, $precio, $duracionMinutos, $servicioId = null) {
+    public function __construct($nombre, $descripcion, $precio, $duracionMinutos, $servicioId = null, $limite = null) {
         $this->servicioId = $servicioId;
         $this->nombre = $nombre;
         $this->descripcion = $descripcion;
         $this->precio = $precio;
         $this->duracionMinutos = $duracionMinutos;
+        $this->limite = $limite;
     }
 
     // Métodos para formatear precio y duración
@@ -34,8 +36,8 @@ class Servicio {
         $db = BD::obtenerConexion();
 
         if ($this->servicioId === null) {
-            $sql = "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos)
-                    VALUES (?, ?, ?, ?)
+            $sql = "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, limite)
+                    VALUES (?, ?, ?, ?, ?)
                     RETURNING servicio_id";
 
             $stmt = $db->prepare($sql);
@@ -43,7 +45,8 @@ class Servicio {
                 $this->nombre,
                 $this->descripcion,
                 $this->precio,
-                $this->duracionMinutos
+                $this->duracionMinutos,
+                $this->limite
             ]);
 
             $this->servicioId = $stmt->fetchColumn();
@@ -51,7 +54,7 @@ class Servicio {
         }
 
         $sql = "UPDATE servicios
-                SET nombre = ?, descripcion = ?, precio = ?, duracion_minutos = ?
+                SET nombre = ?, descripcion = ?, precio = ?, duracion_minutos = ?, limite = ?
                 WHERE servicio_id = ?";
 
         $stmt = $db->prepare($sql);
@@ -60,6 +63,7 @@ class Servicio {
             $this->descripcion,
             $this->precio,
             $this->duracionMinutos,
+            $this->limite,
             $this->servicioId
         ]);
     }
@@ -76,7 +80,7 @@ class Servicio {
     public static function obtenerTodos(): array {
         $db = BD::obtenerConexion();
 
-        $stmt = $db->query("SELECT * FROM servicios ORDER BY servicio_id DESC");
+        $stmt = $db->query("SELECT * FROM servicios ORDER BY limite ASC, nombre ASC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -98,7 +102,8 @@ class Servicio {
             $data['descripcion'],
             $data['precio'],
             $data['duracion_minutos'],
-            $data['servicio_id']
+            $data['servicio_id'],
+            $data['limite']
         );
     }
 }
