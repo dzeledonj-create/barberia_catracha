@@ -20,6 +20,7 @@ foreach ($serviciosRaw as $s) {
     <title>Servicios - Barbería Catracha</title>
     <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="../assets/servicios-style.css">
+    <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
 </head>
 <body class="servicios-body">
 
