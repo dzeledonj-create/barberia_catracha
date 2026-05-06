@@ -5,14 +5,12 @@
     </section>
 
     <nav class="admin-menu">
-        <a href="panel.php">Dashboard</a>
-        <a href="reservas.php">Reservas</a>
-        <a href="servicios.php">Servicios</a>
-        <a href="barberos.php">Equipo</a>
-        <a href="galeria.php">Galería</a>
-        <a href="resenas.php">Reseñas</a>
-        <a href="blog.php">Blog</a>
-        <a href="../vistas/ubicacion.php">Ubicación</a>
+        <a href="/barberia_catracha/admin/panel.php">Dashboard</a>
+<a href="/barberia_catracha/admin/reservas/reservas.php">Reservas</a>
+<a href="/barberia_catracha/admin/barberos/index.php">Barberos</a>
+<a href="/barberia_catracha/admin/servicios/index.php">Servicios</a>
+<a href="/barberia_catracha/admin/resenas/index.php">Reseñas</a>
+<a href="/barberia_catracha/admin/blog/index.php">Blog</a>
     </nav>
 
     <section class="admin-bottom">
