@@ -38,17 +38,27 @@ require_once '../clases/BD.php';
             </section>
 
             <section class="info-item">
-                <header class="info-header">
-                    <i class="fas fa-clock"></i>
-                    <h2>HORARIOS</h2>
-                </header>
-                <ul class="horario-lista">
-                    <li><span class="dia">Lunes</span> <span class="horas">10:00 – 19:30</span></li>
-                    <li><span class="dia">Martes - Viernes</span> <span class="horas">09:30 – 20:30</span></li>
-                    <li><span class="dia">Sábado</span> <span class="horas">09:30 – 20:30</span></li>
-                    <li><span class="dia">Domingo</span> <span class="horas">10:00 – 13:30</span></li>
-                </ul>
-            </section>
+    <header class="info-header">
+        <i class="fas fa-clock"></i>
+        <h2>HORARIOS</h2>
+    </header>
+
+    <?php
+    $db = BD::obtenerConexion();
+    $stmt = $db->query("SELECT dia_semana, hora_apertura, hora_cierre FROM horarios ORDER BY horario_id ASC");
+    $horarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
+
+    <ul class="horario-lista">
+        <?php foreach ($horarios as $h): ?>
+            <li>
+                <span class="dia"><?= $h['dia_semana'] ?></span>
+                <span class="horas"><?= substr($h['hora_apertura'], 0, 5) ?> – <?= substr($h['hora_cierre'], 0, 5) ?></span>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</section>
+
 
             <section class="info-item">
                 <header class="info-header">

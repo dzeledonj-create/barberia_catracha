@@ -97,6 +97,8 @@ INSERT INTO horarios (dia_semana, hora_apertura, hora_cierre) VALUES
 (6, '09:30', '20:30'), -- Sábado
 (0, '10:00', '13:30'); -- Domingo
 
+
+
 INSERT INTO barbero_servicio (barbero_id, servicio_id) VALUES
 (1, 1),
 (1, 2),
@@ -181,3 +183,21 @@ INSERT INTO usuarios (nombre, email, password, rol, barbero_id) VALUES
 ('Luis', 'luis@barberia.com', '1234', 'barbero', 3);
 
 SELECT * FROM usuarios;
+
+ALTER TABLE horarios
+ALTER COLUMN dia_semana TYPE VARCHAR(20);
+
+INSERT INTO horarios (dia_semana, hora_apertura, hora_cierre) VALUES
+('Lunes', '10:00', '19:30'),
+('Martes', '09:30', '20:30'),
+('Miércoles', '09:30', '20:30'),
+('Jueves', '09:30', '20:30'),
+('Viernes', '09:30', '20:30'),
+('Sábado', '09:30', '20:30'),
+('Domingo', '10:00', '13:30');
+
+
+SELECT * FROM horarios;
+
+DELETE FROM horarios
+WHERE horario_id <= 7;
