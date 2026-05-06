@@ -1360,3 +1360,50 @@ body {
     background-color: var(--gold);
     color: #000;
 }
+
+
+/* --- SECCIÓN LOGIN --- */
+.login-page {
+    min-height: 100vh;
+    background-color: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.login-box {
+    width: 400px;
+    background-color: #111;
+    border: 1px solid #222;
+    padding: 40px;
+    text-align: center;
+}
+
+.login-box h1 {
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    background-color: #1b1b1b;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 14px;
+    background-color: #d99c2b;
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.login-error {
+    color: #ff5555;
+    margin-bottom: 15px;
+}

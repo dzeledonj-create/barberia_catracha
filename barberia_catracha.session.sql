@@ -137,3 +137,47 @@ INSERT INTO mural_sugerencias (nombre_corte, descripcion, imagen_url, estilo, ac
 ('Buzz cut', 'Corte corto, práctico y fácil de mantener.', 'assets/img/mural/buzz-cut.jpg', 'Moderno', TRUE);
 
 SELECT * FROM horarios;
+
+ALTER TABLE servicios
+ADD COLUMN limite VARCHAR(50);
+
+UPDATE servicios SET limite = 'populares' WHERE nombre = 'Corte';
+UPDATE servicios SET limite = 'populares' WHERE nombre = 'Corte y barba';
+UPDATE servicios SET limite = 'populares' WHERE nombre = 'Barba';
+
+UPDATE servicios SET limite = 'barba' WHERE nombre = 'Barba';
+UPDATE servicios SET limite = 'barba' WHERE nombre = 'Barba + tinte';
+
+UPDATE servicios SET limite = 'cejas' WHERE nombre = 'Cejas con cuchilla';
+UPDATE servicios SET limite = 'cejas' WHERE nombre = 'Cejas con hilo';
+
+UPDATE servicios SET limite = 'color' WHERE nombre = 'Tinte negro';
+UPDATE servicios SET limite = 'color' WHERE nombre = 'Tinte de colores';
+
+UPDATE servicios SET limite = 'corte_y_barba' WHERE nombre = 'Corte y barba';
+UPDATE servicios SET limite = 'corte_y_barba' WHERE nombre = 'Corte, barba y tinte De Pelo';
+
+UPDATE servicios SET limite = 'corte' WHERE nombre = 'Corte';
+UPDATE servicios SET limite = 'corte' WHERE nombre = 'Corte para jubilados';
+UPDATE servicios SET limite = 'corte' WHERE nombre = 'Corte y diseño';
+
+UPDATE servicios SET limite = 'permanente' WHERE nombre = 'Permanente';
+
+
+CREATE TABLE usuarios (
+    usuario_id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    rol VARCHAR(20) NOT NULL CHECK (rol IN ('admin', 'barbero')),
+    barbero_id INT REFERENCES barberos(barbero_id),
+    activo BOOLEAN DEFAULT TRUE
+);
+
+INSERT INTO usuarios (nombre, email, password, rol, barbero_id) VALUES
+('Administrador', 'admin@barberia.com', '1234', 'admin', NULL),
+('Ross', 'ross@barberia.com', '1234', 'barbero', 1),
+('Rolando', 'rolando@barberia.com', '1234', 'barbero', 2),
+('Luis', 'luis@barberia.com', '1234', 'barbero', 3);
+
+SELECT * FROM usuarios;
