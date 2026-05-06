@@ -26,7 +26,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'barbero') {
     <li>Cancelar reservas</li>
 </ul>
 
-<a href="../logout.php">Cerrar sesión</a>
+<a href="../includes/logout.php">Cerrar sesión</a>
 
 </body>
 </html>

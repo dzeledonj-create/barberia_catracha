@@ -44,19 +44,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <section class="login-page">
+
+    <section class="login-icon">
+    <img src="/barberia_catracha/assets/img/logo.png" alt="Logo Barbería Catracha">
+</section>
+
     <section class="login-box">
-        <h1>Iniciar sesión</h1>
+        <h2>INICIAR SESIÓN</h2>
 
         <?php if ($error): ?>
             <p class="login-error"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
         <form method="POST">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-            <button type="submit">Entrar</button>
+            <label>Correo electrónico</label>
+            <input type="email" name="email" placeholder="tu@correo.com" required>
+
+            <label>Contraseña</label>
+            <input type="password" name="password" placeholder="********" required>
+
+            <button type="submit">↪ ENTRAR AL PANEL</button>
         </form>
     </section>
+
+    <a href="index.php" class="volver-web">← Volver a la web</a>
+
 </section>
 
 </body>

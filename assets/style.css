@@ -411,6 +411,19 @@ body {
     color: #777;
 }
 
+.footer-login {
+    display: inline;
+    color: inherit;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.footer-bottom .footer-login {
+    display: inline !important;
+}
+
+.footer-login:hover {
+    color: var(--gold);
+}
 
 /* --- SECCIÓN GALERÍA --- */
 
@@ -1251,95 +1264,51 @@ body {
 /* --- SECCIÓN RESEÑAS --- */
 
 .resenas-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: var(--dark-bg);
     color: var(--white);
-    padding: 90px 20px;
+    padding: 40px 20px;
+    text-align: center;
+    margin-bottom: 30px;
+    min-height: auto;
+}
+
+.widget-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0; /* 10px de espacio abajo nada más */
+    padding: 0;
 }
 
 .resenas-header {
     text-align: center;
-    margin-bottom: 60px;
-}
-
-.google-rating {
-    margin-top: 20px;
-}
-
-.stars {
-    color: var(--gold);
-    letter-spacing: 3px;
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-}
-
-.google-rating h3 {
-    color: var(--white);
-    font-size: 1.3rem;
-    margin-bottom: 5px;
-}
-
-.google-rating p {
-    color: var(--gray-text);
-    font-size: 0.85rem;
-}
-
-.resenas-grid {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-}
-
-.resena-card {
-    background-color: #151515;
-    border: 1px solid #252525;
-    padding: 25px;
-    transition: 0.3s;
-}
-
-.resena-card:hover {
-    border-color: var(--gold);
-    transform: translateY(-5px);
-}
-
-.comentario {
-    color: var(--gray-text);
-    font-style: italic;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-.resena-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.resena-footer strong {
-    color: var(--gold);
-    font-size: 0.85rem;
-}
-
-.resena-footer span {
-    color: #777;
-    font-size: 0.75rem;
+    margin-bottom: 20px;
 }
 
 .resenas-cta {
     text-align: center;
-    margin-top: 60px;
+    margin-top: 10px;
+    width: 100%;
 }
 
 .resenas-cta p {
     color: var(--gray-text);
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
 }
 
 .resenas-botones {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+[class*="elfsight-app"] {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 .btn-google,
@@ -1361,49 +1330,291 @@ body {
     color: #000;
 }
 
-
 /* --- SECCIÓN LOGIN --- */
 .login-page {
     min-height: 100vh;
     background-color: #0a0a0a;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: #fff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-logo-box {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.login-icon {
+    width: 225px;
+    height: 225px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.login-logo-box h1 {
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+.login-logo-box h1 span {
+    color: #fff;
+}
+
+.login-logo-box h1 {
+    color: #d99c2b;
+}
+
+.login-logo-box p {
+    color: #777;
+    font-size: 0.75rem;
+    margin-top: 5px;
 }
 
 .login-box {
-    width: 400px;
+    width: 360px;
     background-color: #111;
     border: 1px solid #222;
-    padding: 40px;
-    text-align: center;
+    padding: 30px;
 }
 
-.login-box h1 {
-    margin-bottom: 30px;
+.login-box h2 {
+    font-size: 1rem;
+    margin-bottom: 25px;
     color: #fff;
+}
+
+.login-box label {
+    display: block;
+    color: #777;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 800;
 }
 
 .login-box input {
     width: 100%;
     padding: 14px;
-    margin-bottom: 15px;
-    background-color: #1b1b1b;
+    margin-bottom: 18px;
+    background-color: #252525;
     border: 1px solid #333;
     color: #fff;
 }
 
+.login-box input:focus {
+    outline: none;
+    border-color: #d99c2b;
+}
+
 .login-box button {
     width: 100%;
-    padding: 14px;
+    padding: 15px;
     background-color: #d99c2b;
     border: none;
-    font-weight: 800;
+    font-weight: 900;
+    color: #000;
     cursor: pointer;
+}
+
+.login-box button:hover {
+    background-color: #f0ad32;
 }
 
 .login-error {
     color: #ff5555;
     margin-bottom: 15px;
+    font-size: 0.85rem;
+}
+
+.volver-web {
+    margin-top: 20px;
+    color: #777;
+    text-decoration: none;
+    font-size: 0.75rem;
+}
+
+.volver-web:hover {
+    color: #d99c2b;
+}
+
+
+/* --- PANEL ADMIN --- */
+
+.admin-layout {
+    min-height: 100vh;
+    display: flex;
+    background-color: #0a0a0a;
+    color: #fff;
+}
+
+.admin-sidebar {
+    width: 230px;
+    background-color: #111;
+    border-right: 1px solid #222;
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-logo {
+    margin-bottom: 35px;
+    color: var(--gold);
+}
+
+.admin-logo strong {
+    display: block;
+    font-size: 1rem;
+}
+
+.admin-logo span {
+    color: #777;
+    font-size: 0.75rem;
+}
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-menu a {
+    color: #aaa;
+    text-decoration: none;
+    padding: 12px;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.admin-menu a:hover {
+    background-color: var(--gold);
+    color: #000;
+}
+
+.admin-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-bottom a {
+    color: #777;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 35px;
+}
+
+.admin-small-title {
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.admin-main h1 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.admin-subtitle {
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.admin-card,
+.admin-panel-box {
+    background-color: #111;
+    border: 1px solid #222;
+    padding: 20px;
+}
+
+.admin-card span {
+    color: #888;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.admin-card strong {
+    display: block;
+    font-size: 1.8rem;
+    margin-top: 10px;
+}
+
+.admin-panel-box h2 {
+    margin-bottom: 20px;
+}
+
+.admin-panel-box p {
+    color: #777;
+}
+
+.admin-actions {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.admin-actions a {
+    background-color: #151515;
+    border: 1px solid #222;
+    color: #fff;
+    text-decoration: none;
+    padding: 18px;
+    text-align: center;
+}
+
+.admin-actions a:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    border-bottom: 1px solid #222;
+    padding: 14px;
+    text-align: left;
+}
+
+.admin-table th {
+    color: var(--gold);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.admin-table td {
+    color: #ccc;
+}
+
+.admin-table a {
+    color: var(--gold);
+    margin-right: 10px;
+    text-decoration: none;
 }
