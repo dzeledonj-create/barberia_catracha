@@ -83,14 +83,6 @@ class Reserva {
         ]);
     }
 
-    // Método para eliminar la reserva de la base de datos
-    public function eliminar(): bool {
-        $db = BD::obtenerConexion();
-
-        $stmt = $db->prepare("DELETE FROM reservas WHERE reserva_id = ?");
-        return $stmt->execute([$this->reservaId]);
-    }
-
     // Método para obtener todas las reservas con detalles de cliente, barbero y servicio
     public static function obtenerTodas(): array {
         $db = BD::obtenerConexion();
@@ -169,4 +161,42 @@ class Reserva {
 
         return $stmt->fetchColumn() == 0;
     }
+
+    // Método para obtener todas las reservas con detalles para el panel de administración
+    public static function obtenerTodasConDetalles() {
+    $db = BD::obtenerConexion();
+
+    $sql = "SELECT 
+                r.reserva_id,
+                CONCAT(c.nombre, ' ', c.apellido) AS cliente,
+                b.nombre AS barbero,
+                s.nombre AS servicio,
+                r.fecha_hora,
+                r.estado
+            FROM reservas r
+            JOIN clientes c ON r.cliente_id = c.cliente_id
+            JOIN barberos b ON r.barbero_id = b.barbero_id
+            JOIN servicios s ON r.servicio_id = s.servicio_id
+            ORDER BY r.fecha_hora DESC";
+
+    $stmt = $db->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Métodos para cambiar el estado de la reserva desde el panel de administración
+public static function cambiarEstado($reservaId, $estado) {
+    $db = BD::obtenerConexion();
+
+    $sql = "UPDATE reservas SET estado = ? WHERE reserva_id = ?";
+    $stmt = $db->prepare($sql);
+    return $stmt->execute([$estado, $reservaId]);
+}
+
+// Método para eliminar una reserva desde el panel de administración
+public static function eliminar($reservaId) {
+    $db = BD::obtenerConexion();
+
+    $stmt = $db->prepare("DELETE FROM reservas WHERE reserva_id = ?");
+    return $stmt->execute([$reservaId]);
+}
 }

@@ -12,21 +12,55 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
 <head>
     <meta charset="UTF-8">
     <title>Panel Admin</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
-<h1>Panel de Administración</h1>
+<section class="admin-layout">
 
-<p>Bienvenido, <?= $_SESSION['nombre'] ?></p>
+    <?php include_once 'includes/admin_sidebar.php'; ?>
 
-<ul>
-    <li>Gestionar barberos</li>
-    <li>Gestionar reservas</li>
-    <li>Gestionar reseñas</li>
-</ul>
+    <main class="admin-main">
+        <p class="admin-small-title">DASHBOARD</p>
 
-<a href="../includes/logout.php">Cerrar sesión</a>
+        <h1>Bienvenido al Panel</h1>
+        <p class="admin-subtitle">Gestiona toda la barbería desde aquí.</p>
+
+        <section class="admin-stats">
+            <section class="admin-card">
+                <span>Total reservas</span>
+                <strong>0</strong>
+            </section>
+
+            <section class="admin-card">
+                <span>Pendientes</span>
+                <strong>0</strong>
+            </section>
+
+            <section class="admin-card">
+                <span>Confirmadas</span>
+                <strong>0</strong>
+            </section>
+
+            <section class="admin-card">
+                <span>Canceladas</span>
+                <strong>0</strong>
+            </section>
+        </section>
+
+        <section class="admin-panel-box">
+            <h2>Reservas recientes</h2>
+            <p>No hay reservas todavía.</p>
+        </section>
+
+        <section class="admin-actions">
+            <a href="servicios.php">Gestionar servicios</a>
+            <a href="barberos.php">Gestionar equipo</a>
+            <a href="reservas.php">Ver reservas</a>
+        </section>
+    </main>
+
+</section>
 
 </body>
 </html>

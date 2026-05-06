@@ -1492,3 +1492,174 @@ body {
 .volver-web:hover {
     color: #d99c2b;
 }
+
+
+/* --- PANEL ADMIN --- */
+
+.admin-layout {
+    min-height: 100vh;
+    display: flex;
+    background-color: #0a0a0a;
+    color: #fff;
+}
+
+.admin-sidebar {
+    width: 230px;
+    background-color: #111;
+    border-right: 1px solid #222;
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-logo {
+    margin-bottom: 35px;
+    color: var(--gold);
+}
+
+.admin-logo strong {
+    display: block;
+    font-size: 1rem;
+}
+
+.admin-logo span {
+    color: #777;
+    font-size: 0.75rem;
+}
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-menu a {
+    color: #aaa;
+    text-decoration: none;
+    padding: 12px;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.admin-menu a:hover {
+    background-color: var(--gold);
+    color: #000;
+}
+
+.admin-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-bottom a {
+    color: #777;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 35px;
+}
+
+.admin-small-title {
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.admin-main h1 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.admin-subtitle {
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.admin-card,
+.admin-panel-box {
+    background-color: #111;
+    border: 1px solid #222;
+    padding: 20px;
+}
+
+.admin-card span {
+    color: #888;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.admin-card strong {
+    display: block;
+    font-size: 1.8rem;
+    margin-top: 10px;
+}
+
+.admin-panel-box h2 {
+    margin-bottom: 20px;
+}
+
+.admin-panel-box p {
+    color: #777;
+}
+
+.admin-actions {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.admin-actions a {
+    background-color: #151515;
+    border: 1px solid #222;
+    color: #fff;
+    text-decoration: none;
+    padding: 18px;
+    text-align: center;
+}
+
+.admin-actions a:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    border-bottom: 1px solid #222;
+    padding: 14px;
+    text-align: left;
+}
+
+.admin-table th {
+    color: var(--gold);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.admin-table td {
+    color: #ccc;
+}
+
+.admin-table a {
+    color: var(--gold);
+    margin-right: 10px;
+    text-decoration: none;
+}
