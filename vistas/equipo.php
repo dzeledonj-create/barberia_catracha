@@ -65,6 +65,7 @@ $barberos = Barbero::obtenerActivos();
         </section>
 
         <footer class="equipo-cta">
+            <?php include_once '../includes/footer.php'; ?>
             <a href="reservas.php" class="btn-reservar-equipo">ELIGE TU BARBERO Y RESERVA</a>
         </footer>
     </section>
