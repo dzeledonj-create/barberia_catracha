@@ -411,6 +411,19 @@ body {
     color: #777;
 }
 
+.footer-login {
+    display: inline;
+    color: inherit;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.footer-bottom .footer-login {
+    display: inline !important;
+}
+
+.footer-login:hover {
+    color: var(--gold);
+}
 
 /* --- SECCIÓN GALERÍA --- */
 
@@ -1367,43 +1380,115 @@ body {
     min-height: 100vh;
     background-color: #0a0a0a;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: #fff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-logo-box {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.login-icon {
+    width: 225px;
+    height: 225px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.login-logo-box h1 {
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+.login-logo-box h1 span {
+    color: #fff;
+}
+
+.login-logo-box h1 {
+    color: #d99c2b;
+}
+
+.login-logo-box p {
+    color: #777;
+    font-size: 0.75rem;
+    margin-top: 5px;
 }
 
 .login-box {
-    width: 400px;
+    width: 360px;
     background-color: #111;
     border: 1px solid #222;
-    padding: 40px;
-    text-align: center;
+    padding: 30px;
 }
 
-.login-box h1 {
-    margin-bottom: 30px;
+.login-box h2 {
+    font-size: 1rem;
+    margin-bottom: 25px;
     color: #fff;
+}
+
+.login-box label {
+    display: block;
+    color: #777;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 800;
 }
 
 .login-box input {
     width: 100%;
     padding: 14px;
-    margin-bottom: 15px;
-    background-color: #1b1b1b;
+    margin-bottom: 18px;
+    background-color: #252525;
     border: 1px solid #333;
     color: #fff;
 }
 
+.login-box input:focus {
+    outline: none;
+    border-color: #d99c2b;
+}
+
 .login-box button {
     width: 100%;
-    padding: 14px;
+    padding: 15px;
     background-color: #d99c2b;
     border: none;
-    font-weight: 800;
+    font-weight: 900;
+    color: #000;
     cursor: pointer;
+}
+
+.login-box button:hover {
+    background-color: #f0ad32;
 }
 
 .login-error {
     color: #ff5555;
     margin-bottom: 15px;
+    font-size: 0.85rem;
+}
+
+.volver-web {
+    margin-top: 20px;
+    color: #777;
+    text-decoration: none;
+    font-size: 0.75rem;
+}
+
+.volver-web:hover {
+    color: #d99c2b;
 }
