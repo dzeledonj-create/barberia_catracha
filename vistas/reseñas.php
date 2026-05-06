@@ -21,70 +21,21 @@ include_once '../includes/header.php';
         <section class="underline"></section>
     </section>
 
-    <section class="resenas-grid">
-
-        <section class="resena-card">
-            <p class="stars">★★★★★</p>
-            <p class="comentario">"Muy buen trato y corte perfecto."</p>
-            <section class="resena-footer">
-                <strong>— Jose</strong>
-                <span>Hace 2 semanas</span>
-            </section>
-        </section>
-
-        <section class="resena-card">
-    <p class="stars">★★★★★</p>
-    <p class="comentario">"Trato increíble y corte perfecto. Muy profesionales, repetiré seguro."</p>
-    <section class="resena-footer">
-        <strong>— Jose Miguel</strong>
-        <span>Hace 2 semanas</span>
-    </section>
-</section>
-
-<section class="resena-card">
-    <p class="stars">★★★★★</p>
-    <p class="comentario">"El mejor degradado que me han hecho en Zaragoza. Muy buen ambiente."</p>
-    <section class="resena-footer">
-        <strong>— Carlos R.</strong>
-        <span>Hace 1 mes</span>
-    </section>
-</section>
-
-<section class="resena-card">
-    <p class="stars">★★★★★</p>
-    <p class="comentario">"Rápidos, atentos y muy detallistas. Se nota que saben lo que hacen."</p>
-    <section class="resena-footer">
-        <strong>— David M.</strong>
-        <span>Hace 3 semanas</span>
-    </section>
-</section>
-
-<section class="resena-card">
-    <p class="stars">★★★★★</p>
-    <p class="comentario">"Muy buen servicio y precios justos. Llevo tiempo viniendo y siempre perfecto."</p>
-    <section class="resena-footer">
-        <strong>— Alejandro P.</strong>
-        <span>Hace 1 mes</span>
-    </section>
-</section>
-
-<section class="resena-card">
-    <p class="stars">★★★★★</p>
-    <p class="comentario">"Sin duda la mejor barbería del barrio. Profesionales y con muy buen rollo."</p>
-    <section class="resena-footer">
-        <strong>— Sergio V.</strong>
-        <span>Hace 2 semanas</span>
-    </section>
-</section>
-
+    <section class="widget-container">
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <div class="elfsight-app-fadea039-06dc-4982-ba29-5e89930fabc6" data-elfsight-app-lazy></div>
     </section>
 
     <section class="resenas-cta">
-        <a href="https://www.google.com/maps/place/Barberia+Catracha/" 
-           target="_blank" 
-           class="btn-google">
-            Ver reseñas en Google
-        </a>
+        <p>¿Te ha gustado tu corte? ¡Cuéntanos tu experiencia!</p>
+        <div class="resenas-botones">
+            <a href="https://maps.google.com/?q=Barbería+Catracha" 
+               target="_blank" 
+               class="btn-google">
+                Escribir reseña en Google
+            </a>
+            <a href="reservas.php" class="btn-resenas-reserva">Reservar Cita</a>
+        </div>
     </section>
 
 </section>

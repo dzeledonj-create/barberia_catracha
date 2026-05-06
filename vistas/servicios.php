@@ -58,11 +58,11 @@ foreach ($serviciosRaw as $s) {
             </nav>
         </section>
     <?php endforeach; ?>
-
     <footer class="categoria-cta">
         <a href="reservas.php" class="btn-reserva-premium">RESERVAR CITA AHORA</a>
     </footer>
-
 </main>
 </body>
+
+    <?php include_once '../includes/footer.php'; ?>
 </html>
