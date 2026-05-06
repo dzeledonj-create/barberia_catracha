@@ -179,3 +179,5 @@ INSERT INTO usuarios (nombre, email, password, rol, barbero_id) VALUES
 ('Ross', 'ross@barberia.com', '1234', 'barbero', 1),
 ('Rolando', 'rolando@barberia.com', '1234', 'barbero', 2),
 ('Luis', 'luis@barberia.com', '1234', 'barbero', 3);
+
+SELECT * FROM usuarios;
