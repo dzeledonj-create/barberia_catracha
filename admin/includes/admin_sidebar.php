@@ -6,13 +6,13 @@
 
     <nav class="admin-menu">
         <a href="panel.php">Dashboard</a>
-        <a href="GestionReservas.php">Reservas</a>
-        <a href="GestionServicios.php">Servicios</a>
-        <a href="GestionEquipo.php">Equipo</a>
-        <a href="GestionGaleria.php">Galería</a>
-        <a href="GestionResenas.php">Reseñas</a>
-        <a href="GestionBlog.php">Blog</a>
-        <a href="GestionUbicacion.php">Ubicación</a>
+        <a href="GestionesAdmin/GestionReservas.php">Reservas</a>
+        <a href="GestionesAdmin/GestionServicios.php">Servicios</a>
+        <a href="GestionesAdmin/GestionEquipo.php">Equipo</a>
+        <a href="GestionesAdmin/GestionGaleria.php">Galería</a>
+        <a href="GestionesAdmin/GestionResenas.php">Reseñas</a>
+        <a href="GestionesAdmin/GestionBlog.php">Blog</a>
+        <a href="GestionesAdmin/GestionUbicacion.php">Ubicación</a>
     </nav>
 
     <section class="admin-bottom">
