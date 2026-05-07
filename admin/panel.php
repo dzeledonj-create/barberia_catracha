@@ -54,9 +54,12 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
         </section>
 
         <section class="admin-actions">
-            <a href="servicios.php">Gestionar servicios</a>
-            <a href="barberos.php">Gestionar equipo</a>
-            <a href="reservas.php">Ver reservas</a>
+            <a href="GestionServicios.php">Gestionar Servicios</a>
+            <a href="GestionEquipo.php">Gestionar Equipo</a>
+            <a href="GestionReservas.php">Ver Reservas</a>
+            <a href="GestionGaleria.php">Gestionar Galería</a>
+            <a href="gestionBlog.php">Editar Blog</a>
+            <a href="GestionUbicacion.php">Actualizar Ubicación</a>
         </section>
     </main>
 
