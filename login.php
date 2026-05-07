@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'clases/clases_admin/GestorUsuarios.php';
+require_once 'admin/clases_admin/GestorUsuarios.php';
 
 $error = "";
 
