@@ -201,3 +201,9 @@ SELECT * FROM horarios;
 
 DELETE FROM horarios
 WHERE horario_id <= 7;
+
+ALTER TABLE barberos 
+ADD COLUMN descripcion TEXT,
+ADD COLUMN etiquetas VARCHAR(255);
+
+SELECT * FROM barberos;

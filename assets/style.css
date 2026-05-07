@@ -1457,186 +1457,843 @@ body {
     background-color: #0a0a0a;
     color: #fff;
 }
-
+ 
+ 
+/* ============================================================
+   LAYOUT GENERAL — GestionEquipo.php  (body.admin-panel)
+   ============================================================ */
+ 
+body.admin-panel {
+    display: flex;
+    min-height: 100vh;
+    background-color: #0a0a0a;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+ 
+ 
+/* ============================================================
+   SIDEBAR — admin_sidebar.php
+   Clases reales: .admin-sidebar  .admin-logo  .admin-menu  .admin-bottom
+   ============================================================ */
+ 
 .admin-sidebar {
-    width: 230px;
+    width: 250px;
+    min-height: 100vh;
     background-color: #111;
-    border-right: 1px solid #222;
-    padding: 25px 15px;
+    border-right: 1px solid #1c1c1c;
+    padding: 28px 15px 20px;
     display: flex;
     flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
-
-.admin-logo {
-    margin-bottom: 35px;
-    color: var(--gold);
-}
-
-.admin-logo strong {
+ 
+/* Logo */
+.admin-sidebar .admin-logo {
+    margin-bottom: 38px;
+    padding: 0 5px;
     display: block;
-    font-size: 1rem;
 }
-
-.admin-logo span {
-    color: #777;
-    font-size: 0.75rem;
+ 
+.admin-sidebar .admin-logo strong {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #d99c2b;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 1.1;
 }
-
-.admin-menu {
+ 
+.admin-sidebar .admin-logo span {
+    display: block;
+    color: #555;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+ 
+/* Menú de navegación */
+.admin-sidebar .admin-menu {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 2px;
+    flex: 1;
 }
-
-.admin-menu a {
-    color: #aaa;
+ 
+.admin-sidebar .admin-menu a {
+    color: #777;
     text-decoration: none;
-    padding: 12px;
-    font-size: 0.9rem;
-    transition: 0.3s;
+    padding: 11px 15px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: all 0.2s ease;
+    display: block;
+    border-left: 2px solid transparent;
 }
-
-.admin-menu a:hover {
-    background-color: var(--gold);
+ 
+.admin-sidebar .admin-menu a:hover {
+    color: #fff;
+    background-color: rgba(217, 156, 43, 0.07);
+    border-left-color: rgba(217, 156, 43, 0.3);
+}
+ 
+.admin-sidebar .admin-menu a.active {
+    background-color: #d99c2b;
     color: #000;
+    font-weight: 700;
+    border-left-color: transparent;
 }
-
-.admin-bottom {
+ 
+/* Pie del sidebar */
+.admin-sidebar .admin-bottom {
     margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
+    padding-top: 20px;
+    border-top: 1px solid #1c1c1c;
 }
-
-.admin-bottom a {
-    color: #777;
+ 
+.admin-sidebar .admin-bottom a {
+    color: #444;
     text-decoration: none;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    padding: 8px 15px;
+    transition: color 0.2s ease;
 }
-
+ 
+.admin-sidebar .admin-bottom a:hover {
+    color: #aaa;
+}
+ 
+ 
+/* ============================================================
+   ÁREA PRINCIPAL — panel.php  (.admin-main)
+   ============================================================ */
+ 
 .admin-main {
     flex: 1;
-    padding: 35px;
+    margin-left: 250px;
+    padding: 35px 40px;
+    background-color: #0a0a0a;
+    min-height: 100vh;
 }
-
+ 
 .admin-small-title {
-    color: var(--gold);
-    font-size: 0.75rem;
+    color: #d99c2b;
+    font-size: 0.68rem;
     font-weight: 800;
-    margin-bottom: 20px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
 }
-
+ 
 .admin-main h1 {
     font-size: 2rem;
-    margin-bottom: 8px;
+    font-weight: 900;
+    margin-bottom: 6px;
 }
-
+ 
 .admin-subtitle {
-    color: #888;
+    color: #555;
+    font-size: 0.85rem;
     margin-bottom: 30px;
 }
-
+ 
+/* Stats cards */
 .admin-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
-
-.admin-card,
-.admin-panel-box {
+ 
+.admin-card {
     background-color: #111;
-    border: 1px solid #222;
+    border: 1px solid #1e1e1e;
     padding: 20px;
 }
-
+ 
 .admin-card span {
-    color: #888;
-    font-size: 0.8rem;
+    color: #555;
+    font-size: 0.75rem;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
-
+ 
 .admin-card strong {
     display: block;
-    font-size: 1.8rem;
+    font-size: 2rem;
+    font-weight: 900;
     margin-top: 10px;
+    color: #fff;
 }
-
+ 
+/* Panel box (reservas recientes, etc.) */
+.admin-panel-box {
+    background-color: #111;
+    border: 1px solid #1e1e1e;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+ 
 .admin-panel-box h2 {
-    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #fff;
 }
-
+ 
 .admin-panel-box p {
-    color: #777;
+    color: #555;
+    font-size: 0.85rem;
 }
-
+ 
+/* Acciones rápidas */
 .admin-actions {
-    margin-top: 25px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    gap: 12px;
 }
-
+ 
 .admin-actions a {
-    background-color: #151515;
-    border: 1px solid #222;
-    color: #fff;
+    background-color: #111;
+    border: 1px solid #1e1e1e;
+    color: #aaa;
     text-decoration: none;
-    padding: 18px;
+    padding: 18px 15px;
     text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
 }
-
+ 
 .admin-actions a:hover {
-    border-color: var(--gold);
-    color: var(--gold);
+    border-color: #d99c2b;
+    color: #d99c2b;
+    background-color: rgba(217, 156, 43, 0.05);
 }
-
+ 
+/* Tablas admin */
 .admin-table {
     width: 100%;
     border-collapse: collapse;
 }
-
+ 
 .admin-table th,
 .admin-table td {
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid #1e1e1e;
     padding: 14px;
     text-align: left;
 }
-
+ 
 .admin-table th {
-    color: var(--gold);
-    font-size: 0.8rem;
+    color: #d99c2b;
+    font-size: 0.72rem;
+    font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 1.5px;
 }
-
+ 
 .admin-table td {
-    color: #ccc;
+    color: #aaa;
+    font-size: 0.85rem;
 }
-
+ 
 .admin-table a {
-    color: var(--gold);
+    color: #d99c2b;
     margin-right: 10px;
     text-decoration: none;
+    font-size: 0.8rem;
 }
-
+ 
 .admin-header-flex {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
 }
-
+ 
 .admin-btn {
-    background-color: var(--gold);
+    background-color: #d99c2b;
     color: #000;
     text-decoration: none;
-    padding: 14px 20px;
+    padding: 12px 20px;
     font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: background-color 0.2s ease;
 }
-
+ 
+.admin-btn:hover {
+    background-color: #f0ad32;
+}
+ 
 .admin-avatar {
     width: 55px;
     height: 55px;
     object-fit: cover;
     border-radius: 50%;
+}
+ 
+ 
+/* ============================================================
+   ÁREA PRINCIPAL — GestionEquipo.php  (.content)
+   ============================================================ */
+ 
+body.admin-panel .content {
+    flex: 1;
+    margin-left: 250px;
+    min-height: 100vh;
+    background-color: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+ 
+/* Header de sección */
+body.admin-panel .content > header {
+    padding: 28px 40px 22px;
+    border-bottom: 1px solid #161616;
+    background-color: #0d0d0d;
+}
+ 
+body.admin-panel .content > header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 5px 0;
+}
+ 
+body.admin-panel .content > header p {
+    color: #555;
+    font-size: 0.82rem;
+    margin: 0;
+}
+ 
+ 
+/* ============================================================
+   GRID DE BARBEROS — .equipo-grid
+   ============================================================ */
+ 
+body.admin-panel .equipo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 22px;
+    padding: 35px 40px;
+    align-items: start;
+    /* reset de valores del equipo-grid público */
+    max-width: none;
+    margin: 0;
+}
+ 
+ 
+/* ============================================================
+   TARJETA — .barbero-card  (modo vista y modo edición)
+   ============================================================ */
+ 
+body.admin-panel .barbero-card {
+    background-color: #111;
+    border: 1px solid #1e1e1e;
+    overflow: hidden;
+    position: relative;
+    transition: border-color 0.3s ease;
+    border-radius: 0;
+}
+ 
+body.admin-panel .barbero-card:hover {
+    border-color: #2e2e2e;
+}
+ 
+/* La imagen — el PHP ya le pone height:300px inline, pero reforzamos */
+body.admin-panel .barbero-card > img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: brightness(0.6);
+    transition: filter 0.3s ease;
+}
+ 
+body.admin-panel .barbero-card:hover > img {
+    filter: brightness(0.5);
+}
+ 
+/* ---- MODO VISTA: bloque .info ---- */
+/* Clases reales: <section class="info"> <h3> <p class="rank"> <a class="btn-edit"> */
+ 
+body.admin-panel .barbero-card .info {
+    padding: 18px 20px 20px;
+    background-color: #111;
+}
+ 
+body.admin-panel .barbero-card .info h3 {
+    font-size: 1.55rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 5px 0;
+    letter-spacing: 0.3px;
+    line-height: 1.1;
+}
+ 
+body.admin-panel .barbero-card .info .rank {
+    color: #d99c2b;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin: 0 0 16px 0;
+    display: block;
+}
+ 
+body.admin-panel .barbero-card .info .btn-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+}
+ 
+body.admin-panel .barbero-card .info .btn-edit::before {
+    content: '✎';
+    font-size: 0.9rem;
+}
+ 
+body.admin-panel .barbero-card .info .btn-edit:hover {
+    color: #fff;
+}
+ 
+ 
+/* ---- MODO EDICIÓN: .edit-form ---- */
+/* Clases reales: <form class="edit-form">  inputs  textarea
+   <section class="form-buttons">
+   <button class="btn-save">  <a class="btn-cancel"> */
+ 
+.edit-form {
+    padding: 16px 18px 20px;
+    background-color: #111;
+    display: flex;
+    flex-direction: column;
+}
+ 
+.edit-form input,
+.edit-form textarea {
+    width: 100%;
+    background-color: #191919;
+    border: 1px solid #282828;
+    color: #fff;
+    padding: 11px 14px;
+    margin-bottom: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.83rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+ 
+.edit-form input:focus,
+.edit-form textarea:focus {
+    border-color: #d99c2b;
+    background-color: #1e1e1e;
+}
+ 
+.edit-form input::placeholder,
+.edit-form textarea::placeholder {
+    color: #3a3a3a;
+}
+ 
+.edit-form textarea {
+    resize: vertical;
+    min-height: 85px;
+    line-height: 1.5;
+}
+ 
+/* Botones */
+.form-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+ 
+.btn-save {
+    background-color: #d99c2b;
+    color: #000;
+    border: none;
+    padding: 11px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    flex: 1;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+ 
+.btn-save::before {
+    content: '✓';
+    font-size: 0.9rem;
+}
+ 
+.btn-save:hover {
+    background-color: #f0ad32;
+}
+ 
+.btn-cancel {
+    background-color: #1c1c1c;
+    color: #999;
+    border: 1px solid #2a2a2a;
+    padding: 11px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+ 
+.btn-cancel::before {
+    content: '✕';
+    font-size: 0.75rem;
+}
+ 
+.btn-cancel:hover {
+    background-color: #242424;
+    color: #fff;
+    border-color: #333;
+}
+
+/* ============================================================
+   ADMINISTRACIÓN DE EQUIPO (GESTIÓN DE BARBEROS)
+   ============================================================ */
+
+body.admin-panel {
+    display: flex;
+    min-height: 100vh;
+    background-color: #0a0a0a;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    margin-left: 250px;
+    flex: 1;
+    min-height: 100vh;
+    background-color: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+}
+ 
+/* Cabecera de sección con breadcrumb dorado */
+.content > header {
+    padding: 28px 40px 22px;
+    border-bottom: 1px solid #161616;
+    background-color: #0d0d0d;
+}
+ 
+/* Breadcrumb / etiqueta de sección (el "EQUIPO" de arriba) */
+.content > header::before {
+    content: attr(data-section);
+    display: block;
+    color: #d99c2b;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+ 
+.content > header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 5px 0;
+    letter-spacing: 0.5px;
+}
+ 
+.content > header p {
+    color: #555;
+    font-size: 0.82rem;
+    margin: 0;
+}
+ 
+ 
+/* ============================================================
+   ADMIN — GRID DE TARJETAS DE BARBEROS
+   ============================================================ */
+ 
+body.admin-panel .equipo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 22px;
+    padding: 35px 40px;
+    align-items: start;
+    /* resetear valores del equipo-grid público */
+    max-width: none;
+    margin: 0;
+}
+ 
+ 
+/* ============================================================
+   TARJETA DE BARBERO — MODO VISTA
+   ============================================================ */
+ 
+body.admin-panel .barbero-card {
+    background-color: #111;
+    border: 1px solid #1e1e1e;
+    overflow: hidden;
+    position: relative;
+    transition: border-color 0.3s ease;
+    height: auto;
+    border-radius: 0;
+}
+ 
+body.admin-panel .barbero-card:hover {
+    border-color: #303030;
+}
+ 
+/* Imagen principal de la tarjeta */
+body.admin-panel .barbero-card > img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: brightness(0.6);
+    transition: filter 0.4s ease, transform 0.4s ease;
+}
+ 
+body.admin-panel .barbero-card:hover > img {
+    filter: brightness(0.5);
+    transform: scale(1.02);
+}
+ 
+/* Bloque de información debajo de la imagen */
+.barbero-card .info {
+    padding: 18px 20px 20px;
+    background-color: #111;
+}
+ 
+.barbero-card .info h3 {
+    font-size: 1.55rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 4px 0;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+}
+ 
+.barbero-card .info .rank {
+    color: #d99c2b;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin: 0 0 16px 0;
+    display: block;
+}
+ 
+/* Botón EDITAR con icono */
+.barbero-card .info .btn-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+}
+ 
+.barbero-card .info .btn-edit::before {
+    content: '✎';
+    font-size: 0.95rem;
+    line-height: 1;
+}
+ 
+.barbero-card .info .btn-edit:hover {
+    color: #fff;
+}
+ 
+ 
+/* ============================================================
+   TARJETA DE BARBERO — MODO EDICIÓN
+   ============================================================ */
+ 
+body.admin-panel .barbero-card.edit-mode {
+    border-color: #d99c2b;
+}
+ 
+/* Imagen más pequeña cuando está en modo edición */
+body.admin-panel .barbero-card.edit-mode > img {
+    height: 150px;
+    filter: brightness(0.45);
+    transform: none;
+}
+ 
+/* Formulario de edición */
+.edit-form {
+    padding: 16px 18px 20px;
+    background-color: #111;
+    display: flex;
+    flex-direction: column;
+}
+ 
+.edit-form input,
+.edit-form textarea {
+    width: 100%;
+    background-color: #191919;
+    border: 1px solid #282828;
+    color: #fff;
+    padding: 11px 14px;
+    margin-bottom: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.83rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+    border-radius: 0;
+    box-sizing: border-box;
+}
+ 
+.edit-form input:focus,
+.edit-form textarea:focus {
+    border-color: #d99c2b;
+    background-color: #1e1e1e;
+}
+ 
+.edit-form input::placeholder,
+.edit-form textarea::placeholder {
+    color: #3a3a3a;
+}
+ 
+.edit-form textarea {
+    resize: vertical;
+    min-height: 85px;
+    line-height: 1.5;
+}
+ 
+/* Botones del formulario */
+.form-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+}
+ 
+.btn-save {
+    background-color: #d99c2b;
+    color: #000;
+    border: none;
+    padding: 11px 16px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    flex: 1;
+    font-family: 'Montserrat', sans-serif;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+ 
+.btn-save::before {
+    content: '✓';
+    font-size: 1rem;
+}
+ 
+.btn-save:hover {
+    background-color: #f0ad32;
+}
+ 
+.btn-cancel {
+    background-color: #1c1c1c;
+    color: #aaa;
+    border: 1px solid #2a2a2a;
+    padding: 11px 16px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+ 
+.btn-cancel::before {
+    content: '✕';
+    font-size: 0.85rem;
+}
+ 
+.btn-cancel:hover {
+    background-color: #242424;
+    color: #fff;
+    border-color: #333;
+}
+ 
+ 
+/* ============================================================
+   TAGS / ETIQUETAS (si se usan en el panel)
+   ============================================================ */
+ 
+.tags-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+ 
+.tag {
+    background-color: rgba(217, 156, 43, 0.08);
+    color: #d99c2b;
+    border: 1px solid rgba(217, 156, 43, 0.35);
+    padding: 4px 11px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 }

@@ -4,16 +4,20 @@ require_once 'BD.php';
 class Barbero {
     public ?int $barberoId;
     public string $nombre;
+    public ?string $descripcion;
+    public ?string $etiquetas;
     public ?string $especialidad;
     public ?string $fotoUrl;
     public bool $activo;
 
-    public function __construct($nombre, $especialidad = null, $fotoUrl = null, $activo = true, $barberoId = null) {
+    public function __construct($nombre, $especialidad = null, $fotoUrl = null, $activo = true, $barberoId = null, $descripcion = null, $etiquetas = null) {
         $this->barberoId = $barberoId;
         $this->nombre = $nombre;
         $this->especialidad = $especialidad;
         $this->fotoUrl = $fotoUrl;
         $this->activo = $activo;
+        $this->descripcion = $descripcion;
+        $this->etiquetas = $etiquetas;
     }
 
     // Métodos para activar/desactivar al barbero
@@ -36,16 +40,18 @@ class Barbero {
         $db = BD::obtenerConexion();
 
         if ($this->barberoId === null) {
-            $sql = "INSERT INTO barberos (nombre, especialidad, foto_url, activo)
-                    VALUES (?, ?, ?, ?)
+            $sql = "INSERT INTO barberos (nombre, especialidad, descripcion, etiquetas, foto_url, activo)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     RETURNING barbero_id";
 
             $stmt = $db->prepare($sql);
             $stmt->execute([
                 $this->nombre,
                 $this->especialidad,
+                $this->descripcion,
+                $this->etiquetas,
                 $this->fotoUrl,
-                $this->activo
+                $this->activo,
             ]);
 
             $this->barberoId = $stmt->fetchColumn();
@@ -53,7 +59,7 @@ class Barbero {
         }
 
         $sql = "UPDATE barberos
-                SET nombre = ?, especialidad = ?, foto_url = ?, activo = ?
+                SET nombre = ?, especialidad = ?, foto_url = ?, activo = ?, descripcion = ?, etiquetas = ?
                 WHERE barbero_id = ?";
 
         $stmt = $db->prepare($sql);
@@ -62,6 +68,8 @@ class Barbero {
             $this->especialidad,
             $this->fotoUrl,
             $this->activo,
+            $this->descripcion,
+            $this->etiquetas,
             $this->barberoId
         ]);
     }
@@ -108,7 +116,9 @@ class Barbero {
             $data['especialidad'],
             $data['foto_url'],
             $data['activo'],
-            $data['barbero_id']
+            $data['barbero_id'],
+            $data['descripcion'],
+            $data['etiquetas']
         );
     }
 }
