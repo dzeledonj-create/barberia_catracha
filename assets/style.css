@@ -1640,3 +1640,86 @@ body {
     object-fit: cover;
     border-radius: 50%;
 }
+
+/* --- ADMIN SERVICIOS MEJORADO --- */
+
+.admin-main {
+    background-color: #0a0a0a;
+}
+
+.admin-panel-box {
+    margin-bottom: 22px;
+}
+
+.admin-form-servicios {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.admin-form-servicios input {
+    background-color: #202020;
+    border: 1px solid #2b2b2b;
+    color: #fff;
+    padding: 12px;
+}
+
+.admin-form-servicios button {
+    background-color: var(--gold);
+    color: #000;
+    border: none;
+    padding: 12px 18px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.admin-table-servicios {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #111;
+}
+
+.admin-table-servicios th {
+    color: var(--gold);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    padding: 14px;
+    border-bottom: 1px solid #222;
+    text-align: left;
+}
+
+.admin-table-servicios td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #202020;
+    color: #ccc;
+    font-size: 0.85rem;
+}
+
+.admin-table-servicios tr:hover {
+    background-color: #151515;
+}
+
+.admin-precio {
+    color: var(--gold);
+    font-weight: 900;
+}
+
+.admin-tag {
+    background-color: rgba(217, 156, 43, 0.15);
+    color: var(--gold);
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.admin-actions-mini a {
+    color: #aaa;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.admin-actions-mini a:hover {
+    color: var(--gold);
+}

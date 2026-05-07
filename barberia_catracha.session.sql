@@ -201,3 +201,9 @@ SELECT * FROM horarios;
 
 DELETE FROM horarios
 WHERE horario_id <= 7;
+
+
+ALTER TABLE servicios
+RENAME COLUMN limite TO categoria;
+
+SELECT * FROM servicios;

@@ -2,13 +2,13 @@
 require_once '../clases/BD.php';
 require_once '../clases/Servicio.php';
 
-// 1. Obtener servicios y agruparlos por la columna 'limite'
+// 1. Obtener servicios y agruparlos por la columna 'categoria'
 $serviciosRaw = Servicio::obtenerTodos();
 $bloques = [];
 
 foreach ($serviciosRaw as $s) {
-    // Si el servicio no tiene 'limite', lo mandamos a una sección general
-    $categoria = $s['limite'] ?: 'otros'; 
+    // Si el servicio no tiene 'categoria', lo mandamos a una sección general
+    $categoria = $s['categoria'] ?: 'otros'; 
     $bloques[$categoria][] = $s;
 }
 ?>
@@ -33,7 +33,7 @@ foreach ($serviciosRaw as $s) {
         <span class="underline"></span>
     </header>
 
-    <!-- 2. Generar un bloque por cada categoría de 'limite' -->
+    <!-- 2. Generar un bloque por cada categoría de 'categoria' -->
     <?php foreach ($bloques as $nombreBloque => $listaServicios): ?>
         <section class="categoria-bloque">
             <h2 class="categoria-nombre"><?= strtoupper(str_replace('_', ' ', $nombreBloque)) ?></h2>
