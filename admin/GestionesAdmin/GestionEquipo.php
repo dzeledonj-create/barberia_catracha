@@ -1,5 +1,13 @@
 <?php
 require_once '../../clases/Barbero.php';
+require_once '../clases_admin/GestorUsuarios.php';
+
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario instanceof Administrador) {
+    header("Location: ../../login.php");
+    exit;
+}
+
 $barberos = Barbero::obtenerTodos(); // Traemos todos para gestionar activos e inactivos
 
 // Lógica simple para detectar si estamos editando

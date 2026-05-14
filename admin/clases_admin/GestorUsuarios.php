@@ -58,4 +58,31 @@ class GestorUsuarios {
 
         return $datos;
     }
+
+    public static function obtenerDesdeSesion(): ?Usuario {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        if (empty($_SESSION['usuario_id'])) return null;
+
+        if ($_SESSION['rol'] === 'admin') {
+            return new Administrador(
+                $_SESSION['nombre'],
+                $_SESSION['email'],
+                true,
+                $_SESSION['usuario_id']
+            );
+        }
+
+        if ($_SESSION['rol'] === 'barbero') {
+            return new UsuarioBarbero(
+                $_SESSION['nombre'],
+                $_SESSION['email'],
+                $_SESSION['barbero_id'],
+                true,
+                $_SESSION['usuario_id']
+            );
+        }
+
+        return null;
+    }
 }
