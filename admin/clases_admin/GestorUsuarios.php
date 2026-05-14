@@ -1,5 +1,5 @@
 <?php
-require_once 'Clases/BD.php';
+require_once '../../Clases/BD.php';
 require_once 'Administrador.php';
 require_once 'UsuarioBarbero.php';
 
