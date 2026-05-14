@@ -16,5 +16,9 @@ class UsuarioBarbero extends Usuario {
     public function getBarberoId(): int {
         return $this->barberoId;
     }
+
+    public function puedeVerTodasLasReservas(): bool { 
+        return true;
+    }
 }
 ?>

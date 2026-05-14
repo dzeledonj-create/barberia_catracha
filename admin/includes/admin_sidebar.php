@@ -16,7 +16,7 @@
     </nav>
 
     <section class="admin-bottom">
-        <a href="../index.php">Ver Web Pública</a>
-        <a href="../includes/logout.php">Cerrar Sesión</a>
+        <a href="../../index.php">Ver Web Pública</a>
+        <a href="../../includes/logout.php">Cerrar Sesión</a>
     </section>
 </aside>
