@@ -173,9 +173,9 @@ if (isset($_GET['editar'])) {
                             <td><?= htmlspecialchars($servicio['categoria']) ?></td>
                             <td>
                                 <td class="admin-actions-mini">
-    <a href="?editar=<?= $servicio['servicio_id'] ?>">✎</a>
-    <a href="?eliminar=<?= $servicio['servicio_id'] ?>" onclick="return confirm('¿Eliminar servicio?')">🗑</a>
-</td>
+                                    <a href="?editar=<?= $servicio['servicio_id'] ?>">✎</a>
+                                    <a href="?eliminar=<?= $servicio['servicio_id'] ?>" onclick="return confirm('¿Eliminar servicio?')">🗑</a>
+                                </td>
                             </td>
                         </tr>
                         <?php endforeach; ?>
