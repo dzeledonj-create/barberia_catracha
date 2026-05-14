@@ -1,12 +1,13 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+require_once '../../Clases/Servicio.php';
+require_once '../clases_admin/GestorUsuarios.php';
+
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario instanceof Administrador) {
     header("Location: ../../login.php");
     exit;
 }
-
-require_once '../../Clases/Servicio.php';
 
 /* CREAR SERVICIO */
 if (isset($_POST['crear'])) {
@@ -33,7 +34,7 @@ if (isset($_POST['editar'])) {
         $_POST['precio'],
         $_POST['duracion_minutos'],
         $_POST['servicio_id'],
-        $_POST['categoria']
+       $_POST['categoria']
     );
 
     $servicio->guardar();
