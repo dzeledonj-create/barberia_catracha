@@ -1,87 +1,156 @@
 <?php
-require_once '../clases/BD.php';
+require_once '../clases/DatosUbicacion.php';
+require_once '../clases/Horario.php';
+
+$datosUbicacion = DatosUbicacion::obtener();
+$horarios = Horario::obtenerTodos();
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Ubicación - Barbería Catracha</title>
+
     <link rel="stylesheet" href="../assets/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="icon"
+          href="/barberia_catracha/assets/img/logo.png"
+          type="image/png">
 </head>
+
 <body class="bg-dark">
 
 <?php include_once '../includes/header.php'; ?>
 
 <main class="ubicacion-page">
+
     <section class="ubicacion-header">
         <p class="subtitle">ENCUÉNTRANOS</p>
-        <h1 class="titulo-principal">NUESTRA <span class="text-gold">UBICACIÓN</span></h1>
+
+        <h1 class="titulo-principal">
+            NUESTRA <span class="text-gold">UBICACIÓN</span>
+        </h1>
+
         <section class="underline"></section>
+
         <p class="descripcion-header">
-            Visítanos en el sector de San José, Zaragoza. Un espacio diseñado para ofrecerte el mejor servicio de barbería.
+            Visítanos en el sector de San José, Zaragoza.
+            Un espacio diseñado para ofrecerte el mejor servicio de barbería.
         </p>
     </section>
 
     <section class="ubicacion-grid container">
-        
+
         <article class="ubicacion-info">
+
+            <!-- DIRECCIÓN -->
             <section class="info-item">
+
                 <header class="info-header">
                     <i class="fas fa-map-marker-alt"></i>
                     <h2>DIRECCIÓN</h2>
                 </header>
-                <p>C. de Fray Julián Garcés, 3-5</p>
-                <p>50007 Zaragoza, España</p>
+
+                <p>
+                    <?= htmlspecialchars($datosUbicacion['direccion']) ?>
+                </p>
+
             </section>
 
+            <!-- HORARIOS -->
             <section class="info-item">
-    <header class="info-header">
-        <i class="fas fa-clock"></i>
-        <h2>HORARIOS</h2>
-    </header>
 
-    <?php
-    $db = BD::obtenerConexion();
-    $stmt = $db->query("SELECT dia_semana, hora_apertura, hora_cierre FROM horarios ORDER BY horario_id ASC");
-    $horarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    ?>
+                <header class="info-header">
+                    <i class="fas fa-clock"></i>
+                    <h2>HORARIOS</h2>
+                </header>
 
-    <ul class="horario-lista">
-        <?php foreach ($horarios as $h): ?>
-            <li>
-                <span class="dia"><?= $h['dia_semana'] ?></span>
-                <span class="horas"><?= substr($h['hora_apertura'], 0, 5) ?> – <?= substr($h['hora_cierre'], 0, 5) ?></span>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-</section>
+                <ul class="horario-lista">
 
+                    <?php foreach ($horarios as $horario): ?>
 
+                        <li>
+
+                            <span class="dia">
+                                <?= htmlspecialchars($horario['dia_semana']) ?>
+                            </span>
+
+                            <span class="horas">
+
+                                <?php if (!empty($horario['cerrado'])): ?>
+
+                                    Cerrado
+
+                                <?php else: ?>
+
+                                    <?= substr($horario['hora_apertura'], 0, 5) ?>
+                                    –
+                                    <?= substr($horario['hora_cierre'], 0, 5) ?>
+
+                                <?php endif; ?>
+
+                            </span>
+
+                        </li>
+
+                    <?php endforeach; ?>
+
+                </ul>
+
+            </section>
+
+            <!-- CONTACTO -->
             <section class="info-item">
+
                 <header class="info-header">
                     <i class="fas fa-phone-alt"></i>
                     <h2>CONTACTO</h2>
                 </header>
-                <p>Teléfono: <span>+34 600 000 000</span></p>
-                <p>Email: <span>info@barberiacatracha.com</span></p>
+
+                <p>
+                    Teléfono:
+                    <span>
+                        <?= htmlspecialchars($datosUbicacion['telefono']) ?>
+                    </span>
+                </p>
+
+                <p>
+                    WhatsApp:
+                    <span>
+                        <?= htmlspecialchars($datosUbicacion['whatsapp']) ?>
+                    </span>
+                </p>
+
             </section>
+
         </article>
 
+        <!-- MAPA -->
         <article class="ubicacion-mapa">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2981.163351284568!2d-0.8887469!3d41.6306!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd5914e6c764e7c3%3A0x7c7c7c7c7c7c7c7c!2sC.%20de%20Fray%20Juli%C3%A1n%20Garc%C3%A9s%2C%203-5%2C%2050007%20Zaragoza!5e0!3m2!1ses!2ses!4v1714810000000" 
-                allowfullscreen="" 
+
+            <iframe
+                src="<?= htmlspecialchars($datosUbicacion['mapa_embed']) ?>"
+                allowfullscreen=""
                 loading="lazy">
             </iframe>
+
         </article>
+
     </section>
 
     <section class="equipo-cta">
-        <a href="reservas.php" class="btn-reservar-equipo">SOLICITAR CITA AHORA</a>
+        <a href="reservas.php" class="btn-reservar-equipo">
+            SOLICITAR CITA AHORA
+        </a>
     </section>
+
 </main>
 
 <?php include_once '../includes/footer.php'; ?>

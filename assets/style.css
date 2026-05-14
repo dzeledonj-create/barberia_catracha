@@ -1034,7 +1034,124 @@ body {
         padding: 25px;
     }
 }
+/* --- BLOG CLIENTE --- */
 
+.blog-page {
+    background-color: var(--dark-bg);
+    color: var(--white);
+    padding: 90px 20px;
+}
+
+.blog-header {
+    text-align: center;
+    margin-bottom: 55px;
+}
+
+.blog-grid {
+    max-width: 1150px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+.blog-card {
+    background-color: #111;
+    border: 1px solid #222;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.blog-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-6px);
+}
+
+.blog-media {
+    width: 100%;
+    height: 330px;
+    background-color: #050505;
+    overflow: hidden;
+}
+
+.blog-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.blog-media iframe,
+.blog-media blockquote {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+}
+
+.blog-info {
+    padding: 24px;
+}
+
+.blog-tag {
+    display: inline-block;
+    background-color: rgba(217, 156, 43, 0.15);
+    color: var(--gold);
+    border: 1px solid rgba(217, 156, 43, 0.35);
+    padding: 5px 10px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+
+.blog-info h2 {
+    color: var(--white);
+    font-size: 1.25rem;
+    line-height: 1.3;
+    margin-bottom: 12px;
+}
+
+.blog-info p {
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.blog-btn {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: var(--gold);
+    color: #000;
+    padding: 11px 18px;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 0.75rem;
+}
+
+.blog-btn:hover {
+    background-color: #f0ad32;
+}
+
+@media (max-width: 900px) {
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- INSTAGRAM REELS --- */
+
+.instagram-wrapper {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    background-color: #000;
+}
+
+.instagram-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
 /* --- SECCIÓN RESERVAS --- */
 
 .reservas-page {

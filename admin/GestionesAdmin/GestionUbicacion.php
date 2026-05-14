@@ -20,13 +20,13 @@ if (isset($_POST['guardar'])) {
     );
 
     foreach ($_POST['horarios'] as $horarioId => $datos) {
-        Horario::actualizar(
-            $horarioId,
-            $datos['hora_apertura'] ?: null,
-            $datos['hora_cierre'] ?: null,
-            isset($datos['cerrado'])
-        );
-    }
+    Horario::actualizar(
+        $horarioId,
+        $datos['hora_apertura'] ?: null,
+        $datos['hora_cierre'] ?: null,
+        isset($datos['cerrado'])
+    );
+}
 
     header("Location: GestionUbicacion.php");
     exit;
