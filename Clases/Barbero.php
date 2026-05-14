@@ -9,8 +9,10 @@ class Barbero {
     public ?string $especialidad;
     public ?string $fotoUrl;
     public bool $activo;
+    public ?string $rol;
+    public ?string $email;
 
-    public function __construct($nombre, $especialidad = null, $fotoUrl = null, $activo = true, $barberoId = null, $descripcion = null, $etiquetas = null) {
+    public function __construct($nombre, $especialidad = null, $fotoUrl = null, $activo = true, $barberoId = null, $descripcion = null, $etiquetas = null, $rol = null, $email = null) {
         $this->barberoId = $barberoId;
         $this->nombre = $nombre;
         $this->especialidad = $especialidad;
@@ -18,6 +20,8 @@ class Barbero {
         $this->activo = $activo;
         $this->descripcion = $descripcion;
         $this->etiquetas = $etiquetas;
+        $this->rol = $rol;
+        $this->email = $email;
     }
 
     // Métodos para activar/desactivar al barbero
@@ -102,7 +106,10 @@ class Barbero {
     public static function obtenerPorId($barberoId): ?Barbero {
         $db = BD::obtenerConexion();
 
-        $stmt = $db->prepare("SELECT * FROM barberos WHERE barbero_id = ?");
+        $stmt = $db->prepare("SELECT b.*, u.rol, u.email 
+                              FROM barberos b 
+                              LEFT JOIN usuarios u ON b.barbero_id = u.barbero_id 
+                              WHERE b.barbero_id = ?");
         $stmt->execute([$barberoId]);
 
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -118,7 +125,9 @@ class Barbero {
             $data['activo'],
             $data['barbero_id'],
             $data['descripcion'],
-            $data['etiquetas']
+            $data['etiquetas'],
+            $data['rol'] ?? 'barbero',
+            $data['email'] ?? ''
         );
     }
 }
