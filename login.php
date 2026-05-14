@@ -2,11 +2,11 @@
 require_once 'clases/BD.php';
 require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 
-$usuario = GestorUsuarios::obtenerDesdeSesion();
-if (!$usuario instanceof UsuarioBarbero && !$usuario instanceof Administrador) {
-    header("Location: ../../login.php");
-    exit;
-}
+//$usuario = GestorUsuarios::obtenerDesdeSesion();
+//if (!$usuario instanceof UsuarioBarbero && !$usuario instanceof Administrador) {
+//    header("Location: ../../login.php");
+//    exit;
+//}
 
 $error = "";
 

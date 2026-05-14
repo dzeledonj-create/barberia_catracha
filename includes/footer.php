@@ -48,7 +48,7 @@
 
     <!-- PARTE INFERIOR -->
     <section class="footer-bottom">
-      <p><a href="/barberia_catracha/login.php" class="footer-login">© </a>2026 Barbería Catracha</p>
+      <p><a href="../login.php" class="footer-login">© </a>2026 Barbería Catracha</p>
     </section>
 
 </footer>
