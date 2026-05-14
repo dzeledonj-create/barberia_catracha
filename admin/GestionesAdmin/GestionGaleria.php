@@ -1,12 +1,12 @@
 <?php
-session_start();
+require_once '../../Clases/MuralSugerencia.php';
+require_once '../clases_admin/GestorUsuarios.php';
 
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario instanceof Administrador) {
     header("Location: ../../login.php");
     exit;
 }
-
-require_once '../../Clases/MuralSugerencia.php';
 
 /* CREAR */
 if (isset($_POST['crear'])) {

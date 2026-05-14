@@ -1,13 +1,14 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: ../../login.php");
-    exit;
-}
 
 require_once '../../Clases/DatosUbicacion.php';
 require_once '../../Clases/Horario.php';
+require_once '../clases_admin/GestorUsuarios.php';
+
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario instanceof Administrador) {
+    header("Location: ../../login.php");
+    exit;
+}
 
 if (isset($_POST['guardar'])) {
 
