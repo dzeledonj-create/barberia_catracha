@@ -207,3 +207,19 @@ ADD COLUMN descripcion TEXT,
 ADD COLUMN etiquetas VARCHAR(255);
 
 SELECT * FROM barberos;
+
+CREATE TABLE datos_ubicacion (
+    id SERIAL PRIMARY KEY,
+    direccion VARCHAR(255),
+    telefono VARCHAR(50),
+    whatsapp VARCHAR(50),
+    mapa_embed TEXT
+);
+
+INSERT INTO datos_ubicacion (direccion, telefono, whatsapp, mapa_embed)
+VALUES (
+    'C. de Fray Julián Garcés, 3-5, Local 2, 50007 Zaragoza',
+    '+34 600 000 000',
+    '+34 600 000 000',
+    'TU_IFRAME_O_URL_DE_GOOGLE_MAPS'
+);
