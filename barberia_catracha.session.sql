@@ -226,3 +226,71 @@ VALUES (
 
 ALTER TABLE horarios
 ADD COLUMN cerrado BOOLEAN DEFAULT FALSE;
+
+ALTER TABLE blog_posts
+ADD COLUMN instagram_embed TEXT;
+
+SELECT * FROM blog_posts;
+
+SELECT post_id, titulo, instagram_embed
+FROM blog_posts;
+
+UPDATE blog_posts
+SET instagram_embed = '
+<iframe
+src="https://www.instagram.com/p/DYTEpVfoDhH/embed"
+width="100%"
+height="500"
+frameborder="0"
+scrolling="no"
+allowtransparency="true">
+</iframe>
+'
+WHERE post_id = 9;
+
+INSERT INTO blog_posts (
+    titulo,
+    contenido,
+    instagram_embed
+)
+VALUES (
+    '¿No sabes por dónde empezar?',
+    'Empieza por un buen corte. 
+💈✂️😎✨💯
+@barberia.catracha 
+C/Fray Julián Garcés 3 (Torrero - Zaragoza)',
+    '
+    <iframe
+    src="https://www.instagram.com/reel/DWb94GboHAj/embed"
+    width="100%"
+    height="500"
+    frameborder="0"
+    scrolling="no"
+    allowtransparency="true">
+    </iframe>
+    '
+);
+
+INSERT INTO blog_posts (
+    titulo,
+    contenido,
+    imagen_url,
+    autor_id,
+    etiquetas,
+    instagram_embed
+)
+VALUES (
+    '¿No sabes por dónde empezar?',
+    'Empieza por un buen corte. Barbería Catracha - Zaragoza.',
+    NULL,
+    1,
+    'REEL',
+    '<iframe
+        src="https://www.instagram.com/reel/DWb94GboHAj/embed"
+        width="100%"
+        height="500"
+        frameborder="0"
+        scrolling="no"
+        allowtransparency="true">
+    </iframe>'
+);
