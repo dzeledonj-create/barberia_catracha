@@ -1541,6 +1541,204 @@ body {
     color: var(--gold);
 }
 
+/* ---------- GESTIÓN GALERÍA ADMIN ---------- */
+
+.admin-form-galeria {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.admin-form-galeria input,
+.admin-form-galeria select {
+    padding: 12px;
+    background-color: #202020;
+    border: 1px solid #2b2b2b;
+    color: #fff;
+    outline: none;
+}
+
+.admin-form-galeria input:focus,
+.admin-form-galeria select:focus {
+    border-color: var(--gold);
+}
+
+.admin-form-galeria button {
+    background-color: var(--gold);
+    color: #000;
+    border: none;
+    padding: 12px 18px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.admin-form-galeria button:hover {
+    opacity: 0.9;
+}
+
+.galeria-admin-grid {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.galeria-admin-card {
+    position: relative;
+    height: 260px;
+    background-color: #111;
+    border: 1px solid #222;
+    overflow: hidden;
+}
+
+.galeria-admin-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.4s;
+}
+
+.galeria-admin-card:hover img {
+    transform: scale(1.05);
+}
+
+.galeria-admin-info {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: 0.3s;
+    text-align: center;
+    padding: 20px;
+}
+
+.galeria-admin-card:hover .galeria-admin-info {
+    opacity: 1;
+}
+
+.galeria-admin-info h3 {
+    color: #fff;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.galeria-admin-info p {
+    background-color: rgba(217,156,43,0.2);
+    color: var(--gold);
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.admin-actions-mini {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-actions-mini a {
+    text-decoration: none;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    transition: 0.3s;
+}
+
+.admin-actions-mini a:first-child {
+    background-color: var(--gold);
+    color: #000;
+}
+
+.admin-actions-mini a:last-child {
+    background-color: #c0392b;
+    color: #fff;
+}
+
+.admin-actions-mini a:hover {
+    transform: translateY(-2px);
+}
+
+.estado-activo {
+    color: #5cff8d;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.estado-inactivo {
+    color: #ff6666;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+/* ============================================================
+ — GestionUbicacion.php  (body.admin-panel)
+   ============================================================ */
+.gestion-ubicacion-box {
+    max-width: 700px;
+    margin-bottom: 25px;
+}
+
+.gestion-ubicacion-box h2 {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.gestion-ubicacion-box label {
+    display: block;
+    color: #888;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.gestion-ubicacion-box input[type="text"],
+.gestion-ubicacion-box input[type="time"] {
+    width: 100%;
+    background-color: #202020;
+    border: 1px solid #2b2b2b;
+    color: #fff;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.ubicacion-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.horario-admin-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr 100px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.horario-admin-row span {
+    color: #aaa;
+}
+
+.horario-admin-row .admin-check {
+    margin: 0;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    color: #ccc;
+    text-transform: none;
+}
+
 /* ============================================================
  — GestionEquipo.php  (body.admin-panel)
    ============================================================ */
