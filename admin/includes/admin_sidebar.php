@@ -10,7 +10,6 @@
         <a href="/barberia_catracha/Admin/GestionesAdmin/GestionServicios.php">Servicios</a>
         <a href="/barberia_catracha/Admin/GestionesAdmin/GestionEquipo.php">Equipo</a>
         <a href="/barberia_catracha/Admin/GestionesAdmin/GestionGaleria.php">Galería</a>
-        <a href="/barberia_catracha/Admin/GestionesAdmin/GestionResenas.php">Reseñas</a>
         <a href="/barberia_catracha/Admin/GestionesAdmin/GestionBlog.php">Blog</a>
         <a href="/barberia_catracha/Admin/GestionesAdmin/GestionUbicacion.php">Ubicación</a>
     </nav>

@@ -5,7 +5,6 @@ require_once 'BD.php';
 class Horario {
 
     public static function obtenerTodos() {
-
         $db = BD::obtenerConexion();
 
         $sql = "
@@ -22,17 +21,10 @@ class Horario {
         ";
 
         $stmt = $db->query($sql);
-
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function actualizar(
-        $horarioId,
-        $horaApertura,
-        $horaCierre,
-        $cerrado
-    ) {
-
+    public static function actualizar($horarioId, $horaApertura, $horaCierre, $cerrado) {
         $db = BD::obtenerConexion();
 
         $sql = "
@@ -48,7 +40,7 @@ class Horario {
         return $stmt->execute([
             $horaApertura,
             $horaCierre,
-            $cerrado,
+            $cerrado ? 'true' : 'false',
             $horarioId
         ]);
     }
