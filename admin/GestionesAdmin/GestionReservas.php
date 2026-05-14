@@ -1,11 +1,12 @@
 <?php
-session_start();
+require_once '../clases_admin/GestorUsuarios.php';
 
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario instanceof UsuarioBarbero && !$usuario instanceof Administrador) {
     header("Location: ../../login.php");
     exit;
 }
-
+  
 require_once '../../Clases/Reserva.php';
 
 if (isset($_GET['accion'], $_GET['id'])) {
