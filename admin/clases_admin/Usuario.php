@@ -1,7 +1,6 @@
 <?php
 
-require_once __DIR__ . '/BD.php';
-require_once __DIR__ . '/GestorUsuarios.php';
+require_once __DIR__ . '/../../Clases/BD.php';
 
 class Usuario {
 
