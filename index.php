@@ -61,7 +61,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="vistas/resenas.php" class="explore-card">
+            <a href="vistas/reseñas.php" class="explore-card">
                 <div class="card-icon">⭐</div>
                 <div class="card-info">
                     <h3>RESEÑAS</h3>

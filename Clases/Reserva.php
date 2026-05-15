@@ -181,22 +181,83 @@ class Reserva {
 
     $stmt = $db->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    }
 
-// Métodos para cambiar el estado de la reserva desde el panel de administración
-public static function cambiarEstado($reservaId, $estado) {
-    $db = BD::obtenerConexion();
 
-    $sql = "UPDATE reservas SET estado = ? WHERE reserva_id = ?";
-    $stmt = $db->prepare($sql);
-    return $stmt->execute([$estado, $reservaId]);
-}
+    // Métodos para cambiar el estado de la reserva desde el panel de administración
+    public static function cambiarEstado($reservaId, $estado) {
+        $db = BD::obtenerConexion();
 
-// Método para eliminar una reserva desde el panel de administración
-public static function eliminar($reservaId) {
-    $db = BD::obtenerConexion();
+        $sql = "UPDATE reservas SET estado = ? WHERE reserva_id = ?";
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([$estado, $reservaId]);
+    }
 
-    $stmt = $db->prepare("DELETE FROM reservas WHERE reserva_id = ?");
-    return $stmt->execute([$reservaId]);
-}
+    // Método para eliminar una reserva desde el panel de administración
+    public static function eliminar($reservaId) {
+        $db = BD::obtenerConexion();
+
+        $stmt = $db->prepare("DELETE FROM reservas WHERE reserva_id = ?");
+        return $stmt->execute([$reservaId]);
+    }
+
+    // para obtener por barbero
+    public static function contarTotalPorBarbero(int $barberoId): int {
+        $stmt = BD::obtenerConexion()->prepare(
+            "SELECT COUNT(*) FROM reservas WHERE barbero_id = ?"
+        );
+        $stmt->execute([$barberoId]);
+        return (int) $stmt->fetchColumn();
+    }
+ 
+    public static function contarPorEstadoYBarbero(string $estado, int $barberoId): int {
+        $stmt = BD::obtenerConexion()->prepare(
+            "SELECT COUNT(*) FROM reservas WHERE estado = ? AND barbero_id = ?"
+        );
+        $stmt->execute([$estado, $barberoId]);
+        return (int) $stmt->fetchColumn();
+    }
+ 
+    public static function obtenerRecientesPorBarbero(int $barberoId, int $limite = 5): array {
+        $stmt = BD::obtenerConexion()->prepare("
+            SELECT r.reserva_id, r.fecha_hora, r.estado,
+                   c.nombre || ' ' || c.apellido AS cliente,
+                   b.nombre AS barbero,
+                   s.nombre AS servicio
+            FROM reservas r
+            JOIN clientes  c ON r.cliente_id  = c.cliente_id
+            JOIN barberos  b ON r.barbero_id  = b.barbero_id
+            JOIN servicios s ON r.servicio_id = s.servicio_id
+            WHERE r.barbero_id = ?
+            ORDER BY r.creado_en DESC
+            LIMIT ?
+        ");
+        $stmt->execute([$barberoId, $limite]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function contarPorEstado(string $estado): int {
+        $stmt = BD::obtenerConexion()->prepare(
+            "SELECT COUNT(*) FROM reservas WHERE estado = ?"
+        );
+        $stmt->execute([$estado]);
+        return (int) $stmt->fetchColumn();
+    }
+ 
+    public static function obtenerRecientes(int $limite = 5): array {
+        $stmt = BD::obtenerConexion()->prepare("
+            SELECT r.reserva_id, r.fecha_hora, r.estado,
+                   c.nombre || ' ' || c.apellido AS cliente,
+                   b.nombre AS barbero,
+                   s.nombre AS servicio
+            FROM reservas r
+            JOIN clientes  c ON r.cliente_id  = c.cliente_id
+            JOIN barberos  b ON r.barbero_id  = b.barbero_id
+            JOIN servicios s ON r.servicio_id = s.servicio_id
+            ORDER BY r.creado_en DESC
+            LIMIT ?
+        ");
+        $stmt->execute([$limite]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

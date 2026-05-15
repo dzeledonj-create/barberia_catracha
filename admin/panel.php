@@ -1,8 +1,14 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: ../login.php");
+require_once __DIR__ . '/../Clases/BD.php';
+require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
+ 
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if ($usuario instanceof Administrador) {
+    header("Location: admin/panel.php");
+    exit;
+}
+if ($usuario instanceof UsuarioBarbero) {
+    header("Location: barbero/panel.php");
     exit;
 }
 ?>
