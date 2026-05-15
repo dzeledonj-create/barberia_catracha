@@ -1,5 +1,4 @@
 <?php
-
 class Usuario {
 
     public ?int $usuarioId;
@@ -31,10 +30,6 @@ class Usuario {
         return $this->nombre;
     }
 
-    // =========================
-    // CREATE
-    // =========================
-
     public static function crear($nombre, $email, $rol, $activo = true) {
 
         self::$ultimoId++;
@@ -50,10 +45,6 @@ class Usuario {
         self::$usuarios[self::$ultimoId] = $usuario;
     }
 
-    // =========================
-    // READ
-    // =========================
-
     public static function listar() {
         return self::$usuarios;
     }
@@ -67,10 +58,6 @@ class Usuario {
         return null;
     }
 
-    // =========================
-    // UPDATE
-    // =========================
-
     public static function editar($id, $nombre, $email, $rol, $activo) {
 
         if (isset(self::$usuarios[$id])) {
@@ -81,10 +68,6 @@ class Usuario {
             self::$usuarios[$id]->activo = $activo;
         }
     }
-
-    // =========================
-    // DELETE
-    // =========================
 
     public static function eliminar($id) {
 
