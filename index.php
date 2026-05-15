@@ -62,7 +62,7 @@
             </a>
 
             <a href="vistas/reseñas.php" class="explore-card">
-                <div class="card-icon">⭐</div>
+                <div class="card-icon"><i class="fa-solid fa-star"></i></div>
                 <div class="card-info">
                     <h3>RESEÑAS</h3>
                     <p>5 estrellas en Google</p>
