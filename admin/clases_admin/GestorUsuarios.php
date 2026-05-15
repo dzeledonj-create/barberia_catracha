@@ -18,15 +18,17 @@ class GestorUsuarios {
             return null;
         }
 
+        // Validación de contraseña (texto plano según tu código actual)
         if ($password !== $data['password']) {
             return null;
         }
 
+        // Instanciamos la clase correcta según el rol de la BD
         if ($data['rol'] === 'admin') {
             return new Administrador(
                 $data['nombre'],
                 $data['email'],
-                $data['activo'],
+                (bool)$data['activo'],
                 $data['usuario_id']
             );
         }
@@ -36,7 +38,7 @@ class GestorUsuarios {
                 $data['nombre'],
                 $data['email'],
                 $data['barbero_id'],
-                $data['activo'],
+                (bool)$data['activo'],
                 $data['usuario_id']
             );
         }
@@ -64,6 +66,7 @@ class GestorUsuarios {
 
         if (empty($_SESSION['usuario_id'])) return null;
 
+        // Reconstruimos el objeto desde la sesión
         if ($_SESSION['rol'] === 'admin') {
             return new Administrador(
                 $_SESSION['nombre'],
