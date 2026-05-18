@@ -294,3 +294,5 @@ VALUES (
         allowtransparency="true">
     </iframe>'
 );
+
+SELECT * FROM Usuarios;
