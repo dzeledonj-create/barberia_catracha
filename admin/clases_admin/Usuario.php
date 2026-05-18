@@ -27,7 +27,7 @@ class Usuario {
     public function crear() {
     $conexion = BD::obtenerConexion();
 
-    // Añadimos 'password' en las columnas y un valor fijo '1234' en los VALUES
+    // Añadimos 'password' en las columnas y '1234' en los VALUES
     $sql = "INSERT INTO usuarios (nombre, email, password, rol, activo)
             VALUES ('$this->nombre', '$this->email', '1234', '$this->rol', '$this->activo')";
 
