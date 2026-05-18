@@ -9,17 +9,19 @@ class BlogPost {
     public int $autorId;
     public ?string $fechaPublicacion;
     public ?string $etiquetas;
+    public ?string $instagramEmbed;
 
     //
-    public function __construct($titulo,$contenido,$autorId,$imagenUrl = null,$etiquetas = null,$postId = null, $fechaPublicacion = null) {
-        $this->postId = $postId;
-        $this->titulo = $titulo;
-        $this->contenido = $contenido;
-        $this->autorId = $autorId;
-        $this->imagenUrl = $imagenUrl;
-        $this->etiquetas = $etiquetas;
-        $this->fechaPublicacion = $fechaPublicacion;
-    }
+    public function __construct($titulo, $contenido, $autorId, $imagenUrl = null, $etiquetas = null, $postId = null, $fechaPublicacion = null, $instagramEmbed = null) {
+    $this->postId = $postId;
+    $this->titulo = $titulo;
+    $this->contenido = $contenido;
+    $this->autorId = $autorId;
+    $this->imagenUrl = $imagenUrl;
+    $this->etiquetas = $etiquetas;
+    $this->fechaPublicacion = $fechaPublicacion;
+    $this->instagramEmbed = $instagramEmbed;
+}
 
 
     // Métodos para obtener un resumen del contenido, verificar si tiene imagen y obtener etiquetas como array
@@ -41,26 +43,28 @@ class BlogPost {
         $db = BD::obtenerConexion();
 
         if ($this->postId === null) {
-            $sql = "INSERT INTO blog_posts (titulo, contenido, imagen_url, autor_id, etiquetas)
-                    VALUES (?, ?, ?, ?, ?)
+            $sql = "INSERT INTO blog_posts 
+                    (titulo, contenido, imagen_url, autor_id, etiquetas, instagram_embed)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     RETURNING post_id";
 
-            $stmt = $db->prepare($sql);
-            $stmt->execute([
-                $this->titulo,
-                $this->contenido,
-                $this->imagenUrl,
-                $this->autorId,
-                $this->etiquetas
-            ]);
+        $stmt = $db->prepare($sql);
+        $stmt->execute([
+            $this->titulo,
+            $this->contenido,
+            $this->imagenUrl,
+            $this->autorId,
+            $this->etiquetas,
+            $this->instagramEmbed
+        ]);
 
             $this->postId = $stmt->fetchColumn();
             return true;
         }
 
         $sql = "UPDATE blog_posts
-                SET titulo = ?, contenido = ?, imagen_url = ?, etiquetas = ?
-                WHERE post_id = ?";
+        SET titulo = ?, contenido = ?, imagen_url = ?, etiquetas = ?, instagram_embed = ?
+        WHERE post_id = ?";
 
         $stmt = $db->prepare($sql);
         return $stmt->execute([
@@ -68,6 +72,7 @@ class BlogPost {
             $this->contenido,
             $this->imagenUrl,
             $this->etiquetas,
+            $this->instagramEmbed,
             $this->postId
         ]);
     }
@@ -104,14 +109,15 @@ class BlogPost {
         if (!$data) return null;
 
         return new BlogPost(
-            $data['titulo'],
-            $data['contenido'],
-            $data['autor_id'],
-            $data['imagen_url'],
-            $data['etiquetas'],
-            $data['post_id'],
-            $data['fecha_publicacion']
-        );
+        $data['titulo'],
+        $data['contenido'],
+        $data['autor_id'],
+        $data['imagen_url'],
+        $data['etiquetas'],
+        $data['post_id'],
+        $data['fecha_publicacion'],
+        $data['instagram_embed']
+    );
     }
 
     // Método para obtener posts por autor
