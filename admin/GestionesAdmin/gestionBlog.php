@@ -1,12 +1,13 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+require_once '../../Clases/BlogPost.php';
+require_once '../clases_admin/GestorUsuarios.php';
+
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario instanceof Administrador) {
     header("Location: ../../login.php");
     exit;
 }
-
-require_once '../../Clases/BlogPost.php';
 
 /* CREAR */
 if (isset($_POST['crear'])) {
