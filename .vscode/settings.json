@@ -10,5 +10,13 @@
             "database": "barberia_catracha",
             "username": "postgres"
         }
-    ]
+    ],
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "\\.php$",
+                "cmd": "C:\\xampp\\php\\php.exe \"${fileDirname}/generar_diagrama.php\""
+            }
+        ]
+    }
 }
