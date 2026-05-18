@@ -20,5 +20,6 @@ class UsuarioBarbero extends Usuario {
     public function puedeVerTodasLasReservas(): bool { 
         return true;
     }
+    
 }
 ?>
