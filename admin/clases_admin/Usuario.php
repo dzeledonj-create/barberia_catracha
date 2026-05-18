@@ -99,24 +99,5 @@ class Usuario {
         }
         return $usuarios;
     }
-
-    public function listarUsuarios() {
-        $conexion = BD::obtenerConexion();
-
-        $sql = "SELECT * FROM usuarios";
-        $resultado = $conexion->query($sql);
-
-        $usuarios = [];
-        while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
-            $usuarios[] = new Usuario(
-                $fila['nombre'],
-                $fila['email'],
-                $fila['rol'],
-                $fila['activo'],
-                $fila['usuario_id']
-            );
-        }
-        return $usuarios;
-    }
 }
 ?>
