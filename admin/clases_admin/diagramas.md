@@ -29,9 +29,9 @@ classDiagram
         +__construct(nombre,email,rol,activo = true,usuarioId = null)
         +estaActivo() : bool
         +getNombre() : string
-        +crear() : int
-        +actualizar()
-        +eliminar()
+        +crear() : void
+        +actualizar() : void
+        +eliminar() : void
         +obtenerPorId(usuarioId) : ?Usuario
         +obtenerTodos() : array
     }
