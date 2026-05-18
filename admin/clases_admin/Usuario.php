@@ -27,11 +27,12 @@ class Usuario {
     public function crear() {
     $conexion = BD::obtenerConexion();
 
-    $sql = "INSERT INTO usuarios (nombre, email, rol, activo)
-            VALUES ('$this->nombre', '$this->email', '$this->rol', '$this->activo')";
+    // Añadimos 'password' en las columnas y un valor fijo '1234' en los VALUES
+    $sql = "INSERT INTO usuarios (nombre, email, password, rol, activo)
+            VALUES ('$this->nombre', '$this->email', '1234', '$this->rol', '$this->activo')";
 
     $conexion->query($sql);
-    }
+}
 
     public function actualizar() {
         if ($this->usuarioId === null) {
@@ -87,25 +88,6 @@ class Usuario {
         $sql = "SELECT * FROM usuarios";
         $resultado = $conexion->query($sql);
     
-        $usuarios = [];
-        while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
-            $usuarios[] = new Usuario(
-                $fila['nombre'],
-                $fila['email'],
-                $fila['rol'],
-                $fila['activo'],
-                $fila['usuario_id']
-            );
-        }
-        return $usuarios;
-    }
-
-    public function listarUsuarios() {
-        $conexion = BD::obtenerConexion();
-
-        $sql = "SELECT * FROM usuarios";
-        $resultado = $conexion->query($sql);
-
         $usuarios = [];
         while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
             $usuarios[] = new Usuario(
