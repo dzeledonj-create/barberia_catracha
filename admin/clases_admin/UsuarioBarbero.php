@@ -20,22 +20,6 @@ class UsuarioBarbero extends Usuario {
     public function puedeVerTodasLasReservas(): bool { 
         return true;
     }
-    public static function obtenerBarberosActivos(): array {
-        $conexion = BD::obtenerConexion();
-        $sql = "SELECT * FROM usuarios WHERE rol = 'barbero' AND activo = 1";
-        $resultado = $conexion->query($sql);
-
-        $barberos = [];
-        while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
-            $barberos[] = new UsuarioBarbero(
-                $fila['nombre'],
-                $fila['email'],
-                $fila['barbero_id'],
-                $fila['activo'],
-                $fila['usuario_id']
-            );
-        }
-        return $barberos;
-    }
+    
 }
 ?>
