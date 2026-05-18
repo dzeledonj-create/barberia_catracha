@@ -24,16 +24,27 @@ class Usuario {
         return $this->nombre;
     }
 
-    public function crear() {
-    $conexion = BD::obtenerConexion();
+    // CORREGIDO: Uso de consultas preparadas y retorna el ID insertado
+    public function crear(): int {
+        $conexion = BD::obtenerConexion();
 
-    // Añadimos 'password' en las columnas y un valor fijo '1234' en los VALUES
-    $sql = "INSERT INTO usuarios (nombre, email, password, rol, activo)
-            VALUES ('$this->nombre', '$this->email', '1234', '$this->rol', '$this->activo')";
+        $sql = "INSERT INTO usuarios (nombre, email, password, rol, activo)
+                VALUES (?, ?, '1234', ?, ?)";
 
-    $conexion->query($sql);
-}
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([
+            $this->nombre,
+            $this->email,
+            $this->rol,
+            $this->activo ? 1 : 0
+        ]);
 
+        // Retorna el ID autogenerado en Postgres
+        $this->usuarioId = (int)$conexion->lastInsertId();
+        return $this->usuarioId;
+    }
+
+    // CORREGIDO: Sanitizado contra Inyección SQL
     public function actualizar() {
         if ($this->usuarioId === null) {
             throw new Exception("El usuario debe tener un ID para ser actualizado.");
@@ -41,16 +52,18 @@ class Usuario {
 
         $conexion = BD::obtenerConexion();
 
-        $sql = "UPDATE usuarios
-                SET nombre = '$this->nombre',
-                    email = '$this->email',
-                    rol = '$this->rol',
-                    activo = '$this->activo'
-                WHERE usuario_id = $this->usuarioId";
-
-        $conexion->query($sql);
+        $sql = "UPDATE usuarios SET nombre = ?, email = ?, rol = ?, activo = ? WHERE usuario_id = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([
+            $this->nombre,
+            $this->email,
+            $this->rol,
+            $this->activo ? 1 : 0,
+            $this->usuarioId
+        ]);
     }
 
+    // CORREGIDO: Sanitizado contra Inyección SQL
     public function eliminar() {
         if ($this->usuarioId === null) {
             throw new Exception("El usuario debe tener un ID para ser eliminado.");
@@ -58,28 +71,29 @@ class Usuario {
 
         $conexion = BD::obtenerConexion();
 
-        $sql = "DELETE FROM usuarios WHERE usuario_id = $this->usuarioId";
-
-        $conexion->query($sql);
+        $sql = "DELETE FROM usuarios WHERE usuario_id = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([$this->usuarioId]);
     }
 
+    // CORREGIDO: Sanitizado contra Inyección SQL
     public static function obtenerPorId($usuarioId): ?Usuario {
         $conexion = BD::obtenerConexion();
     
-        $sql = "SELECT * FROM usuarios WHERE usuario_id = $usuarioId";
-        $resultado = $conexion->query($sql);
+        $sql = "SELECT * FROM usuarios WHERE usuario_id = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([$usuarioId]);
     
-        if ($resultado->rowCount() > 0) {
-            $fila = $resultado->fetch(PDO::FETCH_ASSOC);
+        if ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
             return new Usuario(
                 $fila['nombre'],
                 $fila['email'],
                 $fila['rol'],
-                $fila['activo'],
+                (bool)$fila['activo'],
                 $fila['usuario_id']
             );
         }
-        return null; // No se encontró el usuario
+        return null;
     }
 
     public static function obtenerTodos(): array {
@@ -94,11 +108,10 @@ class Usuario {
                 $fila['nombre'],
                 $fila['email'],
                 $fila['rol'],
-                $fila['activo'],
+                (bool)$fila['activo'],
                 $fila['usuario_id']
             );
         }
         return $usuarios;
     }
 }
-?>

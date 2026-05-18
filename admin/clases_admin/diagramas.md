@@ -29,12 +29,11 @@ classDiagram
         +__construct(nombre,email,rol,activo = true,usuarioId = null)
         +estaActivo() : bool
         +getNombre() : string
-        +crear()
+        +crear() : int
         +actualizar()
         +eliminar()
         +obtenerPorId(usuarioId) : ?Usuario
         +obtenerTodos() : array
-        +listarUsuarios()
     }
 
     class UsuarioBarbero {
@@ -43,7 +42,6 @@ classDiagram
         +puedeGestionarSusReservas() : bool
         +getBarberoId() : int
         +puedeVerTodasLasReservas() : bool
-        +obtenerBarberosActivos() : array
     }
 
     Usuario <|-- Administrador

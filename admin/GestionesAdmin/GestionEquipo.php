@@ -1,6 +1,7 @@
 <?php
 require_once '../../clases/Barbero.php';
 require_once '../clases_admin/GestorUsuarios.php';
+require_once '../clases_admin/Administrador.php'; 
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
@@ -8,9 +9,71 @@ if (!$usuario instanceof Administrador) {
     exit;
 }
 
-$barberos = Barbero::obtenerTodos(); // Traemos todos para gestionar activos e inactivos
+// --- PROCESAMIENTO DEL FORMULARIO UNIFICADO ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $accion = $_POST['accion'] ?? '';
+    $rolSeleccionado = $_POST['rol'] ?? 'barbero';
+    
+    if ($accion === 'crear') {
+        if ($rolSeleccionado === 'admin') {
+            $nuevoAdmin = new Administrador(
+                $_POST['nombre'] ?? '',
+                $_POST['email'] ?? '',
+                true
+            );
+            $nuevoAdmin->crear(); 
+        } else {
+            $barbero = new Barbero(
+                $_POST['nombre'] ?? '',
+                $_POST['especialidad'] ?? '',
+                $_POST['foto_url'] ?? 'assets/img/default-user.jpg',
+                true,
+                null,
+                $_POST['descripcion'] ?? '',
+                $_POST['etiquetas'] ?? '',
+                'barbero',
+                $_POST['email'] ?? ''
+            );
+            $barbero->guardar();
+        }
+    }
 
-// Lógica simple para detectar si estamos editando
+    if ($accion === 'actualizar') {
+        $barberoId = (int)($_POST['barbero_id'] ?? 0);
+        $barbero = Barbero::obtenerPorId($barberoId);
+        
+        if ($barbero) {
+            if ($rolSeleccionado === 'admin') {
+                $barbero->eliminar();
+                $nuevoAdmin = new Administrador($_POST['nombre'], $_POST['email'], isset($_POST['activo']));
+                $nuevoAdmin->crear();
+            } else {
+                $barbero->nombre = $_POST['nombre'] ?? $barbero->nombre;
+                $barbero->email = $_POST['email'] ?? $barbero->email;
+                $barbero->especialidad = $_POST['especialidad'] ?? $barbero->especialidad;
+                $barbero->descripcion = $_POST['descripcion'] ?? $barbero->descripcion;
+                $barbero->etiquetas = $_POST['etiquetas'] ?? $barbero->etiquetas;
+                $barbero->fotoUrl = $_POST['foto_url'] ?? $barbero->fotoUrl;
+                $barbero->activo = isset($_POST['activo']);
+                $barbero->guardar();
+            }
+        }
+    }
+
+    if ($accion === 'eliminar') {
+        $barberoId = (int)($_POST['barbero_id'] ?? 0);
+        $barbero = Barbero::obtenerPorId($barberoId);
+        if ($barbero) {
+            $barbero->eliminar(); 
+        }
+    }
+
+    header("Location: GestionEquipo.php");
+    exit;
+}
+
+$barberos = Barbero::obtenerTodos(); 
+
 $editandoId = $_GET['editar'] ?? null;
 $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 ?>
@@ -37,7 +100,7 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
                 <div class="line-gold"></div>
             </div>
             
-            <form action="../../Clases/barbero.php" method="POST" class="add-form-grid">
+            <form action="" method="POST" class="add-form-grid">
                 <input type="hidden" name="accion" value="crear">
                 
                 <div class="form-row">
@@ -94,35 +157,37 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
         <hr class="separator-gold">
 
         <section class="equipo-grid">
-            <?php foreach ($barberos as $b_data): 
-                $b = Barbero::obtenerPorId($b_data['barbero_id']);
-            ?>
-                <section class="barbero-card <?= ($editandoId == $b->barberoId) ? 'editing' : '' ?>">
-                    <?php if ($editandoId == $b->barberoId): ?>
-                        <form action="../../Clases/barbero.php" method="POST" class="edit-form">
-                            <input type="hidden" name="accion" value="editar">
-                            <input type="hidden" name="barbero_id" value="<?= $b->barberoId ?>">
+            <?php foreach ($barberos as $barber): ?>
+                <section class="barbero-card <?= ($editandoId == $barber->barberoId) ? 'editing' : '' ?>">
+                    <?php if ($editandoId == $barber->barberoId && $barber->barberoId !== null): ?>
+                        
+                        <form action="" method="POST" class="edit-form">
+                            <input type="hidden" name="accion" value="actualizar">
+                            <input type="hidden" name="barbero_id" value="<?= $barber->barberoId ?>">
                             
                             <label>Nombre</label>
-                            <input type="text" name="nombre" value="<?= htmlspecialchars($b->nombre) ?>">
+                            <input type="text" name="nombre" value="<?= htmlspecialchars($barber->nombre) ?>" required>
+                            
+                            <label>Email</label>
+                            <input type="email" name="email" value="<?= htmlspecialchars($barber->email) ?>" required>
                             
                             <label>Especialidad</label>
-                            <input type="text" name="especialidad" value="<?= htmlspecialchars($b->especialidad) ?>">
+                            <input type="text" name="especialidad" value="<?= htmlspecialchars($barber->especialidad ?? '') ?>">
                             
                             <label>Rol de Sistema</label>
-                            <select name="rol">
-                                <option value="barbero" <?= ($b->rol == 'barbero') ? 'selected' : '' ?>>Usuario Barbero</option>
-                                <option value="admin" <?= ($b->rol == 'admin') ? 'selected' : '' ?>>Administrador</option>
+                            <select name="rol" required>
+                                <option value="barbero" <?= ($barber->rol === 'barbero') ? 'selected' : '' ?>>Barbero Profesional</option>
+                                <option value="admin" <?= ($barber->rol === 'admin') ? 'selected' : '' ?>>Administrador del Sistema</option>
                             </select>
 
                             <label>Descripción</label>
-                            <textarea name="descripcion" rows="3"><?= htmlspecialchars($b->descripcion) ?></textarea>
+                            <textarea name="descripcion" rows="3"><?= htmlspecialchars($barber->descripcion ?? '') ?></textarea>
                             
                             <label>Etiquetas</label>
-                            <input type="text" name="etiquetas" value="<?= htmlspecialchars($b->etiquetas) ?>">
+                            <input type="text" name="etiquetas" value="<?= htmlspecialchars($barber->etiquetas ?? '') ?>">
                             
                             <label>Foto URL</label>
-                            <input type="text" name="foto_url" value="<?= htmlspecialchars($b->fotoUrl) ?>">
+                            <input type="text" name="foto_url" value="<?= htmlspecialchars($barber->fotoUrl ?? '') ?>">
 
                             <section class="form-buttons">
                                 <button type="submit" class="btn-save">GUARDAR</button>
@@ -131,21 +196,25 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
                         </form>
                     <?php else: ?>
                         <div class="card-image">
-                             <img src="../../<?= htmlspecialchars($b->fotoUrl) ?>" alt="<?= htmlspecialchars($b->nombre) ?>" onerror="this.src='../../assets/img/default-user.jpg'">
+                             <img src="../../<?= htmlspecialchars($barber->fotoUrl ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->nombre) ?>" onerror="this.src='../../assets/img/default-user.jpg'">
                         </div>
                         <section class="info">
-                            <h3><?= htmlspecialchars($b->nombre) ?></h3>
-                            <p class="rank"><?= htmlspecialchars($b->especialidad) ?></p>
-                            <p class="role-text"><?= strtoupper($b->rol ?? 'Barbero') ?></p>
+                            <h3><?= htmlspecialchars($barber->nombre) ?></h3>
+                            <p class="rank"><?= htmlspecialchars($barber->especialidad ?? 'Admin') ?></p>
+                            <p class="role-text"><?= strtoupper($barber->rol ?? 'Barbero') ?></p>
                             
                             <div class="actions-group">
-                                <a href="?editar=<?= $b->barberoId ?>" class="btn-edit">EDITAR</a>
-                                
-                                <form action="../../Clases/barbero.php" method="POST" class="delete-form" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este miembro?');">
-                                    <input type="hidden" name="accion" value="eliminar">
-                                    <input type="hidden" name="barbero_id" value="<?= $b->barberoId ?>">
-                                    <button type="submit" class="btn-delete">ELIMINAR</button>
-                                </form>
+                                <?php if($barber->barberoId): ?>
+                                    <a href="?editar=<?= $barber->barberoId ?>" class="btn-edit">EDITAR</a>
+                                    
+                                    <form action="" method="POST" class="delete-form" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este miembro?');">
+                                        <input type="hidden" name="accion" value="eliminar">
+                                        <input type="hidden" name="barbero_id" value="<?= $barber->barberoId ?>">
+                                        <button type="submit" class="btn-delete">ELIMINAR</button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="role-text" style="color:#aaa; font-size:0.8rem;">(Edición avanzada de Admins en progreso)</span>
+                                <?php endif; ?>
                             </div>
                         </section>
                     <?php endif; ?>
