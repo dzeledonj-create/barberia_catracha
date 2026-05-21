@@ -1155,226 +1155,424 @@ body {
 /* --- SECCIÓN RESERVAS --- */
 
 .reservas-page {
-    background-color: #0a0a0a;
-    color: #fff;
-    min-height: 100vh;
-    padding: 100px 20px;
+    background-color: #0d0d0d;
+    color: #ffffff;
+    min-height: calc(100vh - 80px);
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .reservas-container {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 .reservas-container h1 {
-    font-size: 2.8rem;
+    text-align: center;
+    font-size: 2.2rem;
+    color: #d99c2b;
     margin-bottom: 30px;
-    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.pasos-reserva {
+/* Barra de Pasos */
+.pasos-bar {
     display: flex;
-    justify-content: center;
-    gap: 20px;
+    justify-content: space-between;
     margin-bottom: 40px;
+    position: relative;
+    border-bottom: 2px solid #222;
+    padding-bottom: 15px;
 }
 
-.paso {
-    width: 34px;
-    height: 34px;
-    background-color: #222;
-    color: #777;
+.paso-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+.paso-item.activo {
+    opacity: 1;
+}
+
+.paso-numero {
+    width: 35px;
+    height: 35px;
+    background: #222;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
+    font-weight: bold;
+    margin-bottom: 8px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
 }
 
-.paso.activo {
-    background-color: #d99c2b;
-    color: #000;
+.paso-item.activo .paso-numero {
+    background: #d99c2b;
+    color: #0a0a0a;
+    border-color: #ffffff;
 }
 
-.form-reserva {
-    background-color: #111;
-    border: 1px solid #222;
-    padding: 30px;
+.paso-texto {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
+/* Pasos del Formulario */
 .reserva-step {
     display: none;
-    text-align: left;
 }
 
 .reserva-step.activo {
     display: block;
+    animation: fadeIn 0.4s ease-in-out;
 }
 
 .reserva-step h2 {
-    color: #fff;
+    font-size: 1.5rem;
     margin-bottom: 25px;
+    border-left: 4px solid #d99c2b;
+    padding-left: 12px;
 }
 
-.opcion-reserva {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 15px;
-    align-items: center;
-    background: linear-gradient(135deg, #151515, #1f1f1f);
-    border: 1px solid #2a2a2a;
-    padding: 18px 20px;
-    margin-bottom: 14px;
-    cursor: pointer;
-    color: #fff;
-    transition: 0.3s ease;
-}
-
-.opcion-reserva input {
+/* Estilo de Tarjetas y Opciones */
+.card-option input[type="radio"] {
     display: none;
 }
 
-.opcion-reserva section {
+.card-option {
+    display: block;
+    background: #1c1c1c;
+    border: 2px solid #2a2a2a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.card-option:hover {
+    border-color: #555;
+    background: #222;
+}
+
+.card-option input[type="radio"]:checked + .card-content,
+.card-option input[type="radio"]:checked + .card-content-barbero,
+.card-option:has(input[type="radio"]:checked) {
+    border-color: #d99c2b;
+    background: rgba(217, 156, 43, 0.05);
+    box-shadow: 0 0 15px rgba(217, 156, 43, 0.15);
+}
+
+/* Grid de Servicios */
+.servicios-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.servicio-card .card-content {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-info h3 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.card-info p {
+    color: #b3b3b3;
+    font-size: 0.9rem;
+}
+
+.card-meta {
+    text-align: right;
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.opcion-reserva strong {
-    font-size: 1rem;
-    color: #fff;
+.card-meta .precio {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #d99c2b;
 }
 
-.opcion-reserva small {
-    color: #999;
+.card-meta .duracion {
     font-size: 0.8rem;
+    color: #888;
 }
 
-.opcion-reserva span {
-    color: var(--gold);
-    font-weight: 800;
-    font-size: 1rem;
+/* Grid de Barberos */
+.barberos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
 }
 
-.opcion-reserva:hover {
-    border-color: var(--gold);
-    transform: translateY(-2px);
-    background: #202020;
+.card-content-barbero {
+    padding: 25px 15px;
+    text-align: center;
 }
 
-.opcion-reserva:has(input:checked) {
-    border-color: var(--gold);
-    background: rgba(217, 156, 43, 0.12);
-    box-shadow: 0 0 0 1px var(--gold);
-}
-
-.opcion-reserva:has(input:checked)::after {
-    content: "✓";
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 22px;
-    height: 22px;
-    background-color: var(--gold);
-    color: #000;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.barbero-img {
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-}
-
-
-
-.form-reserva input[type="text"],
-.form-reserva input[type="tel"],
-.form-reserva input[type="email"],
-.form-reserva input[type="datetime-local"] {
-    width: 100%;
-    padding: 14px;
+    object-fit: cover;
+    border: 3px solid #2a2a2a;
     margin-bottom: 15px;
-    background-color: #1b1b1b;
-    border: 1px solid #333;
-    color: #fff;
+    transition: border-color 0.3s;
 }
 
-.btn-siguiente,
-.btn-atras,
-.btn-confirmar {
-    background-color: #d99c2b;
-    color: #000;
-    border: none;
-    padding: 14px 28px;
-    font-weight: 800;
-    cursor: pointer;
-    margin-top: 20px;
-    margin-right: 10px;
+.card-option:has(input[type="radio"]:checked) .barbero-img {
+    border-color: #d99c2b;
 }
 
-.btn-atras {
-    background-color: transparent;
-    color: #fff;
-    border: 1px solid #fff;
+.card-content-barbero h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
 }
 
-.label-form {
-    display: block;
-    color: var(--gold);
-    font-weight: 800;
-    margin-bottom: 10px;
+.card-content-barbero .especialidad {
+    font-size: 0.85rem;
+    color: #d99c2b;
     text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
 }
 
-.input-estilo {
+/* Calendario y Horas */
+.agenda-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.calendario-box input {
     width: 100%;
-    padding: 15px;
-    margin-bottom: 25px;
-    background-color: #1b1b1b;
+    background: #1c1c1c;
     border: 1px solid #333;
-    color: #fff;
+    padding: 15px;
+    color: white;
     font-size: 1rem;
+    border-radius: 6px;
+    text-align: center;
 }
 
-.input-estilo:focus {
-    outline: none;
-    border-color: var(--gold);
+.horas-box h3 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #b3b3b3;
 }
 
 .horas-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
-.opcion-hora {
-    position: relative;
-    background: linear-gradient(135deg, #151515, #1f1f1f);
-    border: 1px solid #2a2a2a;
-    padding: 16px;
+.hora-item {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    padding: 10px;
     text-align: center;
+    border-radius: 4px;
     cursor: pointer;
-    transition: 0.3s;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.hora-item:hover {
+    border-color: #d99c2b;
+    color: #d99c2b;
+}
+
+.hora-item.selected {
+    background: #d99c2b;
+    color: #0a0a0a;
+    border-color: #d99c2b;
+    font-weight: bold;
+}
+
+.select-date-msg {
+    grid-column: 1 / -1;
+    color: #666;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Inputs de Datos */
+.form-group-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-box label {
+    font-size: 0.85rem;
+    color: #b3b3b3;
+    text-transform: uppercase;
+}
+
+.input-box input {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    padding: 12px 15px;
+    color: white;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.input-box input:focus {
+    border-color: #d99c2b;
+    outline: none;
+}
+
+/* Resumen del Ticket */
+.ticket-resumen {
+    background: #1c1c1c;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 25px;
+    margin-top: 20px;
+}
+
+.ticket-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #262626;
+    font-size: 0.95rem;
+}
+
+.ticket-line.total {
+    border-bottom: none;
+    font-size: 1.2rem;
+    color: #d99c2b;
+    padding-top: 15px;
+}
+
+/* Botonera de Navegación */
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    gap: 15px;
+}
+
+.nav-buttons.single-btn {
+    justify-content: flex-end;
+}
+
+.btn-siguiente, .btn-confirmar {
+    background: #d99c2b;
+    color: #0a0a0a;
+    border: none;
+    padding: 14px 28px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s;
+}
+
+.btn-siguiente:hover, .btn-confirmar:hover {
+    background: #f0ad32;
+}
+
+.btn-atras {
+    background: transparent;
+    color: #b3b3b3;
+    border: 1px solid #333;
+    padding: 14px 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s;
+}
+
+.btn-atras:hover {
+    background: #222;
     color: #fff;
-    font-weight: 800;
 }
 
-.opcion-hora input {
-    display: none;
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.opcion-hora:hover {
-    border-color: var(--gold);
-    transform: translateY(-2px);
+@media (max-width: 768px) {
+    .agenda-container, .form-group-grid {
+        grid-template-columns: 1fr;
+    }
+    .paso-texto { display: none; }
 }
 
-.opcion-hora:has(input:checked) {
-    background: rgba(217, 156, 43, 0.12);
-    border-color: var(--gold);
-    box-shadow: 0 0 0 1px var(--gold);
-    color: var(--gold);
+/* Contenedor de Botones de Filtro de Categorías */
+.servicios-filtros {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.filtro-btn {
+    background: #1c1c1c;
+    color: #b3b3b3;
+    border: 1px solid #333;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filtro-btn:hover {
+    border-color: #d99c2b;
+    color: #fff;
+}
+
+.filtro-btn.activo {
+    background: #d99c2b;
+    color: #0a0a0a;
+    border-color: #d99c2b;
+    box-shadow: 0 4px 12px rgba(217, 156, 43, 0.2);
+}
+
+/* Animación sutil al cambiar de filtro */
+.servicio-card {
+    transition: all 0.3s ease, border-color 0.25s ease;
 }
 
 

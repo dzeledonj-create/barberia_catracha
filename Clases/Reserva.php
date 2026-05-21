@@ -163,24 +163,24 @@ class Reserva {
     }
 
     // Método para obtener todas las reservas con detalles para el panel de administración
-    public static function obtenerTodasConDetalles() {
-    $db = BD::obtenerConexion();
+    public static function obtenerTodasConDetalles(): array {
+        $db = BD::obtenerConexion();
 
-    $sql = "SELECT 
-                r.reserva_id,
-                CONCAT(c.nombre, ' ', c.apellido) AS cliente,
-                b.nombre AS barbero,
-                s.nombre AS servicio,
-                r.fecha_hora,
-                r.estado
-            FROM reservas r
-            JOIN clientes c ON r.cliente_id = c.cliente_id
-            JOIN barberos b ON r.barbero_id = b.barbero_id
-            JOIN servicios s ON r.servicio_id = s.servicio_id
-            ORDER BY r.fecha_hora DESC";
+        // Hacemos JOIN con usuarios para obtener el nombre real del barbero (u.nombre)
+        $sql = "SELECT r.reserva_id, 
+                       r.fecha_hora, 
+                       r.estado,
+                       (c.nombre || ' ' || c.apellido) AS cliente,
+                       u.nombre AS barbero, 
+                       s.nombre AS servicio
+                FROM reservas r
+                INNER JOIN clientes c ON r.cliente_id = c.cliente_id
+                INNER JOIN servicios s ON r.servicio_id = s.servicio_id
+                LEFT JOIN barberos b ON r.barbero_id = b.barbero_id
+                LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id
+                ORDER BY r.fecha_hora DESC";
 
-    $stmt = $db->query($sql);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
 

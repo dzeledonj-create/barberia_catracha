@@ -4,7 +4,7 @@ require_once '../clases/Barbero.php';
 require_once '../clases/Servicio.php';
 
 $servicios = Servicio::obtenerTodos();
-$barberos = Barbero::obtenerActivos();
+$barberos = Barbero::obtenerActivos(); // Devuelve arrays por el FETCH_ASSOC
 $db = BD::obtenerConexion();
 
 $stmt = $db->query("SELECT barbero_id, servicio_id FROM barbero_servicio");
@@ -26,122 +26,157 @@ $relaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php include_once '../includes/header.php'; ?>
 
 <section class="reservas-page">
-
-    <section class="reservas-container">
-
+    <div class="reservas-container">
         <h1>Reserva tu Cita</h1>
 
-        <section class="pasos-reserva">
-            <span class="paso activo">1</span>
-            <span class="paso">2</span>
-            <span class="paso">3</span>
-            <span class="paso">4</span>
-            <span class="paso">5</span>
-        </section>
+        <div class="pasos-bar">
+            <div class="paso-item activo" data-paso="0"><span class="paso-numero">1</span><span class="paso-texto">Servicio</span></div>
+            <div class="paso-item" data-paso="1"><span class="paso-numero">2</span><span class="paso-texto">Barbero</span></div>
+            <div class="paso-item" data-paso="2"><span class="paso-numero">3</span><span class="paso-texto">Fecha y Hora</span></div>
+            <div class="paso-item" data-paso="3"><span class="paso-numero">4</span><span class="paso-texto">Tus Datos</span></div>
+            <div class="paso-item" data-paso="4"><span class="paso-numero">5</span><span class="paso-texto">Confirmación</span></div>
+        </div>
 
-        <form method="POST" action="../controladores/guardar_reserva.php" class="form-reserva">
+        <form id="form-reserva" action="procesar_reserva.php" method="POST">
+            
+            <div class="reserva-step activo" id="step-1">
+                <h2>Selecciona un servicio</h2>
+                
+                <div class="servicios-filtros">
+                    <button type="button" class="filtro-btn activo" data-categoria="todos">Todos</button>
+                    <button type="button" class="filtro-btn" data-categoria="corte">Cortes</button>
+                    <button type="button" class="filtro-btn" data-categoria="barba">Barba</button>
+                    <button type="button" class="filtro-btn" data-categoria="tinte">Tintes / Color</button>
+                    <button type="button" class="filtro-btn" data-categoria="otros">Otros Combos</button>
+                </div>
 
-            <!-- PASO 1: SERVICIO -->
-            <section class="reserva-step activo" id="step-1">
-                <h2>Elige tu servicio</h2>
-
-                <?php foreach ($servicios as $servicio): ?>
-                    <label class="opcion-reserva">
-                    <input type="radio" name="servicio_id" value="<?= $servicio['servicio_id'] ?>" required>
-
-                    <section>
-                        <strong><?= htmlspecialchars($servicio['nombre']) ?></strong>
-                        <small><?= $servicio['duracion_minutos'] ?> min</small>
-                    </section>
-
-                    <span><?= number_format($servicio['precio'], 2) ?> €</span>
-                    </label>
-                                <?php endforeach; ?>
-
-                                <button type="button" class="btn-siguiente">Siguiente</button>
-            </section>
-
-            <!-- PASO 2: BARBERO -->
-            <section class="reserva-step" id="step-2">
-                <h2>Elige tu barbero</h2>
-
-               <?php foreach ($barberos as $barbero): ?>
-                    <?php
-                        $serviciosBarbero = [];
-                        foreach ($relaciones as $relacion) {
-                            if ($relacion['barbero_id'] == $barbero['barbero_id']) {
-                                $serviciosBarbero[] = $relacion['servicio_id'];
-                            }
+                <div class="servicios-grid">
+                    <?php foreach ($servicios as $servicio): 
+                        // Lógica automática para asignar categoría temporal basándonos en el nombre
+                        $nombreLower = mb_strtolower($servicio['nombre']);
+                        $descLower = mb_strtolower($servicio['descripcion']);
+                        
+                        $cat = 'otros';
+                        if (str_contains($nombreLower, 'corte') || str_contains($nombreLower, 'pelo') || str_contains($nombreLower, 'cejas')) {
+                            $cat = 'corte';
+                        }
+                        if (str_contains($nombreLower, 'barba')) {
+                            // Si tiene corte y barba, se puede quedar en combos/otros o barba
+                            $cat = (str_contains($nombreLower, 'corte')) ? 'otros' : 'barba';
+                        }
+                        if (str_contains($nombreLower, 'tinte') || str_contains($nombreLower, 'color') || str_contains($nombreLower, 'mechas')) {
+                            $cat = 'tinte';
                         }
                     ?>
-                    <label class="opcion-barbero" data-servicios="<?= implode(',', $serviciosBarbero) ?>">
-                        <input type="radio" name="barbero_id" value="<?= $barbero['barbero_id'] ?>" required>
-                        <img src="../<?= htmlspecialchars($barbero['foto_url']) ?>" alt="<?= htmlspecialchars($barbero['nombre']) ?>">
-                        <section>
-                            <strong><?= htmlspecialchars($barbero['nombre']) ?></strong>
-                            <small><?= htmlspecialchars($barbero['especialidad']) ?></small>
-                        </section>
-                    </label>
+                        <label class="card-option servicio-card" data-cat="<?= $cat ?>">
+                            <input type="radio" name="servicio_id" value="<?= $servicio['servicio_id'] ?>" required>
+                            <div class="card-content">
+                                <div class="card-info">
+                                    <h3><?= htmlspecialchars($servicio['nombre']) ?></h3>
+                                    <p><?= htmlspecialchars($servicio['descripcion']) ?></p>
+                                </div>
+                                <div class="card-meta">
+                                    <span class="precio"><?= number_format($servicio['precio'], 2) ?> €</span>
+                                    <span class="duracion"><?= $servicio['duracion_minutos'] ?> min</span>
+                                </div>
+                            </div>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+                <div class="nav-buttons single-btn">
+                    <button type="button" class="btn-siguiente">Siguiente Paso</button>
+                </div>
+            </div>
 
-                <?php endforeach; ?>
+            <div class="reserva-step" id="step-2">
+                <h2>Selecciona tu barbero</h2>
+                <div class="barberos-grid">
+                    <?php foreach ($barberos as $barbero): ?>
+                        <label class="card-option barbero-card" data-id="<?= $barbero['barbero_id'] ?>">
+                            <input type="radio" name="barbero_id" value="<?= $barbero['barbero_id'] ?>" required>
+                            <div class="card-content-barbero">
+                                <img src="<?= htmlspecialchars($barbero['foto_url'] ?? '../assets/img/default-avatar.png') ?>" alt="<?= htmlspecialchars($barbero['nombre']) ?>" class="barbero-img">
+                                <h3><?= htmlspecialchars($barbero['nombre']) ?></h3>
+                                <span class="especialidad"><?= htmlspecialchars($barbero['especialidad'] ?? 'Barbero Profesional') ?></span>
+                            </div>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn-atras">Atrás</button>
+                    <button type="button" class="btn-siguiente">Siguiente Paso</button>
+                </div>
+            </div>
 
-                <button type="button" class="btn-atras">Atrás</button>
-                <button type="button" class="btn-siguiente">Siguiente</button>
-            </section>
+            <div class="reserva-step" id="step-3">
+                <h2>Elige fecha y hora</h2>
+                <div class="agenda-container">
+                    <div class="calendario-box">
+                        <input type="text" id="datepicker" name="fecha" placeholder="Selecciona una fecha" readonly required>
+                    </div>
+                    <div class="horas-box">
+                        <h3>Horas disponibles</h3>
+                        <div id="horas-grid" class="horas-grid">
+                            <p class="select-date-msg">Por favor, selecciona una fecha primero.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn-atras">Atrás</button>
+                    <button type="button" class="btn-siguiente" id="btn-validar-hora">Siguiente Paso</button>
+                </div>
+            </div>
 
-            <!-- PASO 3: FECHA Y HORA -->
-            <section class="reserva-step" id="step-3">
-    <h2>Elige fecha y hora</h2>
+            <div class="reserva-step" id="step-4">
+                <h2>Tus datos personales</h2>
+                <div class="form-group-grid">
+                    <div class="input-box">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" placeholder="Ingresa tu nombre" required>
+                    </div>
+                    <div class="input-box">
+                        <label>Apellido *</label>
+                        <input type="text" name="apellido" placeholder="Ingresa tu apellido" required>
+                    </div>
+                    <div class="input-box">
+                        <label>Teléfono *</label>
+                        <input type="tel" name="telefono" placeholder="Ej: 600000000" required>
+                    </div>
+                    <div class="input-box">
+                        <label>Correo Electrónico</label>
+                        <input type="email" name="email" placeholder="nombre@correo.com">
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn-atras">Atrás</button>
+                    <button type="button" class="btn-siguiente">Siguiente Paso</button>
+                </div>
+            </div>
 
-    <input 
-        type="text" 
-        id="fecha_hora" 
-        name="fecha_hora" 
-        class="input-estilo calendario-reserva" 
-        placeholder="Selecciona fecha y hora"
-        required
-    >
-
-    <button type="button" class="btn-atras">Atrás</button>
-    <button type="button" class="btn-siguiente">Siguiente</button>
-</section>
-
-            <button type="button" class="btn-atras">Atrás</button>
-            <button type="button" class="btn-siguiente">Siguiente</button>
-            </section>
-
-            <!-- PASO 4: DATOS CLIENTE -->
-            <section class="reserva-step" id="step-4">
-                <h2>Tus datos</h2>
-
-                <input type="text" name="nombre" placeholder="Nombre" required>
-                <input type="text" name="apellido" placeholder="Apellido" required>
-                <input type="tel" name="telefono" placeholder="Teléfono" required>
-                <input type="email" name="email" placeholder="Email">
-
-                <button type="button" class="btn-atras">Atrás</button>
-                <button type="button" class="btn-siguiente">Siguiente</button>
-            </section>
-
-            <!-- PASO 5: CONFIRMACIÓN -->
-            <section class="reserva-step" id="step-5">
-                <h2>Confirmar reserva</h2>
-
-                <p>Revisa los datos antes de confirmar tu cita.</p>
-
-                <button type="button" class="btn-atras">Atrás</button>
-                <button type="submit" class="btn-confirmar">Confirmar reserva</button>
-            </section>
+            <div class="reserva-step" id="step-5">
+                <h2>Confirmar tu cita</h2>
+                <div class="resumen-reserva-box">
+                    <p>Por favor, verifica que los detalles de tu cita sean correctos antes de finalizar.</p>
+                    <div class="ticket-resumen">
+                        <div class="ticket-line"><strong>Servicio:</strong> <span id="resumen-servicio">-</span></div>
+                        <div class="ticket-line"><strong>Barbero:</strong> <span id="resumen-barbero">-</span></div>
+                        <div class="ticket-line"><strong>Fecha:</strong> <span id="resumen-fecha">-</span></div>
+                        <div class="ticket-line"><strong>Hora:</strong> <span id="resumen-hora">-</span></div>
+                        <div class="ticket-line total"><strong>Precio total:</strong> <span id="resumen-precio">-</span></div>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn-atras">Atrás</button>
+                    <button type="submit" class="btn-confirmar">Confirmar Reserva</button>
+                </div>
+            </div>
 
         </form>
-
-    </section>
-
+    </div>
 </section>
 
-<script src="../assets/script.js"></script>
-<?php include_once '../includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 <script src="../assets/script.js"></script>
 </body>
 </html>
