@@ -322,4 +322,16 @@ ALTER TABLE barberos DROP COLUMN activo;
 -- Eliminamos barbero_id de usuarios, porque la relación ahora es desde el perfil del barbero hacia su cuenta, no al revés.
 ALTER TABLE usuarios DROP COLUMN barbero_id;
 
+-- Corregir la relación en blog_posts
+ALTER TABLE blog_posts 
+DROP CONSTRAINT blog_posts_autor_id_fkey,
+ADD CONSTRAINT blog_posts_autor_id_fkey 
+    FOREIGN KEY (autor_id) REFERENCES barberos(barbero_id) ON DELETE SET NULL;
+
+-- Corregir la relación en reservas
+ALTER TABLE reservas 
+DROP CONSTRAINT reservas_barbero_id_fkey,
+ADD CONSTRAINT reservas_barbero_id_fkey 
+    FOREIGN KEY (barbero_id) REFERENCES barberos(barbero_id) ON DELETE SET NULL;
+
 COMMIT;

@@ -38,20 +38,22 @@ class Barbero {
             $db->beginTransaction();
 
             if ($this->barberoId === null) {
-                // 1. OPERACIÓN CREAR: Insertar primero en usuarios (obligatorio por el esquema)
+                // 1. OPERACIÓN CREAR: Insertar primero en usuarios usando RETURNING para PostgreSQL
                 $sqlUsuario = "INSERT INTO usuarios (nombre, email, password, rol, activo) 
-                               VALUES (?, ?, '1234', 'barbero', ?)";
+                               VALUES (?, ?, '1234', 'barbero', ?)
+                               RETURNING usuario_id";
                 $stmtU = $db->prepare($sqlUsuario);
                 $stmtU->execute([
                     $this->nombre,
                     $this->email,
                     $this->activo ? 1 : 0
                 ]);
-                $this->usuarioId = (int)$db->lastInsertId();
+                $this->usuarioId = (int)$stmtU->fetchColumn();
 
                 // 2. Insertar en la tabla barberos vinculando el usuario_id obtenido
                 $sqlBarbero = "INSERT INTO barberos (usuario_id, especialidad, foto_url, descripcion, etiquetas) 
-                               VALUES (?, ?, ?, ?, ?)";
+                               VALUES (?, ?, ?, ?, ?)
+                               RETURNING barbero_id";
                 $stmtB = $db->prepare($sqlBarbero);
                 $stmtB->execute([
                     $this->usuarioId,
@@ -60,7 +62,7 @@ class Barbero {
                     $this->descripcion,
                     $this->etiquetas
                 ]);
-                $this->barberoId = (int)$db->lastInsertId();
+                $this->barberoId = (int)$stmtB->fetchColumn();
 
             } else {
                 // 2. OPERACIÓN ACTUALIZAR: Modificar tabla barberos
@@ -127,7 +129,6 @@ class Barbero {
 
     public static function obtenerTodos(): array {
         $db = BD::obtenerConexion();
-        // Cambiamos INNER JOIN por LEFT JOIN para incluir usuarios que no están en la tabla barberos (como los admins)
         $stmt = $db->query("SELECT u.usuario_id, u.nombre, u.activo, u.rol, u.email, 
                                 b.barbero_id, b.especialidad, b.foto_url, b.descripcion, b.etiquetas 
                             FROM usuarios u
@@ -139,8 +140,8 @@ class Barbero {
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $barberos[] = new Barbero(
                 $data['nombre'],
-                $data['especialidad'] ?? 'Administrador', // Valor por defecto si es admin
-                $data['foto_url'] ?? 'assets/img/default-user.jpg', // Foto por defecto si es admin
+                $data['especialidad'] ?? 'Administrador',
+                $data['foto_url'] ?? 'assets/img/default-user.jpg',
                 (bool)$data['activo'],
                 $data['barbero_id'] ? (int)$data['barbero_id'] : null,
                 $data['descripcion'] ?? 'Administrador del sistema.',
