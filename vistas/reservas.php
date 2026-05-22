@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit;
                 }
 
-                $mensajeError = 'No se pudo guardar la reserva. El barbero puede no estar disponible en ese horario.';
+                $mensajeError = 'No se pudo guardar la reserva. El barbero tiene ya esa hora reservada.';
             }
         }
     }

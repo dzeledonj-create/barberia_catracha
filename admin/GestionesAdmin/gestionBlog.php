@@ -14,9 +14,11 @@ if (isset($_POST['crear'])) {
 
     $embed = "";
 
+    // Si se ha proporcionado una URL de Instagram, generar el código de inserción correspondiente
     if (!empty($_POST['instagram_url'])) {
         $url = trim($_POST['instagram_url']);
 
+        // Verificar si la URL es de un reel o una publicación normal para generar el código de inserción adecuado
         if (strpos($url, '/reel/') !== false) {
             $embed = '
                 <blockquote class="instagram-media"
