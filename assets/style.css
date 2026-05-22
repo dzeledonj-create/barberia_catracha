@@ -663,17 +663,23 @@ body {
     border-color: var(--gold);
 }
 
-.barbero-img {
+.equipo-section .barbero-img {
     width: 100%;
     height: 100%;
+    min-height: 320px;
+    border-radius: 0; /* asegurar que no sea circular */
+    overflow: hidden;
+    display: block;
 }
 
-.barbero-img img {
+.equipo-section .barbero-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     opacity: 0.6; /* Oscurece la imagen para que el texto resalte */
     transition: 0.5s;
+    display: block;
 }
 
 .barbero-card:hover .barbero-img img {
@@ -1331,18 +1337,26 @@ body {
     text-align: center;
 }
 
-.barbero-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #2a2a2a;
+.card-content-barbero .barbero-img {
+    width: 100%;
+    height: 280px; /* altura del recuadro de la imagen */
+    border-radius: 0; /* quitar forma circular */
+    overflow: hidden;
+    display: block;
     margin-bottom: 15px;
-    transition: border-color 0.3s;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card-content-barbero .barbero-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
 }
 
 .card-option:has(input[type="radio"]:checked) .barbero-img {
-    border-color: #d99c2b;
+    box-shadow: 0 0 0 3px rgba(217,156,43,0.12);
 }
 
 .card-content-barbero h3 {

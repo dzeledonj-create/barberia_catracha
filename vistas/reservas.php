@@ -247,4 +247,5 @@ foreach ($relaciones as $rel) {
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 <script src="../assets/script.js"></script>
 </body>
+<?php include_once '../includes/footer.php'; ?>
 </html>

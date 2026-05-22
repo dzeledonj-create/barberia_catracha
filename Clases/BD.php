@@ -10,11 +10,11 @@ class BD {
     public static function obtenerConexion(): PDO {
         // Solo crea la conexión si aún no existe (la primera vez que se llama)
         if (self::$conexion === null) {
-            $host     = '192.168.4.24';
-            $puerto   = '5432';
-            $bd       = 'barberia_catracha';
-            $usuario  = 'postgres';
-            $contrasena = 'Jinotega2014';
+            $host     = '192.168.4.24'; //aws-0-eu-west-1.pooler.supabase.com
+            $puerto   = '5432';  //5432
+            $bd       = 'barberia_catracha'; //postgres
+            $usuario  = 'postgres'; //postgres.qefjlwgqavmumgahjipk
+            $contrasena = 'Jinotega2014'; //C2mpusdigital10.
 
             $dsn = "pgsql:host=$host;port=$puerto;dbname=$bd";
 
