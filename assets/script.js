@@ -32,267 +32,405 @@ document.querySelectorAll('.explore-card').forEach(card => {
 });
 
 
-// 3. Filtrado de barberos según el servicio seleccionado
+// 3. Reservas: filtros, calendario y selección de horas
+
 document.addEventListener('DOMContentLoaded', function () {
+    const scheduleData = window.reservaScheduleData || [];
+    const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const horariosPorDia = scheduleData.reduce((map, horario) => {
+        map[horario.dia_semana] = horario;
+        return map;
+    }, {});
 
     const servicios = document.querySelectorAll('input[name="servicio_id"]');
-    const barberos = document.querySelectorAll('.opcion-barbero');
+    const barberos = document.querySelectorAll('.barbero-card');
+    const steps = document.querySelectorAll('.reserva-step');
+    const pasosBar = document.querySelectorAll('.paso-item');
+    const btnSiguiente = document.querySelectorAll('.btn-siguiente');
+    const btnAtras = document.querySelectorAll('.btn-atras');
+    const datepickerInput = document.getElementById('datepicker');
+    const horasGrid = document.getElementById('horas-grid');
+    const horaHidden = document.getElementById('hora-seleccionada');
+    const trackServicio = document.getElementById('track-servicio');
+    const trackBarbero = document.getElementById('track-barbero');
+    const trackCita = document.getElementById('track-cita');
+
+    let pasoActual = 0;
+    let servicioTexto = "";
+    let barberoTexto = "";
+    let horaSeleccionada = null;
+    let servicioDuracionMinutos = 30;
+    const isReservationSuccess = window.location.search.includes('reserva=ok');
+
+    const btnSiguienteStep1 = steps[0]?.querySelector('.btn-siguiente');
+    const btnSiguienteStep2 = steps[1]?.querySelector('.btn-siguiente');
+    const btnSiguienteStep3 = steps[2]?.querySelector('.btn-siguiente');
+
+    const initialState = { step: pasoActual, reservationComplete: isReservationSuccess };
+    history.replaceState(initialState, '', window.location.pathname + window.location.search);
+
+    if (isReservationSuccess) {
+        sessionStorage.setItem('reservaCompletada', '1');
+    } else {
+        sessionStorage.removeItem('reservaCompletada');
+    }
+
+    function mostrarPaso(index) {
+        steps.forEach(step => step.classList.remove('activo'));
+        pasosBar.forEach(paso => paso.classList.remove('activo'));
+
+        if (steps[index]) {
+            steps[index].classList.add('activo');
+        }
+        if (pasosBar[index]) {
+            pasosBar[index].classList.add('activo');
+        }
+
+        if (index === 2 && btnSiguienteStep3) {
+            btnSiguienteStep3.disabled = !horaHidden.value;
+            if (horaHidden.value) {
+                btnSiguienteStep3.classList.remove('deshabilitado');
+            } else {
+                btnSiguienteStep3.classList.add('deshabilitado');
+            }
+        }
+    }
+
+    function setPaso(index, pushState = true) {
+        pasoActual = index;
+        mostrarPaso(index);
+        if (pushState && !isReservationSuccess) {
+            history.pushState({ step: pasoActual }, '', window.location.pathname + window.location.search);
+        }
+    }
+
+    window.addEventListener('popstate', event => {
+        if (event.state && typeof event.state.step === 'number') {
+            if (sessionStorage.getItem('reservaCompletada')) {
+                window.location.href = '/barberia_catracha/index.php';
+                return;
+            }
+            setPaso(event.state.step, false);
+        }
+    });
+
+    function parseTimeToMinutes(time) {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+    }
+
+    function formatMinutesToTime(value) {
+        const hours = Math.floor(value / 60).toString().padStart(2, '0');
+        const minutes = (value % 60).toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+
+    function getDayName(date) {
+        return dayNames[date.getDay()];
+    }
+
+    function isDateEnabled(date) {
+        const horario = horariosPorDia[getDayName(date)];
+        if (!horario) {
+            return false;
+        }
+        return !['true', '1', 1, true].includes(horario.cerrado);
+    }
+
+    function clearHorasGrid(message) {
+        horasGrid.innerHTML = `<p class="select-date-msg">${message}</p>`;
+    }
+
+    function resetSelectedHour() {
+        horaSeleccionada = null;
+        if (horaHidden) {
+            horaHidden.value = '';
+        }
+        if (btnSiguienteStep3) {
+            btnSiguienteStep3.disabled = true;
+            btnSiguienteStep3.classList.add('deshabilitado');
+        }
+        document.querySelectorAll('.hora-item.selected').forEach(btn => btn.classList.remove('selected'));
+    }
+
+    function renderHorasDisponibles(date) {
+        resetSelectedHour();
+
+        if (!date) {
+            clearHorasGrid('Por favor, selecciona una fecha primero.');
+            return;
+        }
+
+        const diaNombre = getDayName(date);
+        const horario = horariosPorDia[diaNombre];
+
+        if (!horario) {
+            clearHorasGrid('No hay horario disponible para ese día.');
+            return;
+        }
+
+        if (['true', '1', 1, true].includes(horario.cerrado)) {
+            clearHorasGrid('La barbería está cerrada ese día.');
+            return;
+        }
+
+        const aperturaMin = parseTimeToMinutes(horario.hora_apertura);
+        const cierreMin = parseTimeToMinutes(horario.hora_cierre);
+        const duracion = 30;
+        const slots = [];
+        const hoy = new Date();
+        const esHoy = date.toDateString() === hoy.toDateString();
+        const corteHoy = esHoy ? hoy.getHours() * 60 + hoy.getMinutes() : 0;
+
+        for (let minuto = aperturaMin; minuto + duracion <= cierreMin; minuto += 30) {
+            if (esHoy && minuto <= corteHoy) {
+                continue;
+            }
+            slots.push(formatMinutesToTime(minuto));
+        }
+
+        if (!slots.length) {
+            clearHorasGrid('No hay horas disponibles para esa fecha con el servicio seleccionado.');
+            return;
+        }
+
+        horasGrid.innerHTML = '';
+        slots.forEach(hora => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'hora-item';
+            button.textContent = hora;
+            button.dataset.hora = hora;
+            button.addEventListener('click', () => {
+                horaSeleccionada = hora;
+                if (horaHidden) {
+                    horaHidden.value = hora;
+                }
+                document.querySelectorAll('.hora-item.selected').forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+                if (btnSiguienteStep3) {
+                    btnSiguienteStep3.disabled = false;
+                    btnSiguienteStep3.classList.remove('deshabilitado');
+                }
+                if (trackCita) {
+                    trackCita.querySelector('span').innerText = `${datepickerInput.value} a las ${hora}`;
+                    trackCita.classList.add('completado');
+                }
+            });
+            horasGrid.appendChild(button);
+        });
+    }
+
+    function validarPaso(index) {
+        if (index === 0) {
+            const servicioSeleccionado = document.querySelector('input[name="servicio_id"]:checked');
+            if (!servicioSeleccionado) {
+                return { valido: false, mensaje: 'Debes seleccionar un servicio para poder avanzar.' };
+            }
+        }
+        if (index === 1) {
+            const barberoSeleccionado = document.querySelector('input[name="barbero_id"]:checked');
+            if (!barberoSeleccionado) {
+                return { valido: false, mensaje: 'Por favor, selecciona un barbero antes de ir al siguiente paso.' };
+            }
+        }
+        if (index === 2) {
+            const fechaInput = datepickerInput ? datepickerInput.value : '';
+            if (!fechaInput || !horaHidden || !horaHidden.value) {
+                return { valido: false, mensaje: 'Selecciona una fecha y una de las horas disponibles.' };
+            }
+        }
+        if (index === 3) {
+            const nom = document.querySelector('input[name="nombre"]').value.trim();
+            const ape = document.querySelector('input[name="apellido"]').value.trim();
+            const tel = document.querySelector('input[name="telefono"]').value.trim();
+            if (!nom || !ape || !tel) {
+                return { valido: false, mensaje: 'Por favor, rellena todos los campos requeridos (*).' };
+            }
+        }
+        return { valido: true, mensaje: '' };
+    }
+
+    // Genera el resumen que se muestra en el paso de confirmación
+    function generarResumenTicket() {
+        const resumenServicio = document.getElementById('resumen-servicio');
+        const resumenBarbero = document.getElementById('resumen-barbero');
+        const resumenFecha = document.getElementById('resumen-fecha');
+        const resumenHora = document.getElementById('resumen-hora');
+        const resumenPrecio = document.getElementById('resumen-precio');
+
+        // Servicio
+        const servicioSel = document.querySelector('input[name="servicio_id"]:checked');
+        if (servicioSel) {
+            const card = servicioSel.closest('.servicio-card');
+            const nombre = card.querySelector('h3') ? card.querySelector('h3').innerText : '';
+            const precioText = card.querySelector('.precio') ? card.querySelector('.precio').innerText : '-';
+            resumenServicio.innerText = nombre ? `${nombre} (${precioText})` : '-';
+            resumenPrecio.innerText = precioText || '-';
+        } else {
+            resumenServicio.innerText = '-';
+            resumenPrecio.innerText = '-';
+        }
+
+        // Barbero
+        const barberoSel = document.querySelector('input[name="barbero_id"]:checked');
+        if (barberoSel) {
+            const barberoCard = barberoSel.closest('.barbero-card');
+            const nombreB = barberoCard ? (barberoCard.querySelector('h3') ? barberoCard.querySelector('h3').innerText : '') : '';
+            resumenBarbero.innerText = nombreB || '-';
+        } else {
+            resumenBarbero.innerText = '-';
+        }
+
+        // Fecha y hora
+        const fecha = datepickerInput ? datepickerInput.value : '';
+        const hora = horaHidden ? horaHidden.value : '';
+        resumenFecha.innerText = fecha || '-';
+        resumenHora.innerText = hora || '-';
+    }
+
+    if (btnSiguienteStep1) {
+        btnSiguienteStep1.disabled = true;
+        btnSiguienteStep1.classList.add('deshabilitado');
+    }
+    if (btnSiguienteStep2) {
+        btnSiguienteStep2.disabled = true;
+        btnSiguienteStep2.classList.add('deshabilitado');
+    }
+    if (btnSiguienteStep3) {
+        btnSiguienteStep3.disabled = true;
+        btnSiguienteStep3.classList.add('deshabilitado');
+    }
+
+    servicios.forEach(input => {
+        input.addEventListener('change', function () {
+            const card = this.closest('.servicio-card');
+            servicioTexto = card.querySelector('h3').innerText;
+            servicioDuracionMinutos = Number(card.dataset.duracion || 30);
+            const precio = card.querySelector('.precio').innerText;
+
+            if (trackServicio) {
+                trackServicio.querySelector('span').innerText = `${servicioTexto} (${precio})`;
+                trackServicio.classList.add('completado');
+            }
+
+            if (btnSiguienteStep1) {
+                btnSiguienteStep1.disabled = false;
+                btnSiguienteStep1.classList.remove('deshabilitado');
+            }
+
+            if (datepickerInput && datepickerInput._flatpickr && datepickerInput.value) {
+                const selectedDate = datepickerInput._flatpickr.selectedDates[0];
+                renderHorasDisponibles(selectedDate);
+            }
+        });
+    });
+
+    barberos.forEach(card => {
+        const radio = card.querySelector('input[name="barbero_id"]');
+        if (!radio) return;
+
+        radio.addEventListener('change', function () {
+            barberoTexto = card.querySelector('h3').innerText;
+            if (trackBarbero) {
+                trackBarbero.querySelector('span').innerText = barberoTexto;
+                trackBarbero.classList.add('completado');
+            }
+            if (btnSiguienteStep2) {
+                btnSiguienteStep2.disabled = false;
+                btnSiguienteStep2.classList.remove('deshabilitado');
+            }
+        });
+    });
 
     servicios.forEach(servicio => {
         servicio.addEventListener('change', function () {
-
             const servicioSeleccionado = this.value;
-
             barberos.forEach(barbero => {
-                const serviciosBarbero = barbero.dataset.servicios.split(',');
-
+                const serviciosBarbero = (barbero.dataset.servicios || '').split(',').filter(Boolean);
                 if (serviciosBarbero.includes(servicioSeleccionado)) {
                     barbero.style.display = 'flex';
                 } else {
                     barbero.style.display = 'none';
-
                     const radio = barbero.querySelector('input[type="radio"]');
-                    radio.checked = false;
-                }
-            });
-
-        });
-    });
-
-});
-
-// 4. Navegación entre pasos de la reserva
-document.addEventListener('DOMContentLoaded', function () {
-    let pasoActual = 0;
-
-    const steps = document.querySelectorAll('.reserva-step');
-    const pasos = document.querySelectorAll('.paso');
-    const btnSiguiente = document.querySelectorAll('.btn-siguiente');
-    const btnAtras = document.querySelectorAll('.btn-atras');
-
-    function mostrarPaso(index) {
-        steps.forEach(step => step.classList.remove('activo'));
-        pasos.forEach(paso => paso.classList.remove('activo'));
-
-        steps[index].classList.add('activo');
-        pasos[index].classList.add('activo');
-    }
-
-    btnSiguiente.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (pasoActual < steps.length - 1) {
-                pasoActual++;
-                mostrarPaso(pasoActual);
-            }
-        });
-    });
-
-    btnAtras.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (pasoActual > 0) {
-                pasoActual--;
-                mostrarPaso(pasoActual);
-            }
-        });
-    });
-});
-
-// reserva.js//
-
-document.addEventListener('DOMContentLoaded', function () {
-    let pasoActual = 0;
-    const steps = document.querySelectorAll('.reserva-step');
-    const pasoItems = document.querySelectorAll('.paso-item');
-    const btnSiguiente = document.querySelectorAll('.btn-siguiente');
-    const btnAtras = document.querySelectorAll('.btn-atras');
-    
-    // Almacenamiento temporal de datos seleccionados para el ticket
-    let servicioSeleccionadoText = "";
-    let servicioPrecio = "";
-    let barberoSeleccionadoText = "";
-    let horaSeleccionada = "";
-
-    // Inicialización de Flatpickr en Español
-    if (document.getElementById('datepicker')) {
-        flatpickr("#datepicker", {
-            locale: "es",
-            minDate: "today",
-            dateFormat: "Y-m-d",
-            inline: true, // Se muestra incrustado directamente como en tu diseño
-            onChange: function(selectedDates, dateStr) {
-                cargarHorasDisponibles(dateStr);
-            }
-        });
-    }
-
-    function mostrarPaso(index) {
-        steps.forEach(step => step.classList.remove('activo'));
-        pasoItems.forEach(item => item.classList.remove('activo'));
-
-        steps[index].classList.add('activo');
-        
-        // Ilumina los pasos de la barra superior hasta el paso actual
-        for(let i = 0; i <= index; i++) {
-            pasoItems[i].classList.add('activo');
-        }
-    }
-
-    // Navegación Adelante
-    btnSiguiente.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (validarPasoActual()) {
-                if (pasoActual < steps.length - 1) {
-                    pasoActual++;
-                    if (pasoActual === 4) {
-                        generarResumenTicket();
+                    if (radio) {
+                        radio.checked = false;
                     }
-                    mostrarPaso(pasoActual);
+                }
+            });
+        });
+    });
+
+    if (datepickerInput && typeof flatpickr !== 'undefined') {
+        flatpickr(datepickerInput, {
+            locale: 'es',
+            dateFormat: 'd/m/Y',
+            minDate: 'today',
+            disable: [date => !isDateEnabled(date)],
+            onChange: function (selectedDates) {
+                if (selectedDates.length) {
+                    renderHorasDisponibles(selectedDates[0]);
+                } else {
+                    clearHorasGrid('Por favor, selecciona una fecha primero.');
+                }
+            }
+        });
+    }
+
+    btnSiguiente.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const validacion = validarPaso(pasoActual);
+            if (!validacion.valido) {
+                alert(validacion.mensaje);
+                return;
+            }
+
+            if (pasoActual === 2 && trackCita) {
+                const fecha = datepickerInput ? datepickerInput.value : '';
+                trackCita.querySelector('span').innerText = `${fecha} a las ${horaSeleccionada}`;
+                trackCita.classList.add('completado');
+            }
+
+            if (pasoActual < steps.length - 1) {
+                setPaso(pasoActual + 1);
+                if (pasoActual === 4 && typeof generarResumenTicket === 'function') {
+                    generarResumenTicket();
                 }
             }
         });
     });
 
-    // Navegación Atrás
     btnAtras.forEach(btn => {
         btn.addEventListener('click', () => {
             if (pasoActual > 0) {
-                pasoActual--;
-                mostrarPaso(pasoActual);
+                setPaso(pasoActual - 1);
             }
         });
     });
 
-    // Validar que se haya escogido la opción requerida antes de avanzar
-    function validarPasoActual() {
-        if (pasoActual === 0) {
-            const servicio = document.querySelector('input[name="servicio_id"]:checked');
-            if (!servicio) {
-                alert("Por favor, selecciona un servicio.");
-                return false;
-            }
-            const card = servicio.closest('.servicio-card');
-            servicioSeleccionadoText = card.querySelector('h3').innerText;
-            servicioPrecio = card.querySelector('.precio').innerText;
-        }
-        
-        if (pasoActual === 1) {
-            const barbero = document.querySelector('input[name="barbero_id"]:checked');
-            if (!barbero) {
-                alert("Por favor, selecciona un barbero.");
-                return false;
-            }
-            barberoSeleccionadoText = barbero.closest('.barbero-card').querySelector('h3').innerText;
-        }
-
-        if (pasoActual === 2) {
-            if (!document.getElementById('datepicker').value) {
-                alert("Por favor, selecciona una fecha en el calendario.");
-                return false;
-            }
-            if (!horaSeleccionada) {
-                alert("Por favor, elige una hora para tu cita.");
-                return false;
-            }
-        }
-
-        if (pasoActual === 3) {
-            const nombre = document.querySelector('input[name="nombre"]').value.trim();
-            const apellido = document.querySelector('input[name="apellido"]').value.trim();
-            const telefono = document.querySelector('input[name="telefono"]').value.trim();
-            if (!nombre || !apellido || !telefono) {
-                alert("Por favor, rellena todos los campos obligatorios (*).");
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    // Rellenar dinámicamente las horas del Paso 3
-    function cargarHorasDisponibles(fecha) {
-        const horasGrid = document.getElementById('horas-grid');
-        horasGrid.innerHTML = ''; // Limpiar
-        horaSeleccionada = ""; // Resetear hora previa
-
-        // Simulación de horas comerciales (aquí puedes hacer un fetch real a tu backend)
-        const horasSimuladas = ["09:00", "09:45", "10:30", "11:15", "12:00", "16:00", "16:45", "17:30", "18:15", "19:00"];
-        
-        horasSimuladas.forEach(hora => {
-            const div = document.createElement('div');
-            div.className = 'hora-item';
-            div.innerText = hora;
-            div.addEventListener('click', function() {
-                document.querySelectorAll('.hora-item').forEach(h => h.classList.remove('selected'));
-                this.classList.add('selected');
-                horaSeleccionada = this.innerText;
-                
-                // Creamos o actualizamos un input oculto para enviar la hora en el formulario
-                let inputHora = document.getElementById('input-hora-hidden');
-                if(!inputHora) {
-                    inputHora = document.createElement('input');
-                    inputHora.type = 'hidden';
-                    inputHora.name = 'hora';
-                    inputHora.id = 'input-hora-hidden';
-                    document.getElementById('form-reserva').appendChild(inputHora);
-                }
-                inputHora.value = horaSeleccionada;
-            });
-            horasGrid.appendChild(div);
-        });
-    }
-
-    // Armar el resumen del paso 5
-    function generarResumenTicket() {
-        document.getElementById('resumen-servicio').innerText = servicioSeleccionadoText;
-        document.getElementById('resumen-barbero').innerText = barberoSeleccionadoText;
-        document.getElementById('resumen-fecha').innerText = document.getElementById('datepicker').value;
-        document.getElementById('resumen-hora').innerText = horaSeleccionada;
-        document.getElementById('resumen-precio').innerText = servicioPrecio;
-    }
-
-    // Filtrado de barberos según el servicio (mantenemos tu lógica existente adaptada)
-    const radioServicios = document.querySelectorAll('input[name="servicio_id"]');
-    radioServicios.forEach(radio => {
-        radio.addEventListener('change', function () {
-            const servicioSeleccionado = parseInt(this.value);
-            const tarjetasBarberos = document.querySelectorAll('.barbero-card');
-
-            tarjetasBarberos.forEach(tarjeta => {
-                const barberoId = parseInt(tarjeta.getAttribute('data-id'));
-                // Aquí puedes mapear mediante el array de relaciones PHP si fuese necesario ocultar o mostrar
-                tarjeta.style.display = 'block'; 
-            });
-        });
-    });
-
-    // --- LÓGICA DE FILTRADO DE SERVICIOS POR CATEGORÍA ---
     const botonesFiltro = document.querySelectorAll('.filtro-btn');
     const tarjetasServicios = document.querySelectorAll('.servicio-card');
 
     botonesFiltro.forEach(boton => {
-        boton.addEventListener('click', function() {
-            // Cambiar clase activa entre botones
+        boton.addEventListener('click', function () {
             botonesFiltro.forEach(btn => btn.classList.remove('activo'));
             this.classList.add('activo');
-
             const categoriaSeleccionada = this.getAttribute('data-categoria');
-
             tarjetasServicios.forEach(tarjeta => {
                 const categoriaTarjeta = tarjeta.getAttribute('data-cat');
-
                 if (categoriaSeleccionada === 'todos' || categoriaTarjeta === categoriaSeleccionada) {
                     tarjeta.style.display = 'block';
-                    // Pequeña animación de entrada
                     tarjeta.style.opacity = '0';
-                    setTimeout(() => {
-                        tarjeta.style.opacity = '1';
-                    }, 50);
+                    setTimeout(() => { tarjeta.style.opacity = '1'; }, 50);
                 } else {
                     tarjeta.style.display = 'none';
-                    // Desmarcar el radio button si el servicio queda oculto para evitar errores de selección invisibles
                     const radioInput = tarjeta.querySelector('input[type="radio"]');
                     if (radioInput && radioInput.checked) {
                         radioInput.checked = false;
+                        if (trackServicio) {
+                            trackServicio.querySelector('span').innerText = 'Ninguno seleccionado';
+                            trackServicio.classList.remove('completado');
+                        }
                     }
                 }
             });

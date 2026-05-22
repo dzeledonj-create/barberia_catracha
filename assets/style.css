@@ -1506,6 +1506,25 @@ body {
     background: #f0ad32;
 }
 
+/* Estado deshabilitado para botones */
+.btn-siguiente:disabled, .btn-confirmar:disabled {
+    background: #666;
+    color: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-siguiente:disabled:hover, .btn-confirmar:disabled:hover {
+    background: #666;
+}
+
+.btn-siguiente.deshabilitado, .btn-confirmar.deshabilitado {
+    background: #666;
+    color: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .btn-atras {
     background: transparent;
     color: #b3b3b3;
@@ -1535,6 +1554,40 @@ body {
     .paso-texto { display: none; }
 }
 
+.seguimiento-live {
+    display: flex;
+    justify-content: space-between;
+    background: #111111;
+    border: 1px solid #252525;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin: -10px auto 25px auto;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.seg-item {
+    font-size: 0.88rem;
+    color: #777;
+    transition: all 0.3s ease;
+}
+
+.seg-item strong {
+    color: #fff;
+}
+
+.seg-item span {
+    font-style: italic;
+    color: #999;
+}
+
+/* Estado Activo Resaltado */
+.seg-item.completado span {
+    color: var(--gold, #d99c2b);
+    font-style: normal;
+    font-weight: 600;
+}
+
 /* Contenedor de Botones de Filtro de Categorías */
 .servicios-filtros {
     display: flex;
@@ -1548,32 +1601,17 @@ body {
     background: #1c1c1c;
     color: #b3b3b3;
     border: 1px solid #333;
-    padding: 10px 20px;
+    padding: 9px 18px;
     border-radius: 20px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
-.filtro-btn:hover {
-    border-color: #d99c2b;
-    color: #fff;
-}
-
-.filtro-btn.activo {
-    background: #d99c2b;
-    color: #0a0a0a;
-    border-color: #d99c2b;
-    box-shadow: 0 4px 12px rgba(217, 156, 43, 0.2);
-}
-
-/* Animación sutil al cambiar de filtro */
-.servicio-card {
-    transition: all 0.3s ease, border-color 0.25s ease;
-}
+.filtro-btn:hover { border-color: #d99c2b; color: #fff; }
+.filtro-btn.activo { background: #d99c2b; color: #0a0a0a; border-color: #d99c2b; }
 
 
 /* --- SECCIÓN RESEÑAS --- */
@@ -2388,6 +2426,34 @@ body.admin-panel {
 .admin-panel-box p {
     color: #555;
     font-size: 0.85rem;
+}
+
+.admin-alert {
+    background-color: #251f1d;
+    border: 1px solid #d99c2b;
+    color: #f5e6c7;
+    padding: 18px 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.admin-alert strong {
+    display: block;
+    margin-right: 12px;
+}
+
+.admin-alert a {
+    color: #d99c2b;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.admin-alert a:hover {
+    text-decoration: underline;
 }
  
 /* Acciones rápidas */
