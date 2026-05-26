@@ -1,16 +1,16 @@
 <?php
 // generar_diagrama.php
-
+// Este script escanea los archivos PHP en el mismo directorio, extrae las clases, sus atributos, métodos y relaciones de herencia, y genera un diagrama de clases en formato Mermaid. El resultado se guarda automáticamente en un archivo Markdown llamado 'diagramas.md' para facilitar su visualización. 
 $dir = __DIR__;
 $archivos = glob("$dir/*.php");
-
+// Inicializar el contenido del diagrama Mermaid
 $mermaid = "```mermaid\nclassDiagram\n";
 $relaciones = [];
 $clasesEncontradas = [];
-
+// Procesar cada archivo PHP
 foreach ($archivos as $archivo) {
     if (basename($archivo) === 'generar_diagrama.php') continue;
-    
+    // Leer el contenido del archivo
     $contenido = file_get_contents($archivo);
     $nombreClase = pathinfo($archivo, PATHINFO_FILENAME);
     
