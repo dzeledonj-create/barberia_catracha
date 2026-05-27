@@ -159,7 +159,9 @@ foreach ($relaciones as $rel) {
                         <label class="card-option barbero-card" data-id="<?= $barbero['barbero_id'] ?>" data-servicios="<?= htmlspecialchars(implode(',', $barberoServicios[$barbero['barbero_id']] ?? [])) ?>">
                             <input type="radio" name="barbero_id" value="<?= $barbero['barbero_id'] ?>" required>
                             <div class="card-content-barbero">
-                                <img src="<?= htmlspecialchars($foto) ?>" onerror="this.src='../assets/img/default-avatar.png';" alt="<?= htmlspecialchars($barbero['nombre']) ?>" class="barbero-img">
+                                <div class="barbero-img">
+                                    <img src="<?= htmlspecialchars($foto) ?>" onerror="this.src='../assets/img/default-avatar.png';" alt="<?= htmlspecialchars($barbero['nombre']) ?>">
+                                </div>
                                 <h3><?= htmlspecialchars($barbero['nombre']) ?></h3>
                                 <span class="especialidad"><?= htmlspecialchars($barbero['especialidad'] ?? 'Barbero Profesional') ?></span>
                             </div>
