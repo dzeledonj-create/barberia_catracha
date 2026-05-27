@@ -2490,9 +2490,79 @@ body.admin-panel {
     top: 0;
     left: 0;
     bottom: 0;
-    z-index: 100;
+    z-index: 1040; /* elevated so it sits above the overlay */
     overflow-y: auto;
     box-sizing: border-box;
+}
+
+/* Admin hamburger button (tablet / mobile) */
+#admin-hamburger-btn, .admin-hamburger {
+    display: none;
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    left: auto;
+    z-index: 1100;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+/* Overlay that appears when sidebar open on small screens */
+.admin-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1030; /* under the sidebar but above content */
+    display: none;
+}
+.admin-overlay.show { display: block; }
+
+/* Behavior on tablets and below */
+@media (max-width: 1024px) {
+    #admin-hamburger-btn, .admin-hamburger { display: inline-flex; align-items: center; justify-content: center; }
+
+    .admin-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 6px 0 30px rgba(0,0,0,0.6);
+    }
+
+    .admin-sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* ensure top padding so content is not hidden under the fixed hamburger */
+    .admin-main { margin-left: 0 !important; padding-top: 72px; }
+
+    /* Make admin panel boxes scrollable on smaller screens */
+    .admin-panel-box {
+        max-height: calc(100vh - 220px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Tables inside admin panels should scroll horizontally and vertically if needed */
+    .admin-panel-box table {
+        display: block;
+        max-height: 45vh;
+        overflow: auto;
+        width: 100%;
+    }
+
+    /* Slightly reduce sidebar padding on small screens */
+    .admin-sidebar { padding: 20px 12px; width: 260px; }
+
+}
+
+@media (max-width: 600px) {
+    #admin-hamburger-btn { right: 8px; top: 10px; padding: 7px 10px; }
+    .admin-sidebar { width: 240px; }
 }
  
 /* Logo */

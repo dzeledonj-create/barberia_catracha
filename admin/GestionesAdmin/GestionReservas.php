@@ -173,6 +173,5 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
 
 </section>
 
-        <script src="../../assets/script.js"></script>
         </body>
         </html>

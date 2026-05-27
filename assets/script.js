@@ -511,6 +511,60 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Admin sidebar toggle (for tablet/mobile)
+document.addEventListener('DOMContentLoaded', function () {
+    const adminBtn = document.getElementById('admin-hamburger-btn');
+    const adminSidebar = document.querySelector('.admin-sidebar');
+
+    if (!adminBtn || !adminSidebar) return;
+
+    // Prevent double-initialization if script loaded/executed multiple times
+    if (window.adminHamburgerInitialized) return;
+    window.adminHamburgerInitialized = true;
+
+    // create overlay element if not present
+    let overlay = document.querySelector('.admin-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'admin-overlay';
+        document.body.appendChild(overlay);
+    }
+
+    function openAdmin() {
+        adminSidebar.classList.add('open');
+        adminBtn.setAttribute('aria-expanded', 'true');
+        overlay.classList.add('show');
+    }
+
+    function closeAdmin() {
+        adminSidebar.classList.remove('open');
+        adminBtn.setAttribute('aria-expanded', 'false');
+        overlay.classList.remove('show');
+    }
+
+    adminBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (adminSidebar.classList.contains('open')) closeAdmin(); else openAdmin();
+    });
+
+    overlay.addEventListener('click', function () { closeAdmin(); });
+
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAdmin(); });
+});
+
+// Ensure admin overlay and sidebar state reset on window resize (desktop)
+window.addEventListener('resize', function () {
+    const adminSidebar = document.querySelector('.admin-sidebar');
+    const overlay = document.querySelector('.admin-overlay');
+    if (!adminSidebar) return;
+    if (window.innerWidth > 1024) {
+        adminSidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('show');
+        const adminBtn = document.getElementById('admin-hamburger-btn');
+        if (adminBtn) adminBtn.setAttribute('aria-expanded', 'false');
+    }
+});
+
 // Si el script se carga después de que el DOM ya esté listo, disparar el evento
 // para que los listeners que se agregan en este archivo se ejecuten igualmente.
 if (document.readyState !== 'loading') {
