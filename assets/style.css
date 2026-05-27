@@ -1543,7 +1543,9 @@ img { max-width: 100%; height: auto; display: block; }
 /* Grid de Barberos */
 .barberos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 280px));
+    justify-content: center;
+    justify-items: center;
     gap: 20px;
 }
 
@@ -1552,7 +1554,8 @@ img { max-width: 100%; height: auto; display: block; }
     text-align: center;
 }
 
-.card-content-barbero .barbero-img {
+.card-content-barbero .barbero-img,
+.card-content-barbero img.barbero-img {
     width: 100%;
     height: 280px; /* altura del recuadro de la imagen */
     border-radius: 0; /* quitar forma circular */
@@ -1562,7 +1565,8 @@ img { max-width: 100%; height: auto; display: block; }
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.card-content-barbero .barbero-img img {
+.card-content-barbero .barbero-img img,
+.card-content-barbero img.barbero-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
