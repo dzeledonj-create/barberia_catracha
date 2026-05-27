@@ -4,11 +4,11 @@ require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if ($usuario instanceof Administrador) {
-    header("Location: /barberia_catracha/admin/panel.php");
+    header("Location: /barberia_catracha/app/admin/panel.php");
     exit;
 }
 if ($usuario instanceof UsuarioBarbero) {
-    header("Location: /barberia_catracha/admin/panel.php");
+    header("Location: /barberia_catracha/app/admin/panel.php");
     exit;
 }
 
@@ -30,12 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($_SESSION['rol'] === 'admin') {
-            header("Location: /barberia_catracha/admin/panel.php");
+            header("Location: /barberia_catracha/app/admin/panel.php");
             exit;
         }
 
         if ($_SESSION['rol'] === 'barbero') {
-            header("Location: /barberia_catracha/admin/panel.php");
+            header("Location: /barberia_catracha/app/admin/panel.php");
             exit;
         }
     } else {
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <section class="login-page">
 
     <section class="login-icon">
-    <img src="/barberia_catracha/assets/img/logo.png" alt="Logo Barbería Catracha">
+    <img src="/barberia_catracha/app/assets/img/logo.png" alt="Logo Barbería Catracha">
 </section>
 
     <section class="login-box">
