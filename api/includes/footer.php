@@ -41,15 +41,15 @@
 
         <!-- DERECHA: LOGO -->
         <section class="footer-lado footer-logo">
-            <img src="/barberia_catracha/app/assets/img/logo.png" alt="logo barberia">
+            <img src="/barberia_catracha/assets/img/logo.png" alt="logo barberia">
         </section>
 
     </section>
 
     <!-- PARTE INFERIOR -->
     <section class="footer-bottom">
-    <p><a href="/barberia_catracha/app/login.php" class="footer-login">© </a>2026 Barbería Catracha</p>
+    <p><a href="/barberia_catracha/api/login.php" class="footer-login">© </a>2026 Barbería Catracha</p>
     </section>
 
 </footer>
-<script src="/barberia_catracha/app/assets/script.js"></script>
+<script src="/barberia_catracha/assets/script.js"></script>

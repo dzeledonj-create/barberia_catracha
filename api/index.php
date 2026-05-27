@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barberia Catracha</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/style.css">
-    <link rel="icon" href="/barberia_catracha/app/assets/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
+    <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
 </head>
 <body>
-    <?php include_once 'includes/header.php'; ?>
+    <?php include_once '/barberia_catracha/api/includes/header.php'; ?>
     <main>
         <section class="container-contenido">
             <section class="contenido">
@@ -89,5 +89,5 @@
     
 
 </body>
-    <?php include_once 'includes/footer.php'; ?>
+    <?php include_once '/barberia_catracha/api/includes/footer.php'; ?>
 </html>
