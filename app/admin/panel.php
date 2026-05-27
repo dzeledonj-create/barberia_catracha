@@ -33,7 +33,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
         <?php if ($pendientes > 0): ?>
             <section class="admin-alert">
                 <strong>Notificación:</strong> Tienes <?= htmlspecialchars($pendientes) ?> reserva<?= $pendientes === 1 ? '' : 's' ?> pendiente<?= $pendientes === 1 ? '' : 's' ?>.
-                <a href="/barberia_catracha/Admin/GestionesAdmin/GestionReservas.php">Ver reservas</a>
+                <a href="/barberia_catracha/app/admin/GestionesAdmin/GestionReservas.php">Ver reservas</a>
             </section>
         <?php endif; ?>
 
@@ -92,12 +92,12 @@ $recientesReservas = Reserva::obtenerRecientes(5);
         </section>
 
         <section class="admin-actions">
-            <a href="/barberia_catracha/Admin/GestionesAdmin/GestionServicios.php">Gestionar Servicios</a>
-            <a href="/barberia_catracha/Admin/GestionesAdmin/GestionEquipo.php">Gestionar Equipo</a>
-            <a href="/barberia_catracha/Admin/GestionesAdmin/GestionReservas.php">Ver Reservas</a>
-            <a href="/barberia_catracha/Admin/GestionesAdmin/GestionGaleria.php">Gestionar Galería</a>
-            <a href="/barberia_catracha/Admin/GestionesAdmin/GestionBlog.php">Editar Blog</a>
-            <a href="/barberia_catracha/Admin/GestionesAdmin/GestionUbicacion.php">Actualizar Ubicación</a>
+            <a href="/barberia_catracha/app/admin/GestionesAdmin/GestionServicios.php">Gestionar Servicios</a>
+            <a href="/barberia_catracha/app/admin/GestionesAdmin/GestionEquipo.php">Gestionar Equipo</a>
+            <a href="/barberia_catracha/app/admin/GestionesAdmin/GestionReservas.php">Ver Reservas</a>
+            <a href="/barberia_catracha/app/admin/GestionesAdmin/GestionGaleria.php">Gestionar Galería</a>
+            <a href="/barberia_catracha/app/admin/GestionesAdmin/GestionBlog.php">Editar Blog</a>
+            <a href="/barberia_catracha/app/admin/GestionesAdmin/GestionUbicacion.php">Actualizar Ubicación</a>
         </section>
     </main>
 
