@@ -90,11 +90,12 @@ class Reserva {
         $sql = "SELECT r.*, 
                        c.nombre AS cliente_nombre,
                        c.apellido AS cliente_apellido,
-                       b.nombre AS barbero_nombre,
+                       u.nombre AS barbero_nombre,
                        s.nombre AS servicio_nombre
                 FROM reservas r
                 JOIN clientes c ON r.cliente_id = c.cliente_id
                 JOIN barberos b ON r.barbero_id = b.barbero_id
+                LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id
                 JOIN servicios s ON r.servicio_id = s.servicio_id
                 ORDER BY r.fecha_hora DESC";
 
@@ -129,24 +130,16 @@ class Reserva {
     public static function estaDisponible($barberoId, $fechaHora, $servicioId, $reservaId = null): bool {
         $db = BD::obtenerConexion();
 
-        $stmtServicio = $db->prepare("SELECT duracion_minutos FROM servicios WHERE servicio_id = ?");
-        $stmtServicio->execute([$servicioId]);
-        $duracion = $stmtServicio->fetchColumn();
-
-        if (!$duracion) {
-            return false;
-        }
-
+        $duracion = 30;
         $finNueva = date("Y-m-d H:i:s", strtotime($fechaHora . " + $duracion minutes"));
 
         $sql = "SELECT COUNT(*)
                 FROM reservas r
-                JOIN servicios s ON r.servicio_id = s.servicio_id
                 WHERE r.barbero_id = ?
                 AND r.estado != 'cancelada'
-                AND (? IS NULL OR r.reserva_id != ?)
+                AND (?::int IS NULL OR r.reserva_id != ?)
                 AND (
-                    ? < (r.fecha_hora + (s.duracion_minutos || ' minutes')::interval)
+                    ? < (r.fecha_hora + interval '30 minutes')
                     AND ? > r.fecha_hora
                 )";
 
@@ -163,24 +156,24 @@ class Reserva {
     }
 
     // Método para obtener todas las reservas con detalles para el panel de administración
-    public static function obtenerTodasConDetalles() {
-    $db = BD::obtenerConexion();
+    public static function obtenerTodasConDetalles(): array {
+        $db = BD::obtenerConexion();
 
-    $sql = "SELECT 
-                r.reserva_id,
-                CONCAT(c.nombre, ' ', c.apellido) AS cliente,
-                b.nombre AS barbero,
-                s.nombre AS servicio,
-                r.fecha_hora,
-                r.estado
-            FROM reservas r
-            JOIN clientes c ON r.cliente_id = c.cliente_id
-            JOIN barberos b ON r.barbero_id = b.barbero_id
-            JOIN servicios s ON r.servicio_id = s.servicio_id
-            ORDER BY r.fecha_hora DESC";
+        // Hacemos JOIN con usuarios para obtener el nombre real del barbero (u.nombre)
+        $sql = "SELECT r.reserva_id, 
+                       r.fecha_hora, 
+                       r.estado,
+                       (c.nombre || ' ' || c.apellido) AS cliente,
+                       u.nombre AS barbero, 
+                       s.nombre AS servicio
+                FROM reservas r
+                INNER JOIN clientes c ON r.cliente_id = c.cliente_id
+                INNER JOIN servicios s ON r.servicio_id = s.servicio_id
+                LEFT JOIN barberos b ON r.barbero_id = b.barbero_id
+                LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id
+                ORDER BY r.fecha_hora DESC";
 
-    $stmt = $db->query($sql);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
@@ -222,11 +215,12 @@ class Reserva {
         $stmt = BD::obtenerConexion()->prepare("
             SELECT r.reserva_id, r.fecha_hora, r.estado,
                    c.nombre || ' ' || c.apellido AS cliente,
-                   b.nombre AS barbero,
+                   u.nombre AS barbero,
                    s.nombre AS servicio
             FROM reservas r
             JOIN clientes  c ON r.cliente_id  = c.cliente_id
             JOIN barberos  b ON r.barbero_id  = b.barbero_id
+            LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id
             JOIN servicios s ON r.servicio_id = s.servicio_id
             WHERE r.barbero_id = ?
             ORDER BY r.creado_en DESC
@@ -248,11 +242,12 @@ class Reserva {
         $stmt = BD::obtenerConexion()->prepare("
             SELECT r.reserva_id, r.fecha_hora, r.estado,
                    c.nombre || ' ' || c.apellido AS cliente,
-                   b.nombre AS barbero,
+                   u.nombre AS barbero,
                    s.nombre AS servicio
             FROM reservas r
             JOIN clientes  c ON r.cliente_id  = c.cliente_id
             JOIN barberos  b ON r.barbero_id  = b.barbero_id
+            LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id
             JOIN servicios s ON r.servicio_id = s.servicio_id
             ORDER BY r.creado_en DESC
             LIMIT ?

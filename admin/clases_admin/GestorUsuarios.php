@@ -8,7 +8,11 @@ class GestorUsuarios {
     public static function autenticar($email, $password) {
         $db = BD::obtenerConexion();
 
-        $sql = "SELECT * FROM usuarios WHERE email = ? AND activo = TRUE";
+        $sql = "SELECT u.*, b.barbero_id 
+                FROM usuarios u
+                LEFT JOIN barberos b ON u.usuario_id = b.usuario_id
+                WHERE u.email = ? AND u.activo = TRUE";
+                
         $stmt = $db->prepare($sql);
         $stmt->execute([$email]);
 
@@ -18,12 +22,10 @@ class GestorUsuarios {
             return null;
         }
 
-        // Validación de contraseña (texto plano según tu código actual)
         if ($password !== $data['password']) {
             return null;
         }
 
-        // Instanciamos la clase correcta según el rol de la BD
         if ($data['rol'] === 'admin') {
             return new Administrador(
                 $data['nombre'],
@@ -66,7 +68,6 @@ class GestorUsuarios {
 
         if (empty($_SESSION['usuario_id'])) return null;
 
-        // Reconstruimos el objeto desde la sesión
         if ($_SESSION['rol'] === 'admin') {
             return new Administrador(
                 $_SESSION['nombre'],

@@ -296,4 +296,43 @@ VALUES (
 
 );
 
-SELECT * FROM Usuarios;
+BEGIN;
+
+-- 1. Añadimos el nuevo enlace en la tabla barberos (apuntando a usuarios)
+ALTER TABLE barberos 
+ADD COLUMN usuario_id INTEGER REFERENCES usuarios(usuario_id) ON DELETE CASCADE;
+
+-- 2. MIGRAMOS LOS DATOS DE FORMA EXACTA
+-- Como la tabla usuarios AÚN tiene el barbero_id, cruzamos los datos usando ese ID.
+-- Esto asocia perfectamente a Ross (1), Rolando (2) y Luis (3) con sus usuarios.
+UPDATE barberos b
+SET usuario_id = u.usuario_id
+FROM usuarios u
+WHERE u.barbero_id = b.barbero_id;
+
+-- 3. Hacemos que el usuario_id sea obligatorio y único (Relación 1 a 1 final)
+ALTER TABLE barberos ALTER COLUMN usuario_id SET NOT NULL;
+ALTER TABLE barberos ADD CONSTRAINT unique_usuario_en_barberos UNIQUE (usuario_id);
+
+-- 4. LIMPIEZA DE TABLA 'BARBEROS':
+-- Eliminamos nombre y activo, porque ya existen en la tabla usuarios y generan redundancia.
+ALTER TABLE barberos DROP COLUMN nombre;
+ALTER TABLE barberos DROP COLUMN activo;
+
+-- 5. LIMPIEZA DE TABLA 'USUARIOS':
+-- Eliminamos barbero_id de usuarios, porque la relación ahora es desde el perfil del barbero hacia su cuenta, no al revés.
+ALTER TABLE usuarios DROP COLUMN barbero_id;
+
+-- Corregir la relación en blog_posts
+ALTER TABLE blog_posts 
+DROP CONSTRAINT blog_posts_autor_id_fkey,
+ADD CONSTRAINT blog_posts_autor_id_fkey 
+    FOREIGN KEY (autor_id) REFERENCES barberos(barbero_id) ON DELETE SET NULL;
+
+-- Corregir la relación en reservas
+ALTER TABLE reservas 
+DROP CONSTRAINT reservas_barbero_id_fkey,
+ADD CONSTRAINT reservas_barbero_id_fkey 
+    FOREIGN KEY (barbero_id) REFERENCES barberos(barbero_id) ON DELETE SET NULL;
+
+COMMIT;

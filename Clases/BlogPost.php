@@ -9,9 +9,9 @@ class BlogPost {
     public int $autorId;
     public ?string $fechaPublicacion;
     public ?string $etiquetas;
+    public ?string $instagramEmbed;
 
-    //
-    public function __construct($titulo,$contenido,$autorId,$imagenUrl = null,$etiquetas = null,$postId = null, $fechaPublicacion = null) {
+    public function __construct($titulo, $contenido, $autorId, $imagenUrl = null, $etiquetas = null, $postId = null, $fechaPublicacion = null, $instagramEmbed = null) {
         $this->postId = $postId;
         $this->titulo = $titulo;
         $this->contenido = $contenido;
@@ -19,8 +19,8 @@ class BlogPost {
         $this->imagenUrl = $imagenUrl;
         $this->etiquetas = $etiquetas;
         $this->fechaPublicacion = $fechaPublicacion;
+        $this->instagramEmbed = $instagramEmbed;
     }
-
 
     // Métodos para obtener un resumen del contenido, verificar si tiene imagen y obtener etiquetas como array
     public function resumen($limite = 100): string {
@@ -41,8 +41,9 @@ class BlogPost {
         $db = BD::obtenerConexion();
 
         if ($this->postId === null) {
-            $sql = "INSERT INTO blog_posts (titulo, contenido, imagen_url, autor_id, etiquetas)
-                    VALUES (?, ?, ?, ?, ?)
+            $sql = "INSERT INTO blog_posts 
+                    (titulo, contenido, imagen_url, autor_id, etiquetas, instagram_embed)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     RETURNING post_id";
 
             $stmt = $db->prepare($sql);
@@ -51,7 +52,8 @@ class BlogPost {
                 $this->contenido,
                 $this->imagenUrl,
                 $this->autorId,
-                $this->etiquetas
+                $this->etiquetas,
+                $this->instagramEmbed
             ]);
 
             $this->postId = $stmt->fetchColumn();
@@ -59,7 +61,7 @@ class BlogPost {
         }
 
         $sql = "UPDATE blog_posts
-                SET titulo = ?, contenido = ?, imagen_url = ?, etiquetas = ?
+                SET titulo = ?, contenido = ?, imagen_url = ?, etiquetas = ?, instagram_embed = ?
                 WHERE post_id = ?";
 
         $stmt = $db->prepare($sql);
@@ -68,6 +70,7 @@ class BlogPost {
             $this->contenido,
             $this->imagenUrl,
             $this->etiquetas,
+            $this->instagramEmbed,
             $this->postId
         ]);
     }
@@ -75,18 +78,19 @@ class BlogPost {
     // Método para eliminar el post de la base de datos
     public function eliminar(): bool {
         $db = BD::obtenerConexion();
-
         $stmt = $db->prepare("DELETE FROM blog_posts WHERE post_id = ?");
         return $stmt->execute([$this->postId]);
     }
 
-    // Método para obtener todos los posts con el nombre del autor
+    // Método para obtener todos los posts con el nombre del autor (Corregido)
     public static function obtenerTodos(): array {
         $db = BD::obtenerConexion();
 
-        $sql = "SELECT p.*, b.nombre AS autor_nombre
+        // Usamos LEFT JOIN para que no desaparezcan los posts que no tienen autor asignado
+        $sql = "SELECT p.*, u.nombre AS autor_nombre
                 FROM blog_posts p
-                JOIN barberos b ON p.autor_id = b.barbero_id
+                LEFT JOIN barberos b ON p.autor_id = b.barbero_id
+                LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id
                 ORDER BY p.fecha_publicacion DESC";
 
         return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -110,7 +114,8 @@ class BlogPost {
             $data['imagen_url'],
             $data['etiquetas'],
             $data['post_id'],
-            $data['fecha_publicacion']
+            $data['fecha_publicacion'],
+            $data['instagram_embed']
         );
     }
 

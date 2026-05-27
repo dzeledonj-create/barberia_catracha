@@ -52,3 +52,4 @@
     </section>
 
 </footer>
+<script src="/barberia_catracha/assets/script.js"></script>

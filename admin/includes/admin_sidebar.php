@@ -1,3 +1,6 @@
+<!-- Admin hamburger (visible en tablets/móviles) -->
+<button id="admin-hamburger-btn" class="admin-hamburger" aria-label="Abrir menú admin" aria-expanded="false">☰</button>
+
 <aside class="admin-sidebar">
     <section class="admin-logo">
         <strong>CATRACHA</strong>
@@ -19,3 +22,4 @@
         <a href="/barberia_catracha/includes/logout.php">Cerrar Sesión</a>
     </section>
 </aside>
+<script src="/barberia_catracha/assets/script.js"></script>

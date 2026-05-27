@@ -28,6 +28,24 @@ class Cliente {
         $db = BD::obtenerConexion();
 
         if ($this->clienteId === null) {
+            if ($this->email) {
+                $existingCliente = self::obtenerPorEmail($this->email);
+                if ($existingCliente) {
+                    $this->clienteId = $existingCliente->clienteId;
+                    $sql = "UPDATE clientes 
+                            SET nombre = ?, apellido = ?, telefono = ?, email = ?
+                            WHERE cliente_id = ?";
+                    $stmt = $db->prepare($sql);
+                    return $stmt->execute([
+                        $this->nombre,
+                        $this->apellido,
+                        $this->telefono,
+                        $this->email,
+                        $this->clienteId
+                    ]);
+                }
+            }
+
             $sql = "INSERT INTO clientes (nombre, apellido, telefono, email)
                     VALUES (?, ?, ?, ?)
                     RETURNING cliente_id";
@@ -51,6 +69,28 @@ class Cliente {
             $this->email,
             $this->clienteId
         ]);
+    }
+
+    // Método para obtener un cliente por su email
+    public static function obtenerPorEmail(string $email): ?Cliente {
+        $db = BD::obtenerConexion();
+
+        $stmt = $db->prepare("SELECT * FROM clientes WHERE email = ? LIMIT 1");
+        $stmt->execute([$email]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$data) {
+            return null;
+        }
+
+        return new Cliente(
+            $data['nombre'], 
+            $data['apellido'], 
+            $data['telefono'], 
+            $data['email'], 
+            $data['cliente_id'], 
+            $data['fecha_registro']
+        );
     }
 
     // Método para eliminar el cliente de la base de datos
