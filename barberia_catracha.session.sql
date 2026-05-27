@@ -293,4 +293,7 @@ VALUES (
         scrolling="no"
         allowtransparency="true">
     </iframe>'
+
 );
+
+SELECT * FROM Usuarios;
