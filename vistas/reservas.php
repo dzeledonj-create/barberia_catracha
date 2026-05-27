@@ -245,7 +245,6 @@ foreach ($relaciones as $rel) {
     window.reservaScheduleData = <?= json_encode($horarios, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-<script src="../assets/script.js"></script>
 </body>
 <?php include_once '../includes/footer.php'; ?>
 </html>

@@ -82,6 +82,7 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin - Gestión de Equipo</title>
     <link rel="stylesheet" href="../../assets/style.css">
 </head>

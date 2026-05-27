@@ -14,6 +14,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin</title>
     <link rel="stylesheet" href="../assets/style.css">
 </head>
@@ -82,7 +83,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
                                 <td><?= htmlspecialchars($reserva['barbero']) ?></td>
                                 <td><?= htmlspecialchars($reserva['servicio']) ?></td>
                                 <td><?= htmlspecialchars($reserva['fecha_hora']) ?></td>
-                                <td><?= htmlspecialchars($reserva['estado']) ?></td>
+                                <td><span class="estado estado-<?= htmlspecialchars($reserva['estado']) ?>"><?= ucfirst(htmlspecialchars($reserva['estado'])) ?></span></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

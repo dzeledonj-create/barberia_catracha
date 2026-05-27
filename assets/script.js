@@ -437,3 +437,82 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+// Funcionalidad admin: seleccionar todas las reservas y control botón eliminar
+document.addEventListener('DOMContentLoaded', function () {
+    const selectAll = document.getElementById('select-all');
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    const eliminarBtn = document.querySelector('button[name="eliminar_seleccionadas"]');
+
+    function updateEliminarBtn() {
+        if (!eliminarBtn) return;
+        const anyChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
+        eliminarBtn.disabled = !anyChecked;
+        eliminarBtn.style.opacity = anyChecked ? '1' : '0.6';
+    }
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function () {
+            rowCheckboxes.forEach(cb => cb.checked = selectAll.checked);
+            updateEliminarBtn();
+        });
+    }
+
+    rowCheckboxes.forEach(cb => cb.addEventListener('change', function () {
+        if (!selectAll) return;
+        const allChecked = Array.from(rowCheckboxes).every(c => c.checked);
+        selectAll.checked = allChecked;
+        updateEliminarBtn();
+    }));
+
+    updateEliminarBtn();
+});
+
+// Hamburger menu toggle for client views
+document.addEventListener('DOMContentLoaded', function () {
+    const hambBtn = document.getElementById('hamburger-btn');
+    const hambMenu = document.getElementById('hamburger-menu');
+
+    if (!hambBtn || !hambMenu) return;
+
+    function closeMenu() {
+        hambMenu.classList.remove('open');
+        hambBtn.classList.remove('open');
+        hambBtn.setAttribute('aria-expanded', 'false');
+        hambMenu.setAttribute('aria-hidden', 'true');
+    }
+
+    function openMenu() {
+        hambMenu.classList.add('open');
+        hambBtn.classList.add('open');
+        hambBtn.setAttribute('aria-expanded', 'true');
+        hambMenu.setAttribute('aria-hidden', 'false');
+    }
+
+    hambBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (hambMenu.classList.contains('open')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function (e) {
+        if (!hambMenu.contains(e.target) && !hambBtn.contains(e.target)) {
+            closeMenu();
+        }
+    });
+
+    // Close on escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+    });
+});
+
+// Si el script se carga después de que el DOM ya esté listo, disparar el evento
+// para que los listeners que se agregan en este archivo se ejecuten igualmente.
+if (document.readyState !== 'loading') {
+    document.dispatchEvent(new Event('DOMContentLoaded'));
+}

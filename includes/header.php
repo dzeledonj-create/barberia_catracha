@@ -23,5 +23,25 @@
         <section class="cta">
             <a href="/barberia_catracha/vistas/reservas.php" class="btn-reserve">RESERVAR</a>
         </section>
+        
+        <!-- Hamburger button for mobile menu -->
+        <button id="hamburger-btn" class="hamburger-btn" aria-label="Abrir menú" aria-expanded="false">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+
+        <nav id="hamburger-menu" class="hamburger-menu" aria-hidden="true">
+            <ul>
+                <li><a href="/barberia_catracha/index.php">INICIO</a></li>
+                <li><a href="/barberia_catracha/vistas/servicios.php">SERVICIOS</a></li>
+                <li><a href="/barberia_catracha/vistas/equipo.php">EQUIPO</a></li>
+                <li><a href="/barberia_catracha/vistas/galeria.php">GALERÍA</a></li>
+                <li><a href="/barberia_catracha/vistas/reseñas.php">RESEÑAS</a></li>
+                <li><a href="/barberia_catracha/vistas/ubicacion.php">UBICACIÓN</a></li>
+                <li><a href="/barberia_catracha/vistas/blog.php">BLOG</a></li>
+                <li class="menu-reservas"><a href="/barberia_catracha/vistas/reservas.php">RESERVAS</a></li>
+            </ul>
+        </nav>
     </section>
 </header>
