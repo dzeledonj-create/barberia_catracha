@@ -21,7 +21,7 @@ $horarios = Horario::obtenerTodos();
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
         <link rel="icon"
-            href="/barberia_catracha/assets/img/logo.png"
+            href="../assets/img/logo.png"
             type="image/png">
 </head>
 
