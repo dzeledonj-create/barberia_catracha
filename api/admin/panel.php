@@ -16,7 +16,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin</title>
-    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
+    <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 
@@ -91,14 +91,14 @@ $recientesReservas = Reserva::obtenerRecientes(5);
             <?php endif; ?>
         </section>
 
-        <section class="admin-actions"> //enlaces
-    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php">Gestionar Servicios</a>
-    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php">Gestionar Equipo</a>
-    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php">Ver Reservas</a>
-    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionGaleria.php">Gestionar Galería</a>
-    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php">Editar Blog</a>
-    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionUbicacion.php">Actualizar Ubicación</a>
-</section>
+        <section class="admin-actions">
+            <a href="../admin/GestionesAdmin/GestionServicios.php">Gestionar Servicios</a>
+            <a href="../admin/GestionesAdmin/GestionEquipo.php">Gestionar Equipo</a>
+            <a href="../admin/GestionesAdmin/GestionReservas.php">Ver Reservas</a>
+            <a href="../admin/GestionesAdmin/GestionGaleria.php">Gestionar Galería</a>
+            <a href="../admin/GestionesAdmin/GestionBlog.php">Editar Blog</a>
+            <a href="../admin/GestionesAdmin/GestionUbicacion.php">Actualizar Ubicación</a>
+        </section>
     </main>
 
 </section>
