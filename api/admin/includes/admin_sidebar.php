@@ -17,10 +17,10 @@
     <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionUbicacion.php">Ubicación</a>
 </nav>
 
-<section class="admin-bottom">
+<section class="admin-bottom">  //enlace a web pública y logout
     <a href="/barberia_catracha/index.php">Ver Web Pública</a>
     <a href="/barberia_catracha/includes/logout.php">Cerrar Sesión</a>
 </section>
 </aside>
-    <script src="/barberia_catracha/assets/script.js"></script>
+    <script src="/barberia_catracha/assets/script.js"></script> 
     

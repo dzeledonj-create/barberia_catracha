@@ -91,7 +91,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
             <?php endif; ?>
         </section>
 
-        <section class="admin-actions">
+        <section class="admin-actions"> //enlaces
     <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php">Gestionar Servicios</a>
     <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php">Gestionar Equipo</a>
     <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php">Ver Reservas</a>
