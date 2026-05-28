@@ -4,11 +4,11 @@ require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if ($usuario instanceof Administrador) {
-    header("Location: /api/admin/panel.php");
+    header("Location: /admin/panel.php");
     exit;
 }
 if ($usuario instanceof UsuarioBarbero) {
-    header("Location: /api/admin/panel.php");
+    header("Location: /admin/panel.php");
     exit;
 }
 

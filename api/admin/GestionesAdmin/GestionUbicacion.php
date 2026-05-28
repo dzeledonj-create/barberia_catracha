@@ -28,7 +28,7 @@ if (isset($_POST['guardar'])) {
     );
 }
 
-    header("Location: /api/admin/GestionesAdmin/GestionUbicacion.php");
+    header("Location: /admin/GestionesAdmin/GestionUbicacion.php");
     exit;
 }
 

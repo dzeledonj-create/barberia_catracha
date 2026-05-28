@@ -37,7 +37,7 @@ if (isset($_POST['crear'])) {
 
     $sugerencia->guardar();
 
-    header("Location: /api/admin/GestionesAdmin/GestionGaleria.php");
+    header("Location: /admin/GestionesAdmin/GestionGaleria.php");
     exit;
 }
 
@@ -71,7 +71,7 @@ if (isset($_POST['editar'])) {
 
     $sugerencia->guardar();
 
-    header("Location: /api/admin/GestionesAdmin/GestionGaleria.php");
+    header("Location: /admin/GestionesAdmin/GestionGaleria.php");
     exit;
 }
 
@@ -84,7 +84,7 @@ if (isset($_GET['eliminar'])) {
         $sugerencia->eliminar();
     }
 
-    header("Location: /api/admin/GestionesAdmin/GestionGaleria.php");
+    header("Location: /admin/GestionesAdmin/GestionGaleria.php");
     exit;
 }
 
