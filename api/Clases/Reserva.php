@@ -1,7 +1,7 @@
 <?php
-require_once 'BD.php';
-require_once 'Cliente.php';
-require_once 'Barbero.php';
+require_once __DIR__ . '/BD.php';
+require_once __DIR__ . '/Cliente.php';
+require_once __DIR__ . '/Barbero.php';
 
 class Reserva {
     public ?int $reservaId;

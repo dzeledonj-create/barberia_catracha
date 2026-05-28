@@ -1,5 +1,5 @@
 <?php
-require_once 'BD.php';
+require_once __DIR__ . '/BD.php';
 
 class Cliente {
     public ?int $clienteId;

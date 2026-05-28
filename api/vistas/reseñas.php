@@ -1,5 +1,5 @@
 <?php
-include_once '../includes/header.php';
+include_once __DIR__ . '/../includes/header.php';
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +40,7 @@ include_once '../includes/header.php';
 
 </section>
 
-<?php include_once '../includes/footer.php'; ?>
+<?php include_once __DIR__ . '/../includes/footer.php'; ?>
 
 </body>
 </html>

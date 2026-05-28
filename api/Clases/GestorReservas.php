@@ -1,6 +1,6 @@
 <?php
-require_once 'BD.php';
-require_once 'Reserva.php';
+require_once __DIR__ . '/BD.php';
+require_once __DIR__ . '/Reserva.php';
 
 class GestorReservas {
 

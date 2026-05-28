@@ -1,7 +1,7 @@
 <?php
-require_once '../../clases/Barbero.php';
-require_once '../clases_admin/GestorUsuarios.php';
-require_once '../clases_admin/Administrador.php'; 
+require_once __DIR__ . '/../../Clases/Barbero.php';
+require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
+require_once __DIR__ . '/../clases_admin/Administrador.php'; 
 
 //Obtenemos el usuario actual desde la sesión
 $usuario = GestorUsuarios::obtenerDesdeSesion();
@@ -88,7 +88,7 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
     <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body class="admin-panel">
-    <?php include_once '../includes/admin_sidebar.php'; ?>
+    <?php include_once __DIR__ . '/../includes/admin_sidebar.php'; ?>
 
 
     <main class="content">

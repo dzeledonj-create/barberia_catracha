@@ -1,5 +1,5 @@
 <?php
-require_once '../Clases/BlogPost.php';
+require_once __DIR__ . '/../Clases/BlogPost.php';
 
 $posts = BlogPost::obtenerTodos();
 ?>
@@ -25,7 +25,7 @@ $posts = BlogPost::obtenerTodos();
 
 <body class="bg-dark">
 
-<?php include_once '../includes/header.php'; ?>
+<?php include_once __DIR__ . '/../includes/header.php'; ?>
 
 <main class="blog-page">
 
@@ -118,7 +118,7 @@ $posts = BlogPost::obtenerTodos();
 
 </main>
 
-<?php include_once '../includes/footer.php'; ?>
+<?php include_once __DIR__ . '/../includes/footer.php'; ?>
 
 <!-- INSTAGRAM EMBED -->
 <script async src="//www.instagram.com/embed.js"></script>

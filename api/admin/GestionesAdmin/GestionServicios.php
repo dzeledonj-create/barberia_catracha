@@ -1,7 +1,7 @@
 <?php
 
-require_once '../../Clases/Servicio.php';
-require_once '../clases_admin/GestorUsuarios.php';
+require_once __DIR__ . '/../../Clases/Servicio.php';
+require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
@@ -78,7 +78,7 @@ if (isset($_GET['editar'])) {
 
 <section class="admin-layout">
 
-    <?php include_once '../includes/admin_sidebar.php'; ?>
+    <?php include_once __DIR__ . '/../includes/admin_sidebar.php'; ?>
 
     <main class="admin-main">
 

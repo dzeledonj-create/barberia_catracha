@@ -22,7 +22,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
 
 <section class="admin-layout">
 
-    <?php include_once 'includes/admin_sidebar.php'; ?>
+    <?php include_once __DIR__ . '/includes/admin_sidebar.php'; ?>
 
     <main class="admin-main">
         <p class="admin-small-title">DASHBOARD</p>

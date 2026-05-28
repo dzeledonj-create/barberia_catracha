@@ -1,5 +1,5 @@
 <?php
-require_once '../clases_admin/GestorUsuarios.php';
+require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof UsuarioBarbero && !$usuario instanceof Administrador) {
@@ -7,7 +7,7 @@ if (!$usuario instanceof UsuarioBarbero && !$usuario instanceof Administrador) {
     exit;
 }
   
-require_once '../../Clases/Reserva.php';
+require_once __DIR__ . '/../../Clases/Reserva.php';
 
 // Manejo de eliminación masiva desde el formulario POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -77,7 +77,7 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
 
 <section class="admin-layout">
 
-    <?php include_once '../includes/admin_sidebar.php'; ?>
+    <?php include_once __DIR__ . '/../includes/admin_sidebar.php'; ?>
 
     <main class="admin-main">
         <p class="admin-small-title">RESERVAS</p>
