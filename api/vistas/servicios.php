@@ -1,6 +1,6 @@
 <?php
-require_once '../clases/BD.php';
-require_once '../clases/Servicio.php';
+require_once __DIR__ . '/../Clases/BD.php';
+require_once __DIR__ . '/../Clases/Servicio.php';
 
 // 1. Obtener servicios y agruparlos por la columna 'categoria'
 $serviciosRaw = Servicio::obtenerTodos();
@@ -25,7 +25,7 @@ foreach ($serviciosRaw as $s) {
 </head>
 <body class="servicios-body">
 
-<?php if (file_exists('../includes/header.php')) include_once '../includes/header.php'; ?>
+<?php if (file_exists(__DIR__ . '/../includes/header.php')) include_once __DIR__ . '/../includes/header.php'; ?>
 
 <main class="servicios-main">
     <header class="servicios-header-top">
@@ -65,5 +65,5 @@ foreach ($serviciosRaw as $s) {
 </main>
 </body>
 
-    <?php include_once '../includes/footer.php'; ?>
+    <?php include_once __DIR__ . '/../includes/footer.php'; ?>
 </html>

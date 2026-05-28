@@ -1,5 +1,5 @@
 <?php
-require_once '../clases/MuralSugerencia.php';
+require_once __DIR__ . '/../Clases/MuralSugerencia.php';
 
 // 1. Obtener las categorías reales desde la base de datos
 $categorias_db = MuralSugerencia::obtenerCategoriasRecientes();
@@ -26,7 +26,7 @@ if ($categoria_actual === 'todos') {
 </head>
 <body>
 
-<?php include_once '../includes/header.php'; ?>
+<?php include_once __DIR__ . '/../includes/header.php'; ?>
 
 <main>
     <section class="galeria-hero">
@@ -93,7 +93,7 @@ if ($categoria_actual === 'todos') {
     </section>
 </main>
 
-<?php include_once '../includes/footer.php'; ?>
+<?php include_once __DIR__ . '/../includes/footer.php'; ?>
 
 </body>
 </html>

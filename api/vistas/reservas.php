@@ -1,10 +1,10 @@
 <?php
-require_once '../clases/BD.php';
-require_once '../clases/Barbero.php';
-require_once '../clases/Servicio.php';
-require_once '../clases/Horario.php';
-require_once '../clases/Reserva.php';
-require_once '../clases/Cliente.php';
+require_once __DIR__ . '/../Clases/BD.php';
+require_once __DIR__ . '/../Clases/Barbero.php';
+require_once __DIR__ . '/../Clases/Servicio.php';
+require_once __DIR__ . '/../Clases/Horario.php';
+require_once __DIR__ . '/../Clases/Reserva.php';
+require_once __DIR__ . '/../Clases/Cliente.php';
 
 $mensajeExito = null;
 $mensajeError = null;

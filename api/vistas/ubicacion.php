@@ -1,6 +1,6 @@
 <?php
-require_once '../clases/DatosUbicacion.php';
-require_once '../clases/Horario.php';
+require_once __DIR__ . '/../Clases/DatosUbicacion.php';
+require_once __DIR__ . '/../Clases/Horario.php';
 
 $datosUbicacion = DatosUbicacion::obtener();
 $horarios = Horario::obtenerTodos();
@@ -27,7 +27,7 @@ $horarios = Horario::obtenerTodos();
 
 <body class="bg-dark">
 
-<?php include_once '../includes/header.php'; ?>
+<?php include_once __DIR__ . '/../includes/header.php'; ?>
 
 <main class="ubicacion-page">
 

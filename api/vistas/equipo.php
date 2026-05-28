@@ -1,6 +1,6 @@
 <?php
-require_once '../clases/BD.php';
-require_once __DIR__ . '/../clases/Barbero.php';
+require_once __DIR__ . '/../Clases/BD.php';
+require_once __DIR__ . '/../Clases/Barbero.php';
 $barberos = Barbero::obtenerActivos();
 ?>
 
@@ -15,7 +15,7 @@ $barberos = Barbero::obtenerActivos();
 </head>
 <body>
 
-<?php include_once '../includes/header.php'; ?>
+<?php include_once __DIR__ . '/../includes/header.php'; ?>
 
 <main>
     <section class="equipo-section">
@@ -71,5 +71,5 @@ $barberos = Barbero::obtenerActivos();
 </main>
 
 </body>
-<?php include_once '../includes/footer.php'; ?>
+<?php include_once __DIR__ . '/../includes/footer.php'; ?>
 </html>
