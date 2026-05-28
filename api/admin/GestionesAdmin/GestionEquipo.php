@@ -3,6 +3,7 @@ require_once '../../clases/Barbero.php';
 require_once '../clases_admin/GestorUsuarios.php';
 require_once '../clases_admin/Administrador.php'; 
 
+//Obtenemos el usuario actual desde la sesión
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
     header("Location: ../../login.php");
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $barberos = Barbero::obtenerTodos(); 
-
+// Para resaltar el formulario de edición si se accede con ?editar=ID
 $editandoId = $_GET['editar'] ?? null;
 $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 ?>
@@ -88,6 +89,7 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 </head>
 <body class="admin-panel">
     <?php include_once '../includes/admin_sidebar.php'; ?>
+
 
     <main class="content">
         <header class="admin-header-main">
@@ -121,7 +123,7 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
                         </select>
                     </div>
                 </div>
-
+                
                 <div class="form-row">
                     <div class="input-group">
                         <label>Email (para el login)</label>
@@ -156,6 +158,7 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
         </section>
 
         <hr class="separator-gold">
+
 
         <section class="equipo-grid">
             <?php foreach ($barberos as $barber): ?>

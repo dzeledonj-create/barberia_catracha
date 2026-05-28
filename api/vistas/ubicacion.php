@@ -20,9 +20,9 @@ $horarios = Horario::obtenerTodos();
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <link rel="icon"
-          href="/barberia_catracha/assets/img/logo.png"
-          type="image/png">
+        <link rel="icon"
+            href="/barberia_catracha/assets/img/logo.png"
+            type="image/png">
 </head>
 
 <body class="bg-dark">

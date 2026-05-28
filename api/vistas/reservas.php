@@ -72,13 +72,13 @@ foreach ($relaciones as $rel) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservas - Barbería Catracha</title>
-    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
 </head>
 <body>
 
-<?php include_once '../includes/header.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/barberia_catracha/api/includes/header.php'; ?>
 
 <section class="reservas-page">
     <div class="reservas-container">
@@ -248,5 +248,5 @@ foreach ($relaciones as $rel) {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 </body>
-<?php include_once '../includes/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/barberia_catracha/api/includes/footer.php'; ?>
 </html>

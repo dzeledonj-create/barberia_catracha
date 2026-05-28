@@ -13,11 +13,11 @@ $posts = BlogPost::obtenerTodos();
 
     <title>Blog | Barbería Catracha</title>
 
-    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
 
-    <link rel="icon"
-          href="/barberia_catracha/assets/img/logo.png"
-          type="image/png">
+        <link rel="icon"
+            href="/barberia_catracha/assets/img/logo.png"
+            type="image/png">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -64,12 +64,12 @@ $posts = BlogPost::obtenerTodos();
 
                     <?php elseif (!empty($post['imagen_url'])): ?>
 
-                        <img src="../<?= htmlspecialchars($post['imagen_url']) ?>"
+                        <img src="../../<?= htmlspecialchars($post['imagen_url']) ?>"
                              alt="<?= htmlspecialchars($post['titulo']) ?>">
 
                     <?php else: ?>
 
-                        <img src="../assets/img/blog/default.jpg"
+                        <img src="/barberia_catracha/assets/img/blog/default.jpg"
                              alt="Blog Barbería Catracha">
 
                     <?php endif; ?>
@@ -104,7 +104,7 @@ $posts = BlogPost::obtenerTodos();
 
                     </p>
 
-                    <a href="reservas.php" class="blog-btn">
+                    <a href="/barberia_catracha/api/vistas/reservas.php" class="blog-btn">
                         RESERVA CITA
                     </a>
 
