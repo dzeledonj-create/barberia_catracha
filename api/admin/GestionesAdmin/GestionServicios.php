@@ -22,7 +22,7 @@ if (isset($_POST['crear'])) {
 
     $servicio->guardar();
 
-    header("Location: gestionservicios.php");
+    header("Location: /api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -39,7 +39,7 @@ if (isset($_POST['editar'])) {
 
     $servicio->guardar();
 
-    header("Location: gestionservicios.php");
+    header("Location: /api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -51,7 +51,7 @@ if (isset($_GET['eliminar'])) {
         $servicio->eliminar();
     }
 
-    header("Location: gestionservicios.php");
+    header("Location: /api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -140,7 +140,7 @@ if (isset($_GET['editar'])) {
 
                 <?php if ($servicioEditar): ?>
                     <button type="submit" name="editar">Guardar cambios</button>
-                    <a href="gestionservicios.php" class="admin-btn-cancelar">Cancelar</a>
+                    <a href="/api/admin/GestionesAdmin/GestionServicios.php" class="admin-btn-cancelar">Cancelar</a>
                 <?php else: ?>
                     <button type="submit" name="crear">Añadir servicio</button>
                 <?php endif; ?>

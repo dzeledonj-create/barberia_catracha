@@ -8,18 +8,18 @@
     </section>
 
     <nav class="admin-menu">
-        <a href="/admin/panel.php">Dashboard</a>
-        <a href="/admin/GestionesAdmin/GestionReservas.php">Reservas</a>
-        <a href="/admin/GestionesAdmin/GestionServicios.php">Servicios</a>
-        <a href="/admin/GestionesAdmin/GestionEquipo.php">Equipo</a>
-        <a href="/admin/GestionesAdmin/GestionGaleria.php">Galería</a>
-        <a href="/admin/GestionesAdmin/GestionBlog.php">Blog</a>
-        <a href="/admin/GestionesAdmin/GestionUbicacion.php">Ubicación</a>
+        <a href="/api/admin/panel.php">Dashboard</a>
+        <a href="/api/admin/GestionesAdmin/GestionReservas.php">Reservas</a>
+        <a href="/api/admin/GestionesAdmin/GestionServicios.php">Servicios</a>
+        <a href="/api/admin/GestionesAdmin/GestionEquipo.php">Equipo</a>
+        <a href="/api/admin/GestionesAdmin/GestionGaleria.php">Galería</a>
+        <a href="/api/admin/GestionesAdmin/GestionBlog.php">Blog</a>
+        <a href="/api/admin/GestionesAdmin/GestionUbicacion.php">Ubicación</a>
     </nav>
 
     <section class="admin-bottom">
         <a href="/">Ver Web Pública</a>
-        <a href="/includes/logout.php">Cerrar Sesión</a>
+        <a href="/api/includes/logout.php">Cerrar Sesión</a>
     </section>
 </aside>
     <script src="/assets/script.js"></script>

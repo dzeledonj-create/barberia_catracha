@@ -1,7 +1,3 @@
-<?php
-include_once __DIR__ . '/../includes/header.php';
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,6 +8,7 @@ include_once __DIR__ . '/../includes/header.php';
 </head>
 
 <body>
+<?php include_once __DIR__ . '/../includes/header.php'; ?>
 
 <section class="resenas-page">
 
@@ -34,7 +31,7 @@ include_once __DIR__ . '/../includes/header.php';
                class="btn-google">
                 Escribir reseña en Google
             </a>
-            <a href="reservas.php" class="btn-resenas-reserva">Reservar Cita</a>
+            <a href="/vistas/reservas.php" class="btn-resenas-reserva">Reservar Cita</a>
         </div>
     </section>
 

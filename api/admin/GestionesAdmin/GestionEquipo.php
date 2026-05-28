@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    header("Location: GestionEquipo.php");
+    header("Location: /api/admin/GestionesAdmin/GestionEquipo.php");
     exit;
 }
 
@@ -195,7 +195,7 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 
                             <section class="form-buttons">
                                 <button type="submit" class="btn-save">GUARDAR</button>
-                                <a href="GestionEquipo.php" class="btn-cancel">CANCELAR</a>
+                                <a href="/api/admin/GestionesAdmin/GestionEquipo.php" class="btn-cancel">CANCELAR</a>
                             </section>
                         </form>
                     <?php else: ?>

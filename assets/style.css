@@ -16,9 +16,25 @@
     box-sizing: border-box;
 }
 
+html, body {
+    min-height: 100%;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: #1a1a1a; /* Fondo temporal para ver el header */
+    min-height: 100vh;
+    color: var(--white);
+}
+
+img, picture, video, iframe, svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* Estilos del Header */
@@ -107,7 +123,85 @@ body {
 
 /* Responsivo básico */
 @media (max-width: 768px) {
-    .nav-menu { display: none; } /* Ocultar menú en móviles por simplicidad */
+    .container {
+        max-width: 100%;
+        width: 100%;
+        padding: 0 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .main-header {
+        height: auto;
+        padding: 14px 0;
+    }
+    .logo {
+        font-size: 1.2rem;
+    }
+    .icon img {
+        max-height: 60px;
+    }
+    .nav-menu { display: none; }
+    .cta { display: none; }
+    .container-contenido {
+        height: auto;
+        min-height: 100vh;
+        padding: 100px 16px 80px;
+        background-position: center top;
+    }
+    .container-contenido::after {
+        height: 220px;
+    }
+    .contenido-titulo {
+        font-size: clamp(2.4rem, 10vw, 4rem);
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    .contenido-description {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+    .buttons {
+        flex-direction: column;
+        gap: 14px;
+    }
+    .btn-reservas,
+    .btn-servicios,
+    .btn-reserve {
+        width: 100%;
+        max-width: 100%;
+        padding: 14px 20px;
+    }
+    .explora {
+        padding: 80px 0 40px;
+    }
+    .bottom-cta-bar {
+        max-width: 100%;
+        padding: 18px 16px;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .footer-center {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .explore-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .card-icon {
+        margin-right: 0;
+        margin-bottom: 12px;
+        width: auto;
+    }
+    .card-arrow {
+        margin-left: 0;
+    }
+    .footer-logo img {
+        width: 100%;
+        max-width: 280px;
+    }
 }
 
 /* Estilos para el Contenido */

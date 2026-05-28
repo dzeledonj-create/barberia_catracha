@@ -12,17 +12,22 @@ class BD {
         if (self::$conexion === null) {
             
             // Intentamos leer la única clave de conexión desde Vercel
-            $dbUrl = getenv('DATABASE_URL');
+            $dbUrl = getenv('DATABASE_URL') ?: getenv('SUPABASE_DATABASE_URL') ?: getenv('SUPABASE_URL');
 
             if ($dbUrl) {
-                // Si existe en Vercel, parseamos la URL de Supabase automáticamente
+                // Si existe en Vercel/Supabase, parseamos la URL de conexión automáticamente
                 $dbparts = parse_url($dbUrl);
-                
+                $query   = [];
+                if (isset($dbparts['query'])) {
+                    parse_str($dbparts['query'], $query);
+                }
+
                 $host       = $dbparts['host'] ?? '';
                 $puerto     = $dbparts['port'] ?? '5432';
                 $bd         = isset($dbparts['path']) ? ltrim($dbparts['path'], '/') : '';
                 $usuario    = $dbparts['user'] ?? '';
                 $contrasena = $dbparts['pass'] ?? '';
+                $sslmode    = $query['sslmode'] ?? 'require';
             } else {
                 // Si NO existe (entorno local en tu PC), usa tus datos locales por defecto
                 $host       = '192.168.4.24'; 
@@ -30,10 +35,11 @@ class BD {
                 $bd         = 'barberia_catracha';
                 $usuario    = 'postgres';
                 $contrasena = 'Jinotega2014';
+                $sslmode    = 'disable';
             }
 
             // Construcción del DSN para PostgreSQL
-            $dsn = "pgsql:host=$host;port=$puerto;dbname=$bd";
+            $dsn = "pgsql:host=$host;port=$puerto;dbname=$bd;sslmode=$sslmode";
 
             try {
                 self::$conexion = new PDO($dsn, $usuario, $contrasena);
