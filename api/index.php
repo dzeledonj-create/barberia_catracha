@@ -9,7 +9,7 @@
     <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
 </head>
 <body>
-    <?php include_once '/barberia_catracha/api/includes/header.php'; ?>
+    <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/barberia_catracha/api/includes/header.php'; ?>
     <main>
         <section class="container-contenido">
             <section class="contenido">
@@ -89,5 +89,5 @@
     
 
 </body>
-    <?php include_once '/barberia_catracha/api/includes/footer.php'; ?>
+    <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/barberia_catracha/api/includes/footer.php'; ?>
 </html>

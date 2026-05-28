@@ -78,7 +78,7 @@ foreach ($relaciones as $rel) {
 </head>
 <body>
 
-<?php include_once '/barberia_catracha/api/includes/header.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/barberia_catracha/api/includes/header.php'; ?>
 
 <section class="reservas-page">
     <div class="reservas-container">
@@ -248,5 +248,5 @@ foreach ($relaciones as $rel) {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 </body>
-<?php include_once '../includes/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/barberia_catracha/api/includes/footer.php'; ?>
 </html>
