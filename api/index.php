@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barberia Catracha</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/style.css">
-    <link rel="icon" href="assets/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="icon" href="/assets/img/logo.png" type="image/png">
 </head>
 <body>
     <?php include_once __DIR__ . '/includes/header.php'; ?>
@@ -20,8 +20,8 @@
                     La experiencia premium que mereces en el corazón de Zaragoza.
                 </p>
                 <section class="buttons">
-                    <a href="vistas/reservas.php" class="btn-reservas">RESERVA TU CITA AHORA</a>
-                    <a href="vistas/servicios.php" class="btn-servicios">VER SERVICIOS</a>
+                    <a href="/vistas/reservas.php" class="btn-reservas">RESERVA TU CITA AHORA</a>
+                    <a href="/vistas/servicios.php" class="btn-servicios">VER SERVICIOS</a>
                 </section>
             </section>
         </section>
@@ -34,7 +34,7 @@
         <div class="title-underline"></div>
 
         <div class="explore-grid">
-            <a href="vistas/servicios.php" class="explore-card">
+            <a href="/vistas/servicios.php" class="explore-card">
                 <div class="card-icon">✂</div>
                 <div class="card-info">
                     <h3>SERVICIOS & PRECIOS</h3>
@@ -43,7 +43,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="vistas/equipo.php" class="explore-card">
+            <a href="/vistas/equipo.php" class="explore-card">
                 <div class="card-icon">👥</div>
                 <div class="card-info">
                     <h3>NUESTRO EQUIPO</h3>
@@ -52,7 +52,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="vistas/galeria.php" class="explore-card">
+            <a href="/vistas/galeria.php" class="explore-card">
                 <div class="card-icon">🖼</div>
                 <div class="card-info">
                     <h3>GALERÍA</h3>
@@ -61,7 +61,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="vistas/reseñas.php" class="explore-card">
+            <a href="/vistas/reseñas.php" class="explore-card">
                 <div class="card-icon"><i class="fa-solid fa-star"></i></div>
                 <div class="card-info">
                     <h3>RESEÑAS</h3>
@@ -70,7 +70,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="vistas/ubicacion.php" class="explore-card">
+            <a href="/vistas/ubicacion.php" class="explore-card">
                 <div class="card-icon">📍</div>
                 <div class="card-info">
                     <h3>UBICACIÓN</h3>
@@ -82,7 +82,7 @@
     </div>
 
     <div class="bottom-cta-bar">
-        <a href="vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
+        <a href="/vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
     </div>
 </section>
 

@@ -13,10 +13,10 @@ $posts = BlogPost::obtenerTodos();
 
     <title>Blog | Barbería Catracha</title>
 
-    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="/assets/style.css">
 
         <link rel="icon"
-            href="../assets/img/logo.png"
+            href="/assets/img/logo.png"
             type="image/png">
 
     <link rel="stylesheet"
@@ -69,7 +69,7 @@ $posts = BlogPost::obtenerTodos();
 
                     <?php else: ?>
 
-                        <img src="../assets/img/blog/default.jpg"
+                        <img src="/assets/img/blog/default.jpg"
                              alt="Blog Barbería Catracha">
 
                     <?php endif; ?>

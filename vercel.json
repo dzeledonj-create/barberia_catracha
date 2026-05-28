@@ -9,8 +9,24 @@
       "handle": "filesystem"
     },
     {
+      "src": "/assets/(.*)",
+      "dest": "/api/assets/$1"
+    },
+    {
+      "src": "/vistas/(.*)",
+      "dest": "/api/vistas/$1"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/api/admin/$1"
+    },
+    {
+      "src": "/login.php",
+      "dest": "/api/login.php"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/api/index.php"
+      "dest": "/api/$1"
     }
   ]
 }

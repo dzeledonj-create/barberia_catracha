@@ -41,7 +41,7 @@
 
         <!-- DERECHA: LOGO -->
         <section class="footer-lado footer-logo">
-            <img src="../assets/img/logo.png" alt="logo barberia">
+            <img src="/assets/img/logo.png" alt="logo barberia">
         </section>
 
     </section>
@@ -52,4 +52,4 @@
     </section>
 
 </footer>
-<script src="../assets/script.js"></script>
+<script src="/assets/script.js"></script>

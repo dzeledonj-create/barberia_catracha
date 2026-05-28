@@ -22,4 +22,4 @@
         <a href="/includes/logout.php">Cerrar Sesión</a>
     </section>
 </aside>
-    <script src="../../assets/script.js"></script>
+    <script src="/assets/script.js"></script>

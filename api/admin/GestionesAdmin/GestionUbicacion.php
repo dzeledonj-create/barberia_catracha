@@ -42,7 +42,7 @@ $horarios = Horario::obtenerTodos();
     <meta charset="UTF-8">
     <title>Gestión Ubicación</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../assets/style.css">
+    <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 

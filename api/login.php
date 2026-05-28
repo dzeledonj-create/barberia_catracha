@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <section class="login-page">
 
     <section class="login-icon">
-    <img src="assets/img/logo.png" alt="Logo Barbería Catracha">
+    <img src="/assets/img/logo.png" alt="Logo Barbería Catracha">
 </section>
 
     <section class="login-box">
