@@ -1,16 +1,13 @@
 {
   "functions": {
     "api/**/*.php": {
-      "runtime": "vercel-php@0.8.0"
+      "runtime": "vercel-php@0.8.0",
+      "excludeFiles": "api/{Clases/**,admin/clases_admin/**,admin/includes/**,includes/**}"
     }
   },
   "routes": [
     {
       "handle": "filesystem"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/api/assets/$1"
     },
     {
       "src": "/vistas/(.*)",
@@ -23,6 +20,10 @@
     {
       "src": "/login.php",
       "dest": "/api/login.php"
+    },
+    {
+      "src": "/includes/(.*)",
+      "dest": "/api/includes/$1"
     },
     {
       "src": "/(.*)",

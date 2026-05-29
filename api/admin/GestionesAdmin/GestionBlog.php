@@ -10,7 +10,6 @@ if (!$usuario instanceof Administrador) {
 }
 
 /* CREAR */
-<?php
 
 require_once __DIR__ . '/../../Clases/BlogPost.php';
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
@@ -117,6 +116,7 @@ if (isset($_GET['editar'])) {
 }
 
 $posts = BlogPost::obtenerTodos();
+
 ?>
 
 <!DOCTYPE html>
