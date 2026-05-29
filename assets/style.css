@@ -525,6 +525,43 @@ img, picture, video, iframe, svg {
 
 /* --- SECCIÓN GALERÍA --- */
 
+@media (max-width: 1024px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .footer-lado {
+        align-items: stretch;
+    }
+
+    .mapa {
+        width: 100%;
+        height: 240px;
+    }
+
+    .footer-center {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 28px;
+    }
+
+    .footer-logo {
+        align-items: center;
+    }
+
+    .footer-logo img {
+        width: 180px;
+        max-height: 170px;
+    }
+}
+
+@media (max-width: 640px) {
+    .footer-center {
+        grid-template-columns: 1fr;
+    }
+}
+
 .galeria-hero {
     padding: 100px 20px 60px;
     text-align: center;
