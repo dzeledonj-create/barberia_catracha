@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    header("Location: /admin/GestionesAdmin/GestionEquipo.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php");
     exit;
 }
 
@@ -195,12 +195,12 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 
                             <section class="form-buttons">
                                 <button type="submit" class="btn-save">GUARDAR</button>
-                                <a href="/admin/GestionesAdmin/GestionEquipo.php" class="btn-cancel">CANCELAR</a>
+                                <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php" class="btn-cancel">CANCELAR</a>
                             </section>
                         </form>
                     <?php else: ?>
                         <div class="card-image">
-                             <img src="../../<?= htmlspecialchars($barber->fotoUrl ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->nombre) ?>" onerror="this.src='../../assets/img/default-user.jpg'">
+                                    <img src="/barberia_catracha/<?= htmlspecialchars($barber->fotoUrl ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->nombre) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
                         </div>
                         <section class="info">
                             <h3><?= htmlspecialchars($barber->nombre) ?></h3>

@@ -3,12 +3,12 @@
 require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
-if ($usuario instanceof Administrador) {
-    header("Location: /admin/panel.php");
+    if ($usuario instanceof Administrador) {
+    header("Location: /barberia_catracha/api/admin/panel.php");
     exit;
 }
 if ($usuario instanceof UsuarioBarbero) {
-    header("Location: /admin/panel.php");
+    header("Location: /barberia_catracha/api/admin/panel.php");
     exit;
 }
 
@@ -30,12 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($_SESSION['rol'] === 'admin') {
-            header("Location: /api/admin/panel.php");
+            header("Location: /barberia_catracha/api/admin/panel.php");
             exit;
         }
 
         if ($_SESSION['rol'] === 'barbero') {
-            header("Location: /api/admin/panel.php");
+            header("Location: /barberia_catracha/api/admin/panel.php");
             exit;
         }
     } else {
