@@ -37,7 +37,7 @@ if (isset($_POST['crear'])) {
 
     $sugerencia->guardar();
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionGaleria.php");
+    header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
 
@@ -71,7 +71,7 @@ if (isset($_POST['editar'])) {
 
     $sugerencia->guardar();
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionGaleria.php");
+    header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
 
@@ -84,7 +84,7 @@ if (isset($_GET['eliminar'])) {
         $sugerencia->eliminar();
     }
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionGaleria.php");
+    header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
 
@@ -107,6 +107,21 @@ $sugerencias = MuralSugerencia::obtenerTodos();
     <title>Gestión Galería</title>
 
     <link rel="stylesheet" href="/assets/style.css">
+    <?php
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    if (strpos($script, '/api/admin') !== false) {
+        $root = substr($script, 0, strpos($script, '/api')) ?: '';
+        $adminBase = $root . '/api/admin';
+    } elseif (strpos($script, '/admin') !== false) {
+        $root = substr($script, 0, strpos($script, '/admin')) ?: '';
+        $adminBase = $root . '/admin';
+    } else {
+        $root = '';
+        $adminBase = '/admin';
+    }
+    $assetsBase = $root . '/assets';
+    ?>
+    <link rel="stylesheet" href="<?= $assetsBase ?>/style.css">
 </head>
 
 <body>

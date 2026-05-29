@@ -28,7 +28,7 @@ if (isset($_POST['guardar'])) {
     );
 }
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionUbicacion.php");
+    header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
 
@@ -43,6 +43,21 @@ $horarios = Horario::obtenerTodos();
     <title>Gestión Ubicación</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/style.css">
+    <?php
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    if (strpos($script, '/api/admin') !== false) {
+        $root = substr($script, 0, strpos($script, '/api')) ?: '';
+        $adminBase = $root . '/api/admin';
+    } elseif (strpos($script, '/admin') !== false) {
+        $root = substr($script, 0, strpos($script, '/admin')) ?: '';
+        $adminBase = $root . '/admin';
+    } else {
+        $root = '';
+        $adminBase = '/admin';
+    }
+    $assetsBase = $root . '/assets';
+    ?>
+    <link rel="stylesheet" href="<?= $assetsBase ?>/style.css">
 </head>
 <body>
 

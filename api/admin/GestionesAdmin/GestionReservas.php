@@ -72,6 +72,21 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión de Reservas</title>
     <link rel="stylesheet" href="/assets/style.css">
+    <?php
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    if (strpos($script, '/api/admin') !== false) {
+        $root = substr($script, 0, strpos($script, '/api')) ?: '';
+        $adminBase = $root . '/api/admin';
+    } elseif (strpos($script, '/admin') !== false) {
+        $root = substr($script, 0, strpos($script, '/admin')) ?: '';
+        $adminBase = $root . '/admin';
+    } else {
+        $root = '';
+        $adminBase = '/admin';
+    }
+    $assetsBase = $root . '/assets';
+    ?>
+    <link rel="stylesheet" href="<?= $assetsBase ?>/style.css">
 </head>
 <body>
 

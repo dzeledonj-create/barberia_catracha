@@ -2,13 +2,25 @@
 
 require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 
+$script = $_SERVER['SCRIPT_NAME'] ?? '';
+if (strpos($script, '/api/admin') !== false) {
+    $root = substr($script, 0, strpos($script, '/api')) ?: '';
+    $adminBase = $root . '/api/admin';
+} elseif (strpos($script, '/admin') !== false) {
+    $root = substr($script, 0, strpos($script, '/admin')) ?: '';
+    $adminBase = $root . '/admin';
+} else {
+    $root = '';
+    $adminBase = '/admin';
+}
+
 $usuario = GestorUsuarios::obtenerDesdeSesion();
     if ($usuario instanceof Administrador) {
-    header("Location: /barberia_catracha/api/admin/panel.php");
+    header('Location: ' . $adminBase . '/panel.php');
     exit;
 }
 if ($usuario instanceof UsuarioBarbero) {
-    header("Location: /barberia_catracha/api/admin/panel.php");
+    header('Location: ' . $adminBase . '/panel.php');
     exit;
 }
 
@@ -30,12 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($_SESSION['rol'] === 'admin') {
-            header("Location: /barberia_catracha/api/admin/panel.php");
+            header('Location: ' . $adminBase . '/panel.php');
             exit;
         }
 
         if ($_SESSION['rol'] === 'barbero') {
-            header("Location: /barberia_catracha/api/admin/panel.php");
+            header('Location: ' . $adminBase . '/panel.php');
             exit;
         }
     } else {
