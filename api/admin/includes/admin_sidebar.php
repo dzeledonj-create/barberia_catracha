@@ -1,4 +1,3 @@
-<!-- Admin hamburger (visible en tablets/móviles) -->
 <button id="admin-hamburger-btn" class="admin-hamburger" aria-label="Abrir menú admin" aria-expanded="false">☰</button>
 
 <aside class="admin-sidebar">
