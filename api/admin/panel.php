@@ -16,21 +16,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin</title>
-    <?php
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    if (strpos($script, '/api/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/api')) ?: '';
-        $adminBase = $root . '/api/admin';
-    } elseif (strpos($script, '/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/admin')) ?: '';
-        $adminBase = $root . '/admin';
-    } else {
-        $root = '';
-        $adminBase = '/admin';
-    }
-    $assetsBase = $root . '/assets';
-    ?>
-    <link rel="stylesheet" href="<?= $assetsBase ?>/style.css">
+    <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 
@@ -47,7 +33,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
         <?php if ($pendientes > 0): ?>
             <section class="admin-alert">
                 <strong>Notificación:</strong> Tienes <?= htmlspecialchars($pendientes) ?> reserva<?= $pendientes === 1 ? '' : 's' ?> pendiente<?= $pendientes === 1 ? '' : 's' ?>.
-                <a href="<?= $adminBase ?>/GestionesAdmin/GestionReservas.php">Ver reservas</a>
+                <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php">Ver reservas</a>
             </section>
         <?php endif; ?>
 
@@ -106,12 +92,12 @@ $recientesReservas = Reserva::obtenerRecientes(5);
         </section>
 
         <section class="admin-actions">
-            <a href="<?= $adminBase ?>/GestionesAdmin/GestionServicios.php">Gestionar Servicios</a>
-            <a href="<?= $adminBase ?>/GestionesAdmin/GestionEquipo.php">Gestionar Equipo</a>
-            <a href="<?= $adminBase ?>/GestionesAdmin/GestionReservas.php">Ver Reservas</a>
-            <a href="<?= $adminBase ?>/GestionesAdmin/GestionGaleria.php">Gestionar Galería</a>
-            <a href="<?= $adminBase ?>/GestionesAdmin/GestionBlog.php">Editar Blog</a>
-            <a href="<?= $adminBase ?>/GestionesAdmin/GestionUbicacion.php">Actualizar Ubicación</a>
+            <a href="../admin/GestionesAdmin/GestionServicios.php">Gestionar Servicios</a>
+            <a href="../admin/GestionesAdmin/GestionEquipo.php">Gestionar Equipo</a>
+            <a href="../admin/GestionesAdmin/GestionReservas.php">Ver Reservas</a>
+            <a href="../admin/GestionesAdmin/GestionGaleria.php">Gestionar Galería</a>
+            <a href="../admin/GestionesAdmin/GestionBlog.php">Editar Blog</a>
+            <a href="../admin/GestionesAdmin/GestionUbicacion.php">Actualizar Ubicación</a>
         </section>
     </main>
 

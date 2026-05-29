@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header("Location: /admin/GestionesAdmin/GestionEquipo.php");
     exit;
 }
 
@@ -86,21 +86,6 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin - Gestión de Equipo</title>
     <link rel="stylesheet" href="/assets/style.css">
-    <?php
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    if (strpos($script, '/api/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/api')) ?: '';
-        $adminBase = $root . '/api/admin';
-    } elseif (strpos($script, '/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/admin')) ?: '';
-        $adminBase = $root . '/admin';
-    } else {
-        $root = '';
-        $adminBase = '/admin';
-    }
-    $assetsBase = $root . '/assets';
-    ?>
-    <link rel="stylesheet" href="<?= $assetsBase ?>/style.css">
 </head>
 <body class="admin-panel">
     <?php include_once __DIR__ . '/../includes/admin_sidebar.php'; ?>
@@ -210,12 +195,12 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 
                             <section class="form-buttons">
                                 <button type="submit" class="btn-save">GUARDAR</button>
-                                <a href="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="btn-cancel">CANCELAR</a>
+                                <a href="/admin/GestionesAdmin/GestionEquipo.php" class="btn-cancel">CANCELAR</a>
                             </section>
                         </form>
                     <?php else: ?>
                         <div class="card-image">
-                                    <img src="/barberia_catracha/<?= htmlspecialchars($barber->fotoUrl ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->nombre) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
+                             <img src="../../<?= htmlspecialchars($barber->fotoUrl ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->nombre) ?>" onerror="this.src='../../assets/img/default-user.jpg'">
                         </div>
                         <section class="info">
                             <h3><?= htmlspecialchars($barber->nombre) ?></h3>

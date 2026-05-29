@@ -1,19 +1,4 @@
-<?php
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    if (strpos($script, '/api/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/api')) ?: '';
-        $adminBase = $root . '/api/admin';
-    } elseif (strpos($script, '/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/admin')) ?: '';
-        $adminBase = $root . '/admin';
-    } else {
-        $root = '';
-        $adminBase = '/admin';
-    }
-    $assetsBase = $root . '/assets';
-    $publicRoot = $root ?: '/';
-?>
-
+<!-- Admin hamburger (visible en tablets/móviles) -->
 <button id="admin-hamburger-btn" class="admin-hamburger" aria-label="Abrir menú admin" aria-expanded="false">☰</button>
 
 <aside class="admin-sidebar">
@@ -23,18 +8,18 @@
     </section>
 
     <nav class="admin-menu">
-        <a href="<?= $adminBase ?>/panel.php">Dashboard</a>
-        <a href="<?= $adminBase ?>/GestionesAdmin/GestionReservas.php">Reservas</a>
-        <a href="<?= $adminBase ?>/GestionesAdmin/GestionServicios.php">Servicios</a>
-        <a href="<?= $adminBase ?>/GestionesAdmin/GestionEquipo.php">Equipo</a>
-        <a href="<?= $adminBase ?>/GestionesAdmin/GestionGaleria.php">Galería</a>
-        <a href="<?= $adminBase ?>/GestionesAdmin/GestionBlog.php">Blog</a>
-        <a href="<?= $adminBase ?>/GestionesAdmin/GestionUbicacion.php">Ubicación</a>
+        <a href="../admin/panel.php">Dashboard</a>
+        <a href="../admin/GestionesAdmin/GestionReservas.php">Reservas</a>
+        <a href="../admin/GestionesAdmin/GestionServicios.php">Servicios</a>
+        <a href="../admin/GestionesAdmin/GestionEquipo.php">Equipo</a>
+        <a href="../admin/GestionesAdmin/GestionGaleria.php">Galería</a>
+        <a href="../admin/GestionesAdmin/GestionBlog.php">Blog</a>
+        <a href="../admin/GestionesAdmin/GestionUbicacion.php">Ubicación</a>
     </nav>
 
     <section class="admin-bottom">
-        <a href="<?= $publicRoot ?>">Ver Web Pública</a>
-        <a href="<?= $publicRoot ?>/includes/logout.php">Cerrar Sesión</a>
+        <a href="../">Ver Web Pública</a>
+        <a href="../includes/logout.php">Cerrar Sesión</a>
     </section>
 </aside>
-    <script src="<?= $assetsBase ?>/script.js"></script>
+    <script src="../assets/script.js"></script>

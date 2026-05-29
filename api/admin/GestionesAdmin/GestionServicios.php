@@ -22,7 +22,7 @@ if (isset($_POST['crear'])) {
 
     $servicio->guardar();
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header("Location: /admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -39,7 +39,7 @@ if (isset($_POST['editar'])) {
 
     $servicio->guardar();
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header("Location: /admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -51,7 +51,7 @@ if (isset($_GET['eliminar'])) {
         $servicio->eliminar();
     }
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header("Location: /admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -73,21 +73,6 @@ if (isset($_GET['editar'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión de Servicios</title>
     <link rel="stylesheet" href="/assets/style.css">
-    <?php
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    if (strpos($script, '/api/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/api')) ?: '';
-        $adminBase = $root . '/api/admin';
-    } elseif (strpos($script, '/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/admin')) ?: '';
-        $adminBase = $root . '/admin';
-    } else {
-        $root = '';
-        $adminBase = '/admin';
-    }
-    $assetsBase = $root . '/assets';
-    ?>
-    <link rel="stylesheet" href="<?= $assetsBase ?>/style.css">
 </head>
 <body>
 
@@ -155,7 +140,7 @@ if (isset($_GET['editar'])) {
 
                 <?php if ($servicioEditar): ?>
                     <button type="submit" name="editar">Guardar cambios</button>
-                    <a href="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="admin-btn-cancelar">Cancelar</a>
+                    <a href="/admin/GestionesAdmin/GestionServicios.php" class="admin-btn-cancelar">Cancelar</a>
                 <?php else: ?>
                     <button type="submit" name="crear">Añadir servicio</button>
                 <?php endif; ?>

@@ -10,6 +10,18 @@ if (!$usuario instanceof Administrador) {
 }
 
 /* CREAR */
+<?php
+
+require_once __DIR__ . '/../../Clases/BlogPost.php';
+require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
+
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario instanceof Administrador) {
+    header("Location: ../../login.php");
+    exit;
+}
+
+/* CREAR */
 if (isset($_POST['crear'])) {
 
     $embed = "";
@@ -49,7 +61,7 @@ if (isset($_POST['crear'])) {
 
     $post->guardar();
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header("Location: /admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -81,7 +93,7 @@ if (isset($_POST['editar'])) {
 
     $post->guardar();
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header("Location: /admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -93,7 +105,7 @@ if (isset($_GET['eliminar'])) {
         $post->eliminar();
     }
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header("Location: /admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -114,21 +126,6 @@ $posts = BlogPost::obtenerTodos();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión Blog</title>
     <link rel="stylesheet" href="/assets/style.css">
-    <?php
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    if (strpos($script, '/api/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/api')) ?: '';
-        $adminBase = $root . '/api/admin';
-    } elseif (strpos($script, '/admin') !== false) {
-        $root = substr($script, 0, strpos($script, '/admin')) ?: '';
-        $adminBase = $root . '/admin';
-    } else {
-        $root = '';
-        $adminBase = '/admin';
-    }
-    $assetsBase = $root . '/assets';
-    ?>
-    <link rel="stylesheet" href="<?= $assetsBase ?>/style.css">
 </head>
 <body>
 
@@ -177,7 +174,7 @@ $posts = BlogPost::obtenerTodos();
                 </button>
 
                 <?php if ($postEditar): ?>
-                    <a href="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="admin-btn-cancelar">Cancelar</a>
+                    <a href="/admin/GestionesAdmin/GestionBlog.php" class="admin-btn-cancelar">Cancelar</a>
                 <?php endif; ?>
 
             </form>
