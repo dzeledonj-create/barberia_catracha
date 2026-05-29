@@ -2,7 +2,7 @@
   "functions": {
     "api/**/*.php": {
       "runtime": "vercel-php@0.8.0",
-      "excludeFiles": "api/{Clases/**,admin/clases_admin/**,admin/includes/**,includes/**}"
+      "excludeFiles": "api/{Clases/**,admin/clases_admin/**, admin/GestionesAdmin/**,admin/includes/**,includes/**}"
     }
   },
   "routes": [
