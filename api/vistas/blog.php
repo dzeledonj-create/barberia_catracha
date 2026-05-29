@@ -64,8 +64,8 @@ $posts = BlogPost::obtenerTodos();
 
                     <?php elseif (!empty($post['imagen_url'])): ?>
 
-                        <img src="../../<?= htmlspecialchars($post['imagen_url']) ?>"
-                             alt="<?= htmlspecialchars($post['titulo']) ?>">
+                            <img src="/<?= htmlspecialchars($post['imagen_url']) ?>"
+                                alt="<?= htmlspecialchars($post['titulo']) ?>">
 
                     <?php else: ?>
 

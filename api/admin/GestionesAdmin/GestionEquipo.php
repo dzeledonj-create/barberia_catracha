@@ -6,7 +6,7 @@ require_once __DIR__ . '/../clases_admin/Administrador.php';
 //Obtenemos el usuario actual desde la sesión
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
-    header("Location: ../../login.php");
+    header("Location: /login.php");
     exit;
 }
 
@@ -199,9 +199,9 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
                             </section>
                         </form>
                     <?php else: ?>
-                        <div class="card-image">
-                             <img src="../../<?= htmlspecialchars($barber->fotoUrl ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->nombre) ?>" onerror="this.src='../../assets/img/default-user.jpg'">
-                        </div>
+                            <div class="card-image">
+                                <img src="/<?= htmlspecialchars($barber->fotoUrl ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->nombre) ?>" onerror="this.src='/assets/img/default-user.jpg'">
+                            </div>
                         <section class="info">
                             <h3><?= htmlspecialchars($barber->nombre) ?></h3>
                             <p class="rank"><?= htmlspecialchars($barber->especialidad ?? 'Admin') ?></p>

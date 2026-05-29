@@ -42,7 +42,7 @@ if ($categoria_actual === 'todos') {
         <nav class="categorias-nav">
             <ul class="categorias-lista">
                 <li>
-                    <a href="galeria.php?categoria=todos" 
+                    <a href="/vistas/galeria.php?categoria=todos" 
                        class="<?= $categoria_actual === 'todos' ? 'active' : '' ?>">
                        TODOS
                     </a>
@@ -50,7 +50,7 @@ if ($categoria_actual === 'todos') {
 
                 <?php foreach ($categorias_db as $cat): ?>
                     <li>
-                        <a href="galeria.php?categoria=<?= urlencode(strtolower($cat)) ?>" 
+                        <a href="/vistas/galeria.php?categoria=<?= urlencode(strtolower($cat)) ?>" 
                            class="<?= strtolower($categoria_actual) === strtolower($cat) ? 'active' : '' ?>">
                             <?= strtoupper(htmlspecialchars($cat)) ?>
                         </a>
@@ -70,7 +70,7 @@ if ($categoria_actual === 'todos') {
                 <?php foreach ($sugerencias as $corte): ?>
                     <section class="galeria-item">
                         <section class="image-wrapper">
-                            <img src="../../<?= htmlspecialchars($corte['imagen_url']) ?>" alt="<?= htmlspecialchars($corte['nombre_corte']) ?>">
+                            <img src="/<?= htmlspecialchars($corte['imagen_url']) ?>" alt="<?= htmlspecialchars($corte['nombre_corte']) ?>">
                             <section class="overlay">
                                 <span class="tag-estilo"><?= htmlspecialchars($corte['estilo']) ?></span>
                             </section>
@@ -85,10 +85,10 @@ if ($categoria_actual === 'todos') {
         </section>
     </section>
 
-    <section class="galeria-cta">
+            <section class="galeria-cta">
         <section class="cta-box">
             <h2>¿Te gusta alguno de estos estilos?</h2>
-            <a href="reservas.php" class="btn-reservas">PEDIR CITA AHORA</a>
+            <a href="/vistas/reservas.php" class="btn-reservas">PEDIR CITA AHORA</a>
         </section>
     </section>
 </main>
