@@ -85,9 +85,9 @@ class GestorUsuarios {
         return $datos;
     }
 
-    public static function obtenerDesdeSesion(): ?Usuario {
+    // Eliminamos la restricción estricta de tipo en el retorno para evitar caídas en producción
+    public static function obtenerDesdeSesion() {
         // --- SOLUCIÓN DE SESIONES EN VERCEL ---
-        // Forzamos la escritura en /tmp porque el resto del servidor es de Solo Lectura
         if (session_status() === PHP_SESSION_NONE) {
             ini_set('session.save_path', '/tmp');
             session_start();
