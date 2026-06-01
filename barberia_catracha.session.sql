@@ -1,3 +1,6 @@
+-- COMENTARIO PARA DEFENSA:
+-- Volcado SQL de apoyo para reconstruir o revisar datos de sesion/base de datos.
+-- Este archivo no se ejecuta en la web directamente; sirve como respaldo/importacion de la base de datos.
 CREATE TABLE clientes (
     cliente_id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
