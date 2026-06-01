@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($_POST['ids'] as $idEliminar) {
             Reserva::eliminar((int)$idEliminar);
         }
-        header('Location: ' . $_SERVER['PHP_SELF']);
+        header('Location: /admin/GestionesAdmin/GestionReservas.php');
         exit;
     }
 }
@@ -36,7 +36,7 @@ if (isset($_GET['accion'], $_GET['id'])) {
         Reserva::eliminar($id);
     }
 
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header('Location: /admin/GestionesAdmin/GestionReservas.php');
     exit;
 }
 
