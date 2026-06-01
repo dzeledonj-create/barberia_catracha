@@ -1,44 +1,8 @@
 <?php
-// ============================================================================
-// --- AUTOLOADER GLOBAL INTELIGENTE (Solución Definitiva para Vercel/Linux) ---
-// ============================================================================
-spl_autoload_register(function ($clase) {
-    // El root de la app/api está 2 niveles arriba de este archivo (/api)
-    $baseDir = dirname(dirname(__DIR__)); 
-    
-    // Directorios donde residen las clases (probamos ambas combinaciones de mayúsculas)
-    $directorios = [
-        $baseDir . '/Clases/',
-        $baseDir . '/clases/',
-        $baseDir . '/admin/clases_admin/',
-        $baseDir . '/admin/Clases_Admin/'
-    ];
-    
-    foreach ($directorios as $directorio) {
-        // Probamos variaciones de nombre de archivo (Exacto, minúsculas, Primera Mayúscula)
-        $posiblesArchivos = [
-            $directorio . $clase . '.php',
-            $directorio . strtolower($clase) . '.php',
-            $directorio . ucfirst(strtolower($clase)) . '.php'
-        ];
-        
-        foreach ($posiblesArchivos as $archivo) {
-            if (file_exists($archivo)) {
-                require_once $archivo;
-                return;
-            }
-        }
-    }
-});
+require_once __DIR__ . '/../../Clases/BD.php';
+require_once 'Administrador.php';
+require_once 'UsuarioBarbero.php';
 
-// Forzamos la carga inicial de la conexión para asegurar compatibilidad
-if (class_exists('BD')) {
-    BD::obtenerConexion();
-}
-
-// ============================================================================
-// --- CLASE GESTOR USUARIOS ---
-// ============================================================================
 class GestorUsuarios {
 
     public static function autenticar($email, $password) {
@@ -85,21 +49,22 @@ class GestorUsuarios {
     }
 
     public static function obtenerDatosSesion($usuario): array {
-        return [
+        $datos = [
             'usuario_id' => $usuario->usuarioId,
             'nombre' => $usuario->nombre,
             'email' => $usuario->email,
-            'rol' => $usuario->rol,
-            'barbero_id' => ($usuario instanceof UsuarioBarbero) ? $usuario->barberoId : null
+            'rol' => $usuario->rol
         ];
+
+        if ($usuario instanceof UsuarioBarbero) {
+            $datos['barbero_id'] = $usuario->barberoId;
+        }
+
+        return $datos;
     }
 
-    // Eliminamos permanentemente la restricción estricta ': ?Usuario' de la firma
-    public static function obtenerDesdeSesion() {
-        if (session_status() === PHP_SESSION_NONE) {
-            ini_set('session.save_path', sys_get_temp_dir());
-            session_start();
-        }
+    public static function obtenerDesdeSesion(): ?Usuario {
+        if (session_status() === PHP_SESSION_NONE) session_start();
 
         if (empty($_SESSION['usuario_id'])) return null;
 

@@ -1,51 +1,15 @@
 <?php
-// ============================================================================
-// --- BUSCADOR INTELIGENTE DE CARPETAS (Evita caídas por Mayúsculas en Vercel) ---
-// ============================================================================
+require_once __DIR__ . '/../Clases/BD.php';
+require_once __DIR__ . '/../Clases/Reserva.php';
+require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
 
-// 1. Buscamos la carpeta de clases principal (Clases vs clases)
-$rutaClases = null;
-foreach (['../Clases', '../clases'] as $carpeta) {
-    if (file_exists(__DIR__ . '/' . $carpeta . '/BD.php')) {
-        $rutaClases = __DIR__ . '/' . $carpeta;
-        break;
-    }
-}
-if (!$rutaClases) {
-    $rutaClases = __DIR__ . '/../clases'; // Fallback por defecto
-}
-
-// Cargamos la Base de Datos y Reservas de forma segura
-require_once $rutaClases . '/BD.php';
-require_once $rutaClases . '/Reserva.php';
-
-// 2. Buscamos la carpeta clases_admin (clases_admin vs Clases_admin)
-$rutaAdmin = null;
-foreach (['clases_admin', 'Clases_admin'] as $carpeta) {
-    if (file_exists(__DIR__ . '/' . $carpeta . '/GestorUsuarios.php')) {
-        $rutaAdmin = __DIR__ . '/' . $carpeta;
-        break;
-    }
-}
-if (!$rutaAdmin) {
-    $rutaAdmin = __DIR__ . '/clases_admin'; // Fallback por defecto
-}
-
-// Cargamos el Gestor de Usuarios
-require_once $rutaAdmin . '/GestorUsuarios.php';
-
-// ============================================================================
-// --- CONTROL DE ACCESO SEGURO ---
-// ============================================================================
+// ¡AÑADIMOS SEGURIDAD AL PANEL!
 $usuario = GestorUsuarios::obtenerDesdeSesion();
-
-// Si no hay un usuario autenticado en la sesión, lo mandamos directo al login
 if (!$usuario) {
-    header("Location: /login.php?error=sesion_expirada");
+    header("Location: /login.php");
     exit;
 }
 
-// Carga de contadores para el Dashboard
 $totalReservas = Reserva::contarPorEstado('pendiente') + Reserva::contarPorEstado('confirmada') + Reserva::contarPorEstado('cancelada');
 $pendientes = Reserva::contarPorEstado('pendiente');
 $confirmadas = Reserva::contarPorEstado('confirmada');
