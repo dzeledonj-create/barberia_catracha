@@ -1,15 +1,25 @@
 <?php
 require_once __DIR__ . '/../Clases/BD.php';
 require_once __DIR__ . '/../Clases/Reserva.php';
+
+// IMPORTANTE: Importamos primero las clases de los usuarios antes del gestor
+if (file_exists(__DIR__ . '/clases_admin/Administrador.php')) {
+    require_once __DIR__ . '/clases_admin/Administrador.php';
+}
+if (file_exists(__DIR__ . '/clases_admin/UsuarioBarbero.php')) {
+    require_once __DIR__ . '/clases_admin/UsuarioBarbero.php';
+}
+
 require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
 
-// ¡AÑADIMOS SEGURIDAD AL PANEL!
+// Validamos la sesión de manera segura
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario) {
     header("Location: /login.php");
     exit;
 }
 
+// Carga de datos para el Dashboard
 $totalReservas = Reserva::contarPorEstado('pendiente') + Reserva::contarPorEstado('confirmada') + Reserva::contarPorEstado('cancelada');
 $pendientes = Reserva::contarPorEstado('pendiente');
 $confirmadas = Reserva::contarPorEstado('confirmada');
