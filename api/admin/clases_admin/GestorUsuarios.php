@@ -1,7 +1,29 @@
 <?php
-require_once __DIR__ . '/../../Clases/BD.php';
-require_once 'Administrador.php';
-require_once 'UsuarioBarbero.php';
+// ============================================================================
+// --- BUSCADOR INTELIGENTE DE RUTAS PARA VERCEL (Evita errores de Mayúsculas) ---
+// ============================================================================
+
+if (file_exists(__DIR__ . '/../../Clases/BD.php')) {
+    require_once __DIR__ . '/../../Clases/BD.php';
+} else {
+    require_once __DIR__ . '/../../clases/BD.php';
+}
+
+if (file_exists(__DIR__ . '/Administrador.php')) {
+    require_once __DIR__ . '/Administrador.php';
+} else if (file_exists(__DIR__ . '/administrador.php')) {
+    require_once __DIR__ . '/administrador.php';
+}
+
+if (file_exists(__DIR__ . '/UsuarioBarbero.php')) {
+    require_once __DIR__ . '/UsuarioBarbero.php';
+} else if (file_exists(__DIR__ . '/usuariobarbero.php')) {
+    require_once __DIR__ . '/usuariobarbero.php';
+}
+
+// ============================================================================
+// --- CLASE GESTOR USUARIOS ---
+// ============================================================================
 
 class GestorUsuarios {
 
@@ -64,7 +86,12 @@ class GestorUsuarios {
     }
 
     public static function obtenerDesdeSesion(): ?Usuario {
-        if (session_status() === PHP_SESSION_NONE) session_start();
+        // --- SOLUCIÓN DE SESIONES EN VERCEL ---
+        // Forzamos la escritura en /tmp porque el resto del servidor es de Solo Lectura
+        if (session_status() === PHP_SESSION_NONE) {
+            ini_set('session.save_path', '/tmp');
+            session_start();
+        }
 
         if (empty($_SESSION['usuario_id'])) return null;
 
