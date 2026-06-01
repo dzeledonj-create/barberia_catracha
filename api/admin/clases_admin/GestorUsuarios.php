@@ -97,7 +97,7 @@ class GestorUsuarios {
     // Eliminamos permanentemente la restricción estricta ': ?Usuario' de la firma
     public static function obtenerDesdeSesion() {
         if (session_status() === PHP_SESSION_NONE) {
-            ini_set('session.save_path', '/tmp');
+            ini_set('session.save_path', sys_get_temp_dir());
             session_start();
         }
 

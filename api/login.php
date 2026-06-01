@@ -1,5 +1,6 @@
 <?php
 
+ini_set('session.save_path', sys_get_temp_dir());
 session_start();
 require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 
