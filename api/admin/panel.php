@@ -2,14 +2,26 @@
 require_once __DIR__ . '/../Clases/BD.php';
 require_once __DIR__ . '/../Clases/Reserva.php';
 
-// IMPORTANTE: Importamos primero las clases de los usuarios antes del gestor
+// --- BUSCADOR INTELIGENTE PARA ADMINISTRADOR (Soporta Mayúsculas/Minúsculas en Vercel) ---
 if (file_exists(__DIR__ . '/clases_admin/Administrador.php')) {
     require_once __DIR__ . '/clases_admin/Administrador.php';
+} else if (file_exists(__DIR__ . '/clases_admin/administrador.php')) {
+    require_once __DIR__ . '/clases_admin/administrador.php';
+} else {
+    // Si no encuentra ninguno, forzamos el error para saber la ruta exacta
+    require_once __DIR__ . '/clases_admin/Administrador.php';
 }
+
+// --- BUSCADOR INTELIGENTE PARA USUARIO BARBERO (Soporta Mayúsculas/Minúsculas en Vercel) ---
 if (file_exists(__DIR__ . '/clases_admin/UsuarioBarbero.php')) {
+    require_once __DIR__ . '/clases_admin/UsuarioBarbero.php';
+} else if (file_exists(__DIR__ . '/clases_admin/usuariobarbero.php')) {
+    require_once __DIR__ . '/clases_admin/usuariobarbero.php';
+} else {
     require_once __DIR__ . '/clases_admin/UsuarioBarbero.php';
 }
 
+// Ahora que las clases están cargadas en memoria de forma segura, cargamos el Gestor
 require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
 
 // Validamos la sesión de manera segura
