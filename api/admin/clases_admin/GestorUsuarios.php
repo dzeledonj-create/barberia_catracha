@@ -3,18 +3,37 @@
 // --- BUSCADOR INTELIGENTE DE RUTAS PARA VERCEL (Evita errores de Mayúsculas) ---
 // ============================================================================
 
+// 1. Cargamos la Base de Datos de forma segura
 if (file_exists(__DIR__ . '/../../Clases/BD.php')) {
     require_once __DIR__ . '/../../Clases/BD.php';
 } else {
     require_once __DIR__ . '/../../clases/BD.php';
 }
 
+// 2. Cargamos la clase base "Usuario" (¡Aquí estaba el fallo de Vercel!)
+$rutasUsuario = [
+    __DIR__ . '/Usuario.php',
+    __DIR__ . '/usuario.php',
+    __DIR__ . '/../../Clases/Usuario.php',
+    __DIR__ . '/../../clases/Usuario.php',
+    __DIR__ . '/../../Clases/usuario.php',
+    __DIR__ . '/../../clases/usuario.php'
+];
+foreach ($rutasUsuario as $ruta) {
+    if (file_exists($ruta)) {
+        require_once $ruta;
+        break;
+    }
+}
+
+// 3. Cargamos Administrador de forma segura
 if (file_exists(__DIR__ . '/Administrador.php')) {
     require_once __DIR__ . '/Administrador.php';
 } else if (file_exists(__DIR__ . '/administrador.php')) {
     require_once __DIR__ . '/administrador.php';
 }
 
+// 4. Cargamos UsuarioBarbero de forma segura
 if (file_exists(__DIR__ . '/UsuarioBarbero.php')) {
     require_once __DIR__ . '/UsuarioBarbero.php';
 } else if (file_exists(__DIR__ . '/usuariobarbero.php')) {
