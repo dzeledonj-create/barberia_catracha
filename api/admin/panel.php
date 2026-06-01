@@ -1,37 +1,51 @@
 <?php
-require_once __DIR__ . '/../Clases/BD.php';
-require_once __DIR__ . '/../Clases/Reserva.php';
+// ============================================================================
+// --- BUSCADOR INTELIGENTE DE CARPETAS (Evita caídas por Mayúsculas en Vercel) ---
+// ============================================================================
 
-// --- BUSCADOR INTELIGENTE PARA ADMINISTRADOR (Soporta Mayúsculas/Minúsculas en Vercel) ---
-if (file_exists(__DIR__ . '/clases_admin/Administrador.php')) {
-    require_once __DIR__ . '/clases_admin/Administrador.php';
-} else if (file_exists(__DIR__ . '/clases_admin/administrador.php')) {
-    require_once __DIR__ . '/clases_admin/administrador.php';
-} else {
-    // Si no encuentra ninguno, forzamos el error para saber la ruta exacta
-    require_once __DIR__ . '/clases_admin/Administrador.php';
+// 1. Buscamos la carpeta de clases principal (Clases vs clases)
+$rutaClases = null;
+foreach (['../Clases', '../clases'] as $carpeta) {
+    if (file_exists(__DIR__ . '/' . $carpeta . '/BD.php')) {
+        $rutaClases = __DIR__ . '/' . $carpeta;
+        break;
+    }
+}
+if (!$rutaClases) {
+    $rutaClases = __DIR__ . '/../clases'; // Fallback por defecto
 }
 
-// --- BUSCADOR INTELIGENTE PARA USUARIO BARBERO (Soporta Mayúsculas/Minúsculas en Vercel) ---
-if (file_exists(__DIR__ . '/clases_admin/UsuarioBarbero.php')) {
-    require_once __DIR__ . '/clases_admin/UsuarioBarbero.php';
-} else if (file_exists(__DIR__ . '/clases_admin/usuariobarbero.php')) {
-    require_once __DIR__ . '/clases_admin/usuariobarbero.php';
-} else {
-    require_once __DIR__ . '/clases_admin/UsuarioBarbero.php';
+// Cargamos la Base de Datos y Reservas de forma segura
+require_once $rutaClases . '/BD.php';
+require_once $rutaClases . '/Reserva.php';
+
+// 2. Buscamos la carpeta clases_admin (clases_admin vs Clases_admin)
+$rutaAdmin = null;
+foreach (['clases_admin', 'Clases_admin'] as $carpeta) {
+    if (file_exists(__DIR__ . '/' . $carpeta . '/GestorUsuarios.php')) {
+        $rutaAdmin = __DIR__ . '/' . $carpeta;
+        break;
+    }
+}
+if (!$rutaAdmin) {
+    $rutaAdmin = __DIR__ . '/clases_admin'; // Fallback por defecto
 }
 
-// Ahora que las clases están cargadas en memoria de forma segura, cargamos el Gestor
-require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
+// Cargamos el Gestor de Usuarios
+require_once $rutaAdmin . '/GestorUsuarios.php';
 
-// Validamos la sesión de manera segura
+// ============================================================================
+// --- CONTROL DE ACCESO SEGURO ---
+// ============================================================================
 $usuario = GestorUsuarios::obtenerDesdeSesion();
+
+// Si no hay un usuario autenticado en la sesión, lo mandamos directo al login
 if (!$usuario) {
-    header("Location: /login.php");
+    header("Location: /login.php?error=sesion_expirada");
     exit;
 }
 
-// Carga de datos para el Dashboard
+// Carga de contadores para el Dashboard
 $totalReservas = Reserva::contarPorEstado('pendiente') + Reserva::contarPorEstado('confirmada') + Reserva::contarPorEstado('cancelada');
 $pendientes = Reserva::contarPorEstado('pendiente');
 $confirmadas = Reserva::contarPorEstado('confirmada');
