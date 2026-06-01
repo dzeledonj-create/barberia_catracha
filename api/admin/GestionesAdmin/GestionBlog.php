@@ -5,19 +5,18 @@ require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
-    header("Location: ../../login.php");
+    header("Location: /login.php");
     exit;
 }
 
 /* CREAR */
-<?php
 
 require_once __DIR__ . '/../../Clases/BlogPost.php';
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
-    header("Location: ../../login.php");
+    header("Location: /login.php");
     exit;
 }
 
@@ -117,6 +116,7 @@ if (isset($_GET['editar'])) {
 }
 
 $posts = BlogPost::obtenerTodos();
+
 ?>
 
 <!DOCTYPE html>

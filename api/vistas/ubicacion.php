@@ -146,7 +146,7 @@ $horarios = Horario::obtenerTodos();
     </section>
 
     <section class="equipo-cta">
-        <a href="reservas.php" class="btn-reservar-equipo">
+        <a href="/vistas/reservas.php" class="btn-reservar-equipo">
             SOLICITAR CITA AHORA
         </a>
     </section>

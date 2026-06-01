@@ -34,7 +34,7 @@ $barberos = Barbero::obtenerActivos();
     <section class="barbero-card">
 
         <section class="barbero-img">
-            <img src="../<?= htmlspecialchars($barbero['foto_url']) ?>" 
+            <img src="/<?= htmlspecialchars($barbero['foto_url']) ?>" 
                  alt="<?= htmlspecialchars($barbero['nombre']) ?>">
         </section>
 
@@ -65,7 +65,7 @@ $barberos = Barbero::obtenerActivos();
         </section>
 
         <footer class="equipo-cta">
-            <a href="reservas.php" class="btn-reservar-equipo">ELIGE TU BARBERO Y RESERVA</a>
+            <a href="/vistas/reservas.php" class="btn-reservar-equipo">ELIGE TU BARBERO Y RESERVA</a>
         </footer>
     </section>
 </main>

@@ -60,7 +60,7 @@ foreach ($serviciosRaw as $s) {
         </section>
     <?php endforeach; ?>
     <footer class="categoria-cta">
-        <a href="reservas.php" class="btn-reserva-premium">RESERVAR CITA AHORA</a>
+        <a href="/vistas/reservas.php" class="btn-reserva-premium">RESERVAR CITA AHORA</a>
     </footer>
 </main>
 </body>

@@ -30,12 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($_SESSION['rol'] === 'admin') {
-            header("Location: /api/admin/panel.php");
+            header("Location: /admin/panel.php");
             exit;
         }
 
         if ($_SESSION['rol'] === 'barbero') {
-            header("Location: /api/admin/panel.php");
+            header("Location: /admin/panel.php");
             exit;
         }
     } else {
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Barbería Catracha</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </section>
 
-    <a href="index.php" class="volver-web">← Volver a la web</a>
+    <a href="/" class="volver-web">← Volver a la web</a>
 
 </section>
 

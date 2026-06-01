@@ -4,7 +4,7 @@ require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
-    header("Location: ../../login.php");
+    header("Location: /login.php");
     exit;
 }
 
@@ -207,7 +207,7 @@ $sugerencias = MuralSugerencia::obtenerTodos();
 
                 <article class="galeria-admin-card">
 
-                    <img src="../../<?= htmlspecialchars($sugerencia['imagen_url']) ?>">
+                    <img src="/<?= htmlspecialchars($sugerencia['imagen_url']) ?>">
 
                     <section class="galeria-admin-info">
 

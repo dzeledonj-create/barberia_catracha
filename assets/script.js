@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('popstate', event => {
         if (event.state && typeof event.state.step === 'number') {
             if (sessionStorage.getItem('reservaCompletada')) {
-                window.location.href = '/barberia_catracha/app/index.php';
+                window.location.href = '/';
                 return;
             }
             setPaso(event.state.step, false);

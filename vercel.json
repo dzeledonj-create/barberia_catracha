@@ -9,10 +9,6 @@
       "handle": "filesystem"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "/api/assets/$1"
-    },
-    {
       "src": "/vistas/(.*)",
       "dest": "/api/vistas/$1"
     },
@@ -23,6 +19,10 @@
     {
       "src": "/login.php",
       "dest": "/api/login.php"
+    },
+    {
+      "src": "/includes/(.*)",
+      "dest": "/api/includes/$1"
     },
     {
       "src": "/(.*)",
