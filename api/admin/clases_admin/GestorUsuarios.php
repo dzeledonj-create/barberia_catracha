@@ -1,49 +1,44 @@
 <?php
 // ============================================================================
-// --- BUSCADOR INTELIGENTE DE RUTAS PARA VERCEL (Evita errores de Mayúsculas) ---
+// --- AUTOLOADER GLOBAL INTELIGENTE (Solución Definitiva para Vercel/Linux) ---
 // ============================================================================
-
-// 1. Cargamos la Base de Datos de forma segura
-if (file_exists(__DIR__ . '/../../Clases/BD.php')) {
-    require_once __DIR__ . '/../../Clases/BD.php';
-} else {
-    require_once __DIR__ . '/../../clases/BD.php';
-}
-
-// 2. Cargamos la clase base "Usuario" (¡Aquí estaba el fallo de Vercel!)
-$rutasUsuario = [
-    __DIR__ . '/Usuario.php',
-    __DIR__ . '/usuario.php',
-    __DIR__ . '/../../Clases/Usuario.php',
-    __DIR__ . '/../../clases/Usuario.php',
-    __DIR__ . '/../../Clases/usuario.php',
-    __DIR__ . '/../../clases/usuario.php'
-];
-foreach ($rutasUsuario as $ruta) {
-    if (file_exists($ruta)) {
-        require_once $ruta;
-        break;
+spl_autoload_register(function ($clase) {
+    // El root de la app/api está 2 niveles arriba de este archivo (/api)
+    $baseDir = dirname(dirname(__DIR__)); 
+    
+    // Directorios donde residen las clases (probamos ambas combinaciones de mayúsculas)
+    $directorios = [
+        $baseDir . '/Clases/',
+        $baseDir . '/clases/',
+        $baseDir . '/admin/clases_admin/',
+        $baseDir . '/admin/Clases_Admin/'
+    ];
+    
+    foreach ($directorios as $directorio) {
+        // Probamos variaciones de nombre de archivo (Exacto, minúsculas, Primera Mayúscula)
+        $posiblesArchivos = [
+            $directorio . $clase . '.php',
+            $directorio . strtolower($clase) . '.php',
+            $directorio . ucfirst(strtolower($clase)) . '.php'
+        ];
+        
+        foreach ($posiblesArchivos as $archivo) {
+            if (file_exists($archivo)) {
+                require_once $archivo;
+                return;
+            }
+        }
     }
-}
+});
 
-// 3. Cargamos Administrador de forma segura
-if (file_exists(__DIR__ . '/Administrador.php')) {
-    require_once __DIR__ . '/Administrador.php';
-} else if (file_exists(__DIR__ . '/administrador.php')) {
-    require_once __DIR__ . '/administrador.php';
-}
-
-// 4. Cargamos UsuarioBarbero de forma segura
-if (file_exists(__DIR__ . '/UsuarioBarbero.php')) {
-    require_once __DIR__ . '/UsuarioBarbero.php';
-} else if (file_exists(__DIR__ . '/usuariobarbero.php')) {
-    require_once __DIR__ . '/usuariobarbero.php';
+// Forzamos la carga inicial de la conexión para asegurar compatibilidad
+if (class_exists('BD')) {
+    BD::obtenerConexion();
 }
 
 // ============================================================================
 // --- CLASE GESTOR USUARIOS ---
 // ============================================================================
-
 class GestorUsuarios {
 
     public static function autenticar($email, $password) {
@@ -90,23 +85,17 @@ class GestorUsuarios {
     }
 
     public static function obtenerDatosSesion($usuario): array {
-        $datos = [
+        return [
             'usuario_id' => $usuario->usuarioId,
             'nombre' => $usuario->nombre,
             'email' => $usuario->email,
-            'rol' => $usuario->rol
+            'rol' => $usuario->rol,
+            'barbero_id' => ($usuario instanceof UsuarioBarbero) ? $usuario->barberoId : null
         ];
-
-        if ($usuario instanceof UsuarioBarbero) {
-            $datos['barbero_id'] = $usuario->barberoId;
-        }
-
-        return $datos;
     }
 
-    // Eliminamos la restricción estricta de tipo en el retorno para evitar caídas en producción
+    // Eliminamos permanentemente la restricción estricta ': ?Usuario' de la firma
     public static function obtenerDesdeSesion() {
-        // --- SOLUCIÓN DE SESIONES EN VERCEL ---
         if (session_status() === PHP_SESSION_NONE) {
             ini_set('session.save_path', '/tmp');
             session_start();
