@@ -31,6 +31,20 @@ class Barbero {
         return $this->activo;
     }
 
+    // Magic methods para acceso a propiedades private
+    public function __get($name) {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        }
+        return null;
+    }
+
+    public function __set($name, $value) {
+        if (property_exists($this, $name)) {
+            $this->$name = $value;
+        }
+    }
+
     // --- EL CRUD ENCAPSULADO TOTALMENTE AQUÍ ---
     public function guardar(): bool {
         $db = BD::obtenerConexion();

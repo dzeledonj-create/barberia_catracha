@@ -42,6 +42,20 @@ class Reserva {
         return $this->estado === "pendiente";
     }
 
+    // Magic methods para acceso a propiedades private
+    public function __get($name) {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        }
+        return null;
+    }
+
+    public function __set($name, $value) {
+        if (property_exists($this, $name)) {
+            $this->$name = $value;
+        }
+    }
+
     // Método para guardar o actualizar la reserva en la base de datos
     public function guardar(): bool {
         // Antes de guardar, verificamos si el barbero está disponible en la fecha y hora dada para el servicio seleccionado

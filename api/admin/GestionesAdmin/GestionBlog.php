@@ -117,7 +117,7 @@ $posts = BlogPost::obtenerTodos();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión Blog</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
 </head>
 <body>
 
@@ -166,7 +166,7 @@ $posts = BlogPost::obtenerTodos();
                 </button>
 
                 <?php if ($postEditar): ?>
-                    <a href="/admin/GestionesAdmin/GestionBlog.php" class="admin-btn-cancelar">Cancelar</a>
+                    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php" class="admin-btn-cancelar">Cancelar</a>
                 <?php endif; ?>
 
             </form>

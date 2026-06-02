@@ -108,7 +108,7 @@ $sugerencias = MuralSugerencia::obtenerTodos();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión Galería</title>
 
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
 </head>
 
 <body>

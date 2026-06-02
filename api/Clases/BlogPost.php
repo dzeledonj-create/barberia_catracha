@@ -36,6 +36,20 @@ class BlogPost {
         return array_map('trim', explode(',', $this->etiquetas));
     }
 
+    // Magic methods para acceso a propiedades private
+    public function __get($name) {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        }
+        return null;
+    }
+
+    public function __set($name, $value) {
+        if (property_exists($this, $name)) {
+            $this->$name = $value;
+        }
+    }
+
     // Método para guardar o actualizar el post en la base de datos
     public function guardar(): bool {
         $db = BD::obtenerConexion();

@@ -21,8 +21,8 @@ if ($categoria_actual === 'todos') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galería Dinámica - Barbería Catracha</title>
-    <link rel="stylesheet" href="/assets/style.css">
-    <link rel="icon" href="/assets/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="icon" href="../assets/img/logo.png" type="image/png">
 </head>
 <body>
 
@@ -42,7 +42,7 @@ if ($categoria_actual === 'todos') {
         <nav class="categorias-nav">
             <ul class="categorias-lista">
                 <li>
-                    <a href="/vistas/galeria.php?categoria=todos" 
+                    <a href="./galeria.php?categoria=todos" 
                        class="<?= $categoria_actual === 'todos' ? 'active' : '' ?>">
                        TODOS
                     </a>
@@ -50,7 +50,7 @@ if ($categoria_actual === 'todos') {
 
                 <?php foreach ($categorias_db as $cat): ?>
                     <li>
-                        <a href="/vistas/galeria.php?categoria=<?= urlencode(strtolower($cat)) ?>" 
+                        <a href="./galeria.php?categoria=<?= urlencode(strtolower($cat)) ?>" 
                            class="<?= strtolower($categoria_actual) === strtolower($cat) ? 'active' : '' ?>">
                             <?= strtoupper(htmlspecialchars($cat)) ?>
                         </a>
@@ -70,7 +70,7 @@ if ($categoria_actual === 'todos') {
                 <?php foreach ($sugerencias as $corte): ?>
                     <section class="galeria-item">
                         <section class="image-wrapper">
-                            <img src="/<?= htmlspecialchars($corte['imagen_url']) ?>" alt="<?= htmlspecialchars($corte['nombre_corte']) ?>">
+                            <img src="/barberia_catracha/<?= htmlspecialchars($corte['imagen_url']) ?>" alt="<?= htmlspecialchars($corte['nombre_corte']) ?>">
                             <section class="overlay">
                                 <span class="tag-estilo"><?= htmlspecialchars($corte['estilo']) ?></span>
                             </section>
@@ -88,7 +88,7 @@ if ($categoria_actual === 'todos') {
             <section class="galeria-cta">
         <section class="cta-box">
             <h2>¿Te gusta alguno de estos estilos?</h2>
-            <a href="/vistas/reservas.php" class="btn-reservas">PEDIR CITA AHORA</a>
+            <a href="./reservas.php" class="btn-reservas">PEDIR CITA AHORA</a>
         </section>
     </section>
 </main>

@@ -47,7 +47,7 @@ if (isset($_GET['accion'], $_GET['id'])) {
         Reserva::eliminar($id);
     }
 
-    header('Location: /admin/GestionesAdmin/GestionReservas.php');
+    header('Location: ' . API_URL . '/admin/GestionesAdmin/GestionReservas.php');
     exit;
 }
 
@@ -85,7 +85,7 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión de Reservas</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
 </head>
 <body>
 

@@ -72,9 +72,9 @@ foreach ($relaciones as $rel) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservas - Barbería Catracha</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../assets/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="icon" href="/assets/img/logo.png" type="image/png">
+    <link rel="icon" href="../assets/img/logo.png" type="image/png">
 </head>
 <body>
 

@@ -75,7 +75,7 @@ if (isset($_GET['editar'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión de Servicios</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
 </head>
 <body>
 
@@ -143,7 +143,7 @@ if (isset($_GET['editar'])) {
 
                 <?php if ($servicioEditar): ?>
                     <button type="submit" name="editar">Guardar cambios</button>
-                    <a href="/admin/GestionesAdmin/GestionServicios.php" class="admin-btn-cancelar">Cancelar</a>
+                    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php" class="admin-btn-cancelar">Cancelar</a>
                 <?php else: ?>
                     <button type="submit" name="crear">Añadir servicio</button>
                 <?php endif; ?>

@@ -47,14 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Barbería Catracha</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
 </head>
 <body>
 
 <section class="login-page">
 
     <section class="login-icon">
-    <img src="/assets/img/logo.png" alt="Logo Barbería Catracha">
+    <img src="/barberia_catracha/assets/img/logo.png" alt="Logo Barbería Catracha">
 </section>
 
     <section class="login-box">
