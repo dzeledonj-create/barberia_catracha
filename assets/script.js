@@ -1,55 +1,71 @@
-// 1. Control del Header al hacer Scroll
-// 
+// ==========================================================================
+// 1. CONTROL DEL HEADER AL HACER SCROLL (Efecto Glassmorphism / Cristal)
+// ==========================================================================
 window.addEventListener('scroll', () => {
     const header = document.querySelector('.main-header');
-    if (!header) return; // Evita errores en páginas que no tengan este header (ej. panel admin)
     
+    // CONTROL DE SEGURIDAD: Si la página actual no tiene este header (ej. panel admin), 
+    // detenemos la ejecución para que no lance un error en la consola.
+    if (!header) return; 
+    
+    // Si el usuario ha bajado más de 100px desde el tope de la página
     if (window.scrollY > 100) {
-        header.style.background = 'rgba(10, 10, 10, 0.95)';
-        header.style.height = '70px';
-        header.style.backdropFilter = 'blur(10px)'; // Efecto cristalino moderno
+        header.style.background = 'rgba(10, 10, 10, 0.95)'; // Fondo oscuro semi-transparente
+        header.style.height = '70px';                         // Reduce la altura para ganar espacio visual
+        header.style.backdropFilter = 'blur(10px)';          // Efecto de desenfoque moderno (estilo Apple)
     } else {
+        // Si el usuario regresa al tope de la página, restablece el diseño original
         header.style.background = '#0a0a0a';
         header.style.height = '80px';
         header.style.backdropFilter = 'none';
     }
 });
 
-// 2. Animación de revelado para las tarjetas de servicio
+// ==========================================================================
+// 2. ANIMACIÓN DE REVELADO PARA LAS TARJETAS DE SERVICIO (Scroll Suave)
+// ==========================================================================
+// Configuramos el observador: la animación se activará cuando el 20% (0.2) de la tarjeta sea visible
 const observerOptions = { threshold: 0.2 };
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
+        // Si la tarjeta entra en el campo de visión del usuario
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.style.opacity = '1';          // Se vuelve completamente visible
+            entry.target.style.transform = 'translateY(0)'; // Regresa a su posición vertical original
         }
     });
 }, observerOptions);
 
+// Preparamos e inicializamos todas las tarjetas antes de que empiece el scroll
 document.querySelectorAll('.explore-card').forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(30px)';
-    card.style.transition = 'all 0.6s ease-out';
-    observer.observe(card);
+    card.style.opacity = '0';                         // Inicialmente invisibles
+    card.style.transform = 'translateY(30px)';        // Desplazadas 30px hacia abajo
+    card.style.transition = 'all 0.6s ease-out';       // Transición suave de 0.6 segundos
+    observer.observe(card);                           // Le decimos al Observer que vigile esta tarjeta
 });
 
 
-// 3. Reservas: filtros, calendario y selección de horas
+// ==========================================================================
+// 3. SISTEMA DE RESERVAS: PASOS, FILTROS, CALENDARIO Y TURNOS HORARIOS
+// ==========================================================================
 document.addEventListener('DOMContentLoaded', function () {
-    // FIX: Si no existe el contenedor de reservas en la página actual, detenemos la ejecución de este bloque.
-    // Esto evita que el panel de administrador (o cualquier otra vista) sea secuestrado por el history.replaceState
+    
+    // CONTROL DE SEGURIDAD: Si no estamos en la página del formulario de reservas,
+    // rompemos la ejecución. Esto evita que el código rompa el historial de otras páginas.
     if (!document.querySelector('.reserva-step')) return;
 
-    // Datos de horarios por día, inyectados desde PHP en reserva.php
+    // HORARIOS: Extraemos los datos inyectados por PHP desde el servidor en el objeto global de la ventana
     const scheduleData = window.reservaScheduleData || [];
     const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    
+    // Convertimos el Array de horarios de PHP en un Objeto indexado por el día de la semana para búsquedas rápidas
     const horariosPorDia = scheduleData.reduce((map, horario) => {
         map[horario.dia_semana] = horario;
         return map;
     }, {});
 
-    // Elementos del DOM relacionados con la reserva
+    // Captura de elementos del DOM esenciales para el flujo de la reserva
     const servicios = document.querySelectorAll('input[name="servicio_id"]');
     const barberos = document.querySelectorAll('.barbero-card');
     const steps = document.querySelectorAll('.reserva-step');
@@ -58,42 +74,46 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnAtras = document.querySelectorAll('.btn-atras');
     const datepickerInput = document.getElementById('datepicker');
     const horasGrid = document.getElementById('horas-grid');
-    const horaHidden = document.getElementById('hora-seleccionada');
+    const horaHidden = document.getElementById('hora-seleccionada'); // Input oculto que se envía en el formulario
+    
+    // Elementos de la barra lateral de seguimiento (sidebar del ticket de progreso)
     const trackServicio = document.getElementById('track-servicio');
     const trackBarbero = document.getElementById('track-barbero');
     const trackCita = document.getElementById('track-cita');
 
+    // Estado interno de la reserva actual
     let pasoActual = 0;
     let servicioTexto = "";
     let barberoTexto = "";
     let horaSeleccionada = null;
-    let servicioDuracionMinutos = 30;
+    let servicioDuracionMinutos = 30; // Duración por defecto si no se especifica otra
     const isReservationSuccess = window.location.search.includes('reserva=ok');
 
+    // Capturamos los botones de avance específicos de cada paso para controlar su estado (activar/desactivar)
     const btnSiguienteStep1 = steps[0]?.querySelector('.btn-siguiente');
     const btnSiguienteStep2 = steps[1]?.querySelector('.btn-siguiente');
     const btnSiguienteStep3 = steps[2]?.querySelector('.btn-siguiente');
 
+    // NAVEGACIÓN HISTORIAL: Forzamos el estado inicial en el historial del navegador para controlar el botón de "Atrás"
     const initialState = { step: pasoActual, reservationComplete: isReservationSuccess };
     history.replaceState(initialState, '', window.location.pathname + window.location.search);
 
+    // Guardamos en la sesión si la reserva ya fue completada con éxito
     if (isReservationSuccess) {
         sessionStorage.setItem('reservaCompletada', '1');
     } else {
         sessionStorage.removeItem('reservaCompletada');
     }
 
+    // Cambia visualmente el paso visible del formulario y actualiza la barra de progreso superior
     function mostrarPaso(index) {
         steps.forEach(step => step.classList.remove('activo'));
         pasosBar.forEach(paso => paso.classList.remove('activo'));
 
-        if (steps[index]) {
-            steps[index].classList.add('activo');
-        }
-        if (pasosBar[index]) {
-            pasosBar[index].classList.add('activo');
-        }
+        if (steps[index]) steps[index].classList.add('activo');
+        if (pasosBar[index]) pasosBar[index].classList.add('activo');
 
+        // Si estamos en el paso de Fecha/Hora (Paso 2), validamos si el botón siguiente debe estar activo o no
         if (index === 2 && btnSiguienteStep3) {
             btnSiguienteStep3.disabled = !horaHidden.value;
             if (horaHidden.value) {
@@ -104,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Cambia el paso activo y registra el movimiento en el historial del navegador para soportar navegación nativa
     function setPaso(index, pushState = true) {
         pasoActual = index;
         mostrarPaso(index);
@@ -112,48 +133,52 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Escucha cuando el usuario hace clic en las flechas nativas de Atrás/Adelante del propio navegador web
     window.addEventListener('popstate', event => {
         if (event.state && typeof event.state.step === 'number') {
+            // Si la reserva ya se guardó, bloqueamos el regreso y lo mandamos al home
             if (sessionStorage.getItem('reservaCompletada')) {
                 window.location.href = '/';
                 return;
             }
-            setPaso(event.state.step, false);
+            setPaso(event.state.step, false); // Cambia el paso sin duplicar el historial
         }
     });
 
+    // MATEMÁTICAS DE TIEMPO: Convierte "14:30" en minutos totales (14 * 60 + 30 = 870 minutos)
     function parseTimeToMinutes(time) {
         const [hours, minutes] = time.split(':').map(Number);
         return hours * 60 + minutes;
     }
 
+    // MATEMÁTICAS DE TIEMPO: Convierte minutos totales de vuelta a formato legible (870 -> "14:30")
     function formatMinutesToTime(value) {
         const hours = Math.floor(value / 60).toString().padStart(2, '0');
         const minutes = (value % 60).toString().padStart(2, '0');
         return `${hours}:${minutes}`;
     }
 
+    // Retorna el nombre del día en español según el objeto Date de JS
     function getDayName(date) {
         return dayNames[date.getDay()];
     }
 
+    // Determina si una fecha está disponible para agendar comparando con los horarios comerciales
     function isDateEnabled(date) {
         const horario = horariosPorDia[getDayName(date)];
-        if (!horario) {
-            return false;
-        }
-        return !['true', '1', 1, true].includes(horario.cerrado);
+        if (!horario) return false; // Si no hay configuración para ese día, se bloquea
+        return !['true', '1', 1, true].includes(horario.cerrado); // Retorna falso si está marcado como cerrado
     }
 
+    // Limpia la cuadrícula de horas y coloca un mensaje informativo
     function clearHorasGrid(message) {
         horasGrid.innerHTML = `<p class="select-date-msg">${message}</p>`;
     }
 
+    // Resetea por completo la hora seleccionada (limpieza de estado al cambiar de día)
     function resetSelectedHour() {
         horaSeleccionada = null;
-        if (horaHidden) {
-            horaHidden.value = '';
-        }
+        if (horaHidden) horaHidden.value = '';
         if (btnSiguienteStep3) {
             btnSiguienteStep3.disabled = true;
             btnSiguienteStep3.classList.add('deshabilitado');
@@ -161,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.hora-item.selected').forEach(btn => btn.classList.remove('selected'));
     }
 
+    // LÓGICA CENTRAL: Renderiza los bloques de horas disponibles en base al día seleccionado
     function renderHorasDisponibles(date) {
         resetSelectedHour();
 
@@ -184,13 +210,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const aperturaMin = parseTimeToMinutes(horario.hora_apertura);
         const cierreMin = parseTimeToMinutes(horario.hora_cierre);
-        const duracion = 30;
+        const duracion = 30; // Intervalo de bloques de turnos (30 mins fijado por diseño técnico)
         const slots = [];
         const hoy = new Date();
         const esHoy = date.toDateString() === hoy.toDateString();
         const corteHoy = esHoy ? hoy.getHours() * 60 + hoy.getMinutes() : 0;
 
+        // Bucle para generar intervalos de tiempo desde la apertura hasta el cierre
         for (let minuto = aperturaMin; minuto + duracion <= cierreMin; minuto += 30) {
+            // Filtro de seguridad: Si la fecha es HOY, ocultamos las horas que ya transcurrieron
             if (esHoy && minuto <= corteHoy) {
                 continue;
             }
@@ -202,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Limpiamos el contenedor y renderizamos los botones de hora dinámicamente
         horasGrid.innerHTML = '';
         slots.forEach(hora => {
             const button = document.createElement('button');
@@ -209,17 +238,22 @@ document.addEventListener('DOMContentLoaded', function () {
             button.className = 'hora-item';
             button.textContent = hora;
             button.dataset.hora = hora;
+            
+            // Evento al elegir una hora específica
             button.addEventListener('click', () => {
                 horaSeleccionada = hora;
-                if (horaHidden) {
-                    horaHidden.value = hora;
-                }
+                if (horaHidden) horaHidden.value = hora;
+                
+                // Desmarcar hora previa y marcar la nueva
                 document.querySelectorAll('.hora-item.selected').forEach(btn => btn.classList.remove('selected'));
                 button.classList.add('selected');
+                
+                // Habilitamos el botón de continuar
                 if (btnSiguienteStep3) {
                     btnSiguienteStep3.disabled = false;
                     btnSiguienteStep3.classList.remove('deshabilitado');
                 }
+                // Actualizamos el ticket lateral
                 if (trackCita) {
                     trackCita.querySelector('span').innerText = `${datepickerInput.value} a las ${hora}`;
                     trackCita.classList.add('completado');
@@ -229,26 +263,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // INTERFAZ DE USUARIO: Reglas de validación antes de permitir avanzar de pantalla
     function validarPaso(index) {
-        if (index === 0) {
+        if (index === 0) { // Paso 1: Servicios
             const servicioSeleccionado = document.querySelector('input[name="servicio_id"]:checked');
             if (!servicioSeleccionado) {
                 return { valido: false, mensaje: 'Debes seleccionar un servicio para poder avanzar.' };
             }
         }
-        if (index === 1) {
+        if (index === 1) { // Paso 2: Barberos
             const barberoSeleccionado = document.querySelector('input[name="barbero_id"]:checked');
             if (!barberoSeleccionado) {
                 return { valido: false, mensaje: 'Por favor, selecciona un barbero antes de ir al siguiente paso.' };
             }
         }
-        if (index === 2) {
+        if (index === 2) { // Paso 3: Calendario
             const fechaInput = datepickerInput ? datepickerInput.value : '';
             if (!fechaInput || !horaHidden || !horaHidden.value) {
                 return { valido: false, mensaje: 'Selecciona una fecha y una de las horas disponibles.' };
             }
         }
-        if (index === 3) {
+        if (index === 3) { // Paso 4: Datos del cliente (Formulario final)
             const nom = document.querySelector('input[name="nombre"]').value.trim();
             const ape = document.querySelector('input[name="apellido"]').value.trim();
             const tel = document.querySelector('input[name="telefono"]').value.trim();
@@ -259,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return { valido: true, mensaje: '' };
     }
 
-    // Genera el resumen que se muestra en el paso de confirmación
+    // RESUMEN FINAL: Toma todos los datos seleccionados y genera el desglose tipo ticket de confirmación
     function generarResumenTicket() {
         const resumenServicio = document.getElementById('resumen-servicio');
         const resumenBarbero = document.getElementById('resumen-barbero');
@@ -267,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const resumenHora = document.getElementById('resumen-hora');
         const resumenPrecio = document.getElementById('resumen-precio');
 
-        // Servicio
+        // Procesar servicio seleccionado
         const servicioSel = document.querySelector('input[name="servicio_id"]:checked');
         if (servicioSel) {
             const card = servicioSel.closest('.servicio-card');
@@ -280,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
             resumenPrecio.innerText = '-';
         }
 
-        // Barbero
+        // Procesar barbero seleccionado
         const barberoSel = document.querySelector('input[name="barbero_id"]:checked');
         if (barberoSel) {
             const barberoCard = barberoSel.closest('.barbero-card');
@@ -290,26 +325,19 @@ document.addEventListener('DOMContentLoaded', function () {
             resumenBarbero.innerText = '-';
         }
 
-        // Fecha y hora
+        // Procesar fecha y hora elegidas
         const fecha = datepickerInput ? datepickerInput.value : '';
         const hora = horaHidden ? horaHidden.value : '';
         resumenFecha.innerText = fecha || '-';
         resumenHora.innerText = hora || '-';
     }
 
-    if (btnSiguienteStep1) {
-        btnSiguienteStep1.disabled = true;
-        btnSiguienteStep1.classList.add('deshabilitado');
-    }
-    if (btnSiguienteStep2) {
-        btnSiguienteStep2.disabled = true;
-        btnSiguienteStep2.classList.add('deshabilitado');
-    }
-    if (btnSiguienteStep3) {
-        btnSiguienteStep3.disabled = true;
-        btnSiguienteStep3.classList.add('deshabilitado');
-    }
+    // Inicializamos deshabilitados los botones de pasos para forzar la selección obligatoria del usuario
+    if (btnSiguienteStep1) { btnSiguienteStep1.disabled = true; btnSiguienteStep1.classList.add('deshabilitado'); }
+    if (btnSiguienteStep2) { btnSiguienteStep2.disabled = true; btnSiguienteStep2.classList.add('deshabilitado'); }
+    if (btnSiguienteStep3) { btnSiguienteStep3.disabled = true; btnSiguienteStep3.classList.add('deshabilitado'); }
 
+    // EVENTO: Control de cambio de selección en los inputs de Servicio
     servicios.forEach(input => {
         input.addEventListener('change', function () {
             const card = this.closest('.servicio-card');
@@ -317,16 +345,19 @@ document.addEventListener('DOMContentLoaded', function () {
             servicioDuracionMinutos = Number(card.dataset.duracion || 30);
             const precio = card.querySelector('.precio').innerText;
 
+            // Actualiza la barra lateral de progreso de reserva
             if (trackServicio) {
                 trackServicio.querySelector('span').innerText = `${servicioTexto} (${precio})`;
                 trackServicio.classList.add('completado');
             }
 
+            // Habilita el avance al Paso 2
             if (btnSiguienteStep1) {
                 btnSiguienteStep1.disabled = false;
                 btnSiguienteStep1.classList.remove('deshabilitado');
             }
 
+            // Si el usuario cambia el servicio teniendo ya una fecha elegida, recalculamos las horas
             if (datepickerInput && datepickerInput._flatpickr && datepickerInput.value) {
                 const selectedDate = datepickerInput._flatpickr.selectedDates[0];
                 renderHorasDisponibles(selectedDate);
@@ -334,6 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // EVENTO: Control de cambio de selección de Barberos
     barberos.forEach(card => {
         const radio = card.querySelector('input[name="barbero_id"]');
         if (!radio) return;
@@ -351,33 +383,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // FILTRO DINÁMICO: Oculta o muestra barberos en base a las habilidades/servicios admitidos
     servicios.forEach(servicio => {
         servicio.addEventListener('change', function () {
             const servicioSeleccionado = this.value;
             barberos.forEach(barbero => {
                 const serviciosBarbero = (barbero.dataset.servicios || '').split(',').filter(Boolean);
+                
                 if (serviciosBarbero.includes(servicioSeleccionado)) {
-                    barbero.style.display = 'flex';
+                    barbero.style.display = 'flex'; // Muestra el barbero calificado
                 } else {
-                    barbero.style.display = 'none';
+                    barbero.style.display = 'none'; // Oculta al barbero que no realiza este servicio
                     const radio = barbero.querySelector('input[type="radio"]');
-                    if (radio) {
-                        radio.checked = false;
-                    }
+                    if (radio) radio.checked = false; // Deselecciona si estaba marcado internamente
                 }
             });
         });
     });
 
+    // CONFIGURACIÓN DE FLATPICKR (Librería del Calendario Dinámico)
     if (datepickerInput && typeof flatpickr !== 'undefined') {
         flatpickr(datepickerInput, {
-            locale: 'es',
-            dateFormat: 'd/m/Y',
-            minDate: 'today',
-            disable: [date => !isDateEnabled(date)],
+            locale: 'es',             // Calendario traducido al español
+            dateFormat: 'd/m/Y',      // Formato visual europeo de fecha
+            minDate: 'today',         // Bloquea días pasados
+            disable: [date => !isDateEnabled(date)], // Función que evalúa si el día de la semana está cerrado
             onChange: function (selectedDates) {
                 if (selectedDates.length) {
-                    renderHorasDisponibles(selectedDates[0]);
+                    renderHorasDisponibles(selectedDates[0]); // Renderiza horas disponibles del día elegido
                 } else {
                     clearHorasGrid('Por favor, selecciona una fecha primero.');
                 }
@@ -385,11 +418,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // EVENTO: Botón genérico Siguiente
     btnSiguiente.forEach(btn => {
         btn.addEventListener('click', () => {
             const validacion = validarPaso(pasoActual);
             if (!validacion.valido) {
-                alert(validacion.mensaje);
+                alert(validacion.mensaje); // Detiene el avance si rompe las reglas
                 return;
             }
 
@@ -401,6 +435,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (pasoActual < steps.length - 1) {
                 setPaso(pasoActual + 1);
+                // Si llegamos al paso final, disparamos la renderización del ticket de resumen
                 if (pasoActual === 4 && typeof generarResumenTicket === 'function') {
                     generarResumenTicket();
                 }
@@ -408,6 +443,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // EVENTO: Botón genérico Atrás
     btnAtras.forEach(btn => {
         btn.addEventListener('click', () => {
             if (pasoActual > 0) {
@@ -416,6 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // FILTRO POR CATEGORÍAS (UI de Servicios: Cortes, Barba, Tintes, etc.)
     const botonesFiltro = document.querySelectorAll('.filtro-btn');
     const tarjetasServicios = document.querySelectorAll('.servicio-card');
 
@@ -423,15 +460,21 @@ document.addEventListener('DOMContentLoaded', function () {
         boton.addEventListener('click', function () {
             botonesFiltro.forEach(btn => btn.classList.remove('activo'));
             this.classList.add('activo');
+            
             const categoriaSeleccionada = this.getAttribute('data-categoria');
+            
             tarjetasServicios.forEach(tarjeta => {
                 const categoriaTarjeta = tarjeta.getAttribute('data-cat');
+                
+                // Muestra todas las tarjetas o filtra por la categoría seleccionada
                 if (categoriaSeleccionada === 'todos' || categoriaTarjeta === categoriaSeleccionada) {
                     tarjeta.style.display = 'block';
                     tarjeta.style.opacity = '0';
-                    setTimeout(() => { tarjeta.style.opacity = '1'; }, 50);
+                    setTimeout(() => { tarjeta.style.opacity = '1'; }, 50); // Pequeña animación fade-in
                 } else {
-                    tarjeta.style.display = 'none';
+                    tarjeta.style.display = 'none'; // Esconde las tarjetas que no correspondan
+                    
+                    // Si el usuario oculta un servicio que ya tenía seleccionado, lo desmarcamos de forma limpia
                     const radioInput = tarjeta.querySelector('input[type="radio"]');
                     if (radioInput && radioInput.checked) {
                         radioInput.checked = false;
@@ -446,19 +489,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Funcionalidad admin: seleccionar todas las reservas y control botón eliminar
+// ==========================================================================
+// 4. FUNCIONALIDAD PANEL ADMIN: SELECCIÓN MÚLTIPLE DE TABLAS Y ACCIONES
+// ==========================================================================
 document.addEventListener('DOMContentLoaded', function () {
-    const selectAll = document.getElementById('select-all');
-    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+    const selectAll = document.getElementById('select-all'); // Checkbox maestro de la cabecera
+    const rowCheckboxes = document.querySelectorAll('.row-checkbox'); // Checkboxes individuales de filas
     const eliminarBtn = document.querySelector('button[name="eliminar_seleccionadas"]');
 
+    // Habilita o deshabilita el botón masivo de "Eliminar" según existan registros marcados
     function updateEliminarBtn() {
         if (!eliminarBtn) return;
-        const anyChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
+        const anyChecked = Array.from(rowCheckboxes).some(cb => cb.checked); // ¿Hay al menos uno seleccionado?
         eliminarBtn.disabled = !anyChecked;
-        eliminarBtn.style.opacity = anyChecked ? '1' : '0.6';
+        eliminarBtn.style.opacity = anyChecked ? '1' : '0.6'; // Feedback visual transparente si está inactivo
     }
 
+    // Al cambiar el estado de la casilla maestra, iguala el estado de todas las filas individuales
     if (selectAll) {
         selectAll.addEventListener('change', function () {
             rowCheckboxes.forEach(cb => cb.checked = selectAll.checked);
@@ -466,6 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Al cambiar cualquier fila individual, verifica si todas están seleccionadas para activar el control maestro
     rowCheckboxes.forEach(cb => cb.addEventListener('change', function () {
         if (!selectAll) return;
         const allChecked = Array.from(rowCheckboxes).every(c => c.checked);
@@ -473,16 +521,19 @@ document.addEventListener('DOMContentLoaded', function () {
         updateEliminarBtn();
     }));
 
-    updateEliminarBtn();
+    updateEliminarBtn(); // Inicialización en carga de página
 });
 
-// Hamburger menu toggle for client views
+// ==========================================================================
+// 5. MENÚ HAMBURGUESA MÓVIL (Vistas del Cliente)
+// ==========================================================================
 document.addEventListener('DOMContentLoaded', function () {
     const hambBtn = document.getElementById('hamburger-btn');
     const hambMenu = document.getElementById('hamburger-menu');
 
     if (!hambBtn || !hambMenu) return;
 
+    // Cierra el menú móvil de manera limpia aplicando accesibilidad ARIA
     function closeMenu() {
         hambMenu.classList.remove('open');
         hambBtn.classList.remove('open');
@@ -490,6 +541,7 @@ document.addEventListener('DOMContentLoaded', function () {
         hambMenu.setAttribute('aria-hidden', 'true');
     }
 
+    // Abre el menú móvil aplicando accesibilidad ARIA
     function openMenu() {
         hambMenu.classList.add('open');
         hambBtn.classList.add('open');
@@ -497,8 +549,9 @@ document.addEventListener('DOMContentLoaded', function () {
         hambMenu.setAttribute('aria-hidden', 'false');
     }
 
+    // Alternar apertura y cierre al presionar el botón de hamburguesa
     hambBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
+        e.stopPropagation(); // Evita que el evento "flote" al documento e inmediatamente cierre el menú
         if (hambMenu.classList.contains('open')) {
             closeMenu();
         } else {
@@ -506,31 +559,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Close menu when clicking outside
+    // UX: Si el menú está abierto y el usuario hace clic fuera de él, se cierra automáticamente
     document.addEventListener('click', function (e) {
         if (!hambMenu.contains(e.target) && !hambBtn.contains(e.target)) {
             closeMenu();
         }
     });
 
-    // Close on escape
+    // Accesibilidad por teclado: Al pulsar la tecla Escape se cierra el menú lateral
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeMenu();
     });
 });
 
-// Admin sidebar toggle (for tablet/mobile)
+// ==========================================================================
+// 6. TOGGLE SIDEBAR DE ADMINISTRACIÓN (Adaptabilidad Tablets/Móviles)
+// ==========================================================================
 document.addEventListener('DOMContentLoaded', function () {
     const adminBtn = document.getElementById('admin-hamburger-btn');
     const adminSidebar = document.querySelector('.admin-sidebar');
 
     if (!adminBtn || !adminSidebar) return;
 
-    // Prevent double-initialization if script loaded/executed multiple times
+    // BANDERA DE CONTROL: Evita que si el script se carga dos veces, se clonen los Event Listeners
     if (window.adminHamburgerInitialized) return;
     window.adminHamburgerInitialized = true;
 
-    // create overlay element if not present
+    // Crear dinámicamente un fondo oscuro (Overlay) si no existe ya en el HTML
     let overlay = document.querySelector('.admin-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -555,16 +610,19 @@ document.addEventListener('DOMContentLoaded', function () {
         if (adminSidebar.classList.contains('open')) closeAdmin(); else openAdmin();
     });
 
+    // Al hacer click en el fondo opaco (overlay), cerramos la barra lateral
     overlay.addEventListener('click', function () { closeAdmin(); });
 
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAdmin(); });
 });
 
-// Ensure admin overlay and sidebar state reset on window resize (desktop)
+// CONTROL DE RESPONSIVIDAD: Resetea el estado de los componentes de administración si se agranda la pantalla
 window.addEventListener('resize', function () {
     const adminSidebar = document.querySelector('.admin-sidebar');
     const overlay = document.querySelector('.admin-overlay');
     if (!adminSidebar) return;
+    
+    // Si la pantalla supera los 1024px (escritorio), limpiamos el diseño móvil para que no colisionen
     if (window.innerWidth > 1024) {
         adminSidebar.classList.remove('open');
         if (overlay) overlay.classList.remove('show');
@@ -573,8 +631,12 @@ window.addEventListener('resize', function () {
     }
 });
 
-// Si el script se carga después de que el DOM ya esté listo, disparar el evento
-// para que los listeners que se agregan en este archivo se ejecuten igualmente.
+// ==========================================================================
+// 7. CIERRE DEFENSIVO: DISPARADOR MANUAL DE DOM READY
+// ==========================================================================
+// Si por razones de rendimiento de carga el script se ejecuta de manera asíncrona ('async' o 'defer')
+// y entra en acción *después* de que el navegador procesó el HTML, disparamos el evento manualmente 
+// para asegurar que absolutamente todos los EventListeners declarados arriba cobren vida.
 if (document.readyState !== 'loading') {
     document.dispatchEvent(new Event('DOMContentLoaded'));
 }
