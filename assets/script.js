@@ -1,4 +1,5 @@
 // 1. Control del Header al hacer Scroll
+// 
 window.addEventListener('scroll', () => {
     const header = document.querySelector('.main-header');
     if (window.scrollY > 100) {
