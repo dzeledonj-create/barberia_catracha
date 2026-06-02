@@ -2,14 +2,14 @@
 require_once __DIR__ . '/BD.php';
 
 class BlogPost {
-    public ?int $postId;
-    public string $titulo;
-    public string $contenido;
-    public ?string $imagenUrl;
-    public int $autorId;
-    public ?string $fechaPublicacion;
-    public ?string $etiquetas;
-    public ?string $instagramEmbed;
+    private ?int $postId;
+    private string $titulo;
+    private string $contenido;
+    private ?string $imagenUrl;
+    private int $autorId;
+    private ?string $fechaPublicacion;
+    private ?string $etiquetas;
+    private ?string $instagramEmbed;
 
     public function __construct($titulo, $contenido, $autorId, $imagenUrl = null, $etiquetas = null, $postId = null, $fechaPublicacion = null, $instagramEmbed = null) {
         $this->postId = $postId;

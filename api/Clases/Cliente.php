@@ -2,12 +2,12 @@
 require_once __DIR__ . '/BD.php';
 
 class Cliente {
-    public ?int $clienteId;
-    public string $nombre;
-    public string $apellido;
-    public string $telefono;
-    public ?string $email;
-    public ?string $fechaRegistro;
+    private ?int $clienteId;
+    private string $nombre;
+    private string $apellido;
+    private string $telefono;
+    private ?string $email;
+    private ?string $fechaRegistro;
 
     public function __construct($nombre, $apellido, $telefono, $email = null, $clienteId = null, $fechaRegistro = null) {
         $this->clienteId = $clienteId;

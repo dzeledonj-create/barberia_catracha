@@ -2,16 +2,16 @@
 require_once __DIR__ . '/BD.php';
 
 class Barbero {
-    public ?int $barberoId;
-    public ?int $usuarioId; // Guardamos el ID de usuario relacionado
-    public string $nombre;
-    public ?string $descripcion;
-    public ?string $etiquetas;
-    public ?string $especialidad;
-    public ?string $fotoUrl;
-    public bool $activo;
-    public ?string $rol;
-    public ?string $email;
+    private ?int $barberoId;
+    private ?int $usuarioId; // Guardamos el ID de usuario relacionado
+    private string $nombre;
+    private ?string $descripcion;
+    private ?string $etiquetas;
+    private ?string $especialidad;
+    private ?string $fotoUrl;
+    private bool $activo;
+    private ?string $rol;
+    private ?string $email;
 
     public function __construct($nombre, $especialidad = null, $fotoUrl = null, $activo = true, $barberoId = null, $descripcion = null, $etiquetas = null, $rol = null, $email = null, $usuarioId = null) {
         $this->barberoId = $barberoId;

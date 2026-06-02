@@ -4,13 +4,13 @@ require_once __DIR__ . '/Cliente.php';
 require_once __DIR__ . '/Barbero.php';
 
 class Reserva {
-    public ?int $reservaId;
-    public int $clienteId;
-    public int $barberoId;
-    public int $servicioId;
-    public string $fechaHora;
-    public string $estado;
-    public ?string $creadoEn;
+    private ?int $reservaId;
+    private int $clienteId;
+    private int $barberoId;
+    private int $servicioId;
+    private string $fechaHora;
+    private string $estado;
+    private ?string $creadoEn;
 
     public function __construct($clienteId, $barberoId, $servicioId, $fechaHora, $estado = "pendiente", $reservaId = null, $creadoEn = null) {
         $this->reservaId = $reservaId;

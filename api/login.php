@@ -4,6 +4,7 @@ ini_set('session.save_path', sys_get_temp_dir());
 session_start();
 require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 
+// Verificar si el usuario ya ha iniciado sesión y redirigirlo al panel de administración si es un administrador o barbero
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if ($usuario instanceof Administrador || $usuario instanceof UsuarioBarbero) {
     header("Location: /admin/panel.php");
@@ -12,6 +13,7 @@ if ($usuario instanceof Administrador || $usuario instanceof UsuarioBarbero) {
 
 $error = "";
 
+// Procesar el formulario de inicio de sesión cuando se envíe
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = GestorUsuarios::autenticar($_POST['email'], $_POST['password']);
 
@@ -23,10 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['email'] = $datosSesion['email'];
         $_SESSION['rol'] = $datosSesion['rol'];
 
+        // Si el usuario tiene un barbero_id, guardarlo en la sesión para facilitar su acceso en el panel
         if (isset($datosSesion['barbero_id'])) {
             $_SESSION['barbero_id'] = $datosSesion['barbero_id'];
         }
 
+        // Redirigir al panel de administración si el usuario es un administrador o barbero
         if ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'barbero') {
             header("Location: /admin/panel.php");
             exit;

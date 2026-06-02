@@ -2,11 +2,11 @@
 require_once __DIR__ . '/../../Clases/BD.php';
 
 class Usuario {
-    public ?int $usuarioId;
-    public string $nombre;
-    public string $email;
-    public string $rol;
-    public bool $activo;
+    private int $usuarioId;
+    private string $nombre;
+    private string $email;
+    private string $rol;
+    private bool $activo;
 
     public function __construct($nombre, $email, $rol, $activo = true, $usuarioId = null) {
         $this->usuarioId = $usuarioId;
