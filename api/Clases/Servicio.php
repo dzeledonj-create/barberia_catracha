@@ -35,7 +35,7 @@ class Servicio {
         return $this->duracionMinutos >= 60;
     }
 
-    // Magic methods para acceso a propiedades private
+    //Getters y setters para las propiedades del servicio
     public function __get($name) {
         if (property_exists($this, $name)) {
             return $this->$name;

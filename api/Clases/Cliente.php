@@ -23,7 +23,7 @@ class Cliente {
         return $this->nombre . " " . $this->apellido;
     }
 
-    // Magic methods para acceso a propiedades private
+    // Getters y setters para las propiedades del cliente
     public function __get($name) {
         if (property_exists($this, $name)) {
             return $this->$name;

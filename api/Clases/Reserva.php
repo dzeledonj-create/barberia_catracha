@@ -42,7 +42,7 @@ class Reserva {
         return $this->estado === "pendiente";
     }
 
-    // Magic methods para acceso a propiedades private
+    // Getters y setters para las propiedades de la reserva
     public function __get($name) {
         if (property_exists($this, $name)) {
             return $this->$name;
@@ -146,7 +146,10 @@ class Reserva {
     public static function estaDisponible($barberoId, $fechaHora, $servicioId, $reservaId = null): bool {
         $db = BD::obtenerConexion();
 
+        // Para verificar la disponibilidad, necesitamos considerar la duración del servicio
+        // Primero, obtenemos la duración del servicio
         $duracion = 30;
+        // Obtenemos la duración del servicio
         $finNueva = date("Y-m-d H:i:s", strtotime($fechaHora . " + $duracion minutes"));
 
         $sql = "SELECT COUNT(*)
