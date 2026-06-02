@@ -3,17 +3,7 @@
 require_once __DIR__ . '/../../Clases/BlogPost.php';
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
-$usuario = GestorUsuarios::obtenerDesdeSesion();
-if (!$usuario instanceof Administrador) {
-    header("Location: /login.php");
-    exit;
-}
-
-/* CREAR */
-
-require_once __DIR__ . '/../../Clases/BlogPost.php';
-require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
-
+// Verificar que el usuario es un administrador antes de permitir el acceso a esta página
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
     header("Location: /login.php");
@@ -30,6 +20,7 @@ if (isset($_POST['crear'])) {
         $url = trim($_POST['instagram_url']);
 
         // Verificar si la URL es de un reel o una publicación normal para generar el código de inserción adecuado
+        
         if (strpos($url, '/reel/') !== false) {
             $embed = '
                 <blockquote class="instagram-media"
@@ -47,6 +38,7 @@ if (isset($_POST['crear'])) {
         }
     }
 
+    // Crear una nueva instancia de BlogPost con los datos del formulario y el código de inserción generado
     $post = new BlogPost(
         $_POST['titulo'],
         $_POST['contenido'],

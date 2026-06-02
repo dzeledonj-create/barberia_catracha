@@ -2,16 +2,16 @@
 require_once __DIR__ . '/BD.php';
 
 class Barbero {
-    public ?int $barberoId;
-    public ?int $usuarioId; // Guardamos el ID de usuario relacionado
-    public string $nombre;
-    public ?string $descripcion;
-    public ?string $etiquetas;
-    public ?string $especialidad;
-    public ?string $fotoUrl;
-    public bool $activo;
-    public ?string $rol;
-    public ?string $email;
+    private ?int $barberoId;
+    private ?int $usuarioId; // Guardamos el ID de usuario relacionado
+    private string $nombre;
+    private ?string $descripcion;
+    private ?string $etiquetas;
+    private ?string $especialidad;
+    private ?string $fotoUrl;
+    private bool $activo;
+    private ?string $rol;
+    private ?string $email;
 
     public function __construct($nombre, $especialidad = null, $fotoUrl = null, $activo = true, $barberoId = null, $descripcion = null, $etiquetas = null, $rol = null, $email = null, $usuarioId = null) {
         $this->barberoId = $barberoId;
@@ -26,6 +26,7 @@ class Barbero {
         $this->email = $email;
     }
 
+    // Método para verificar si el barbero está activo
     public function estaActivo(): bool {
         return $this->activo;
     }
@@ -34,6 +35,7 @@ class Barbero {
     public function guardar(): bool {
         $db = BD::obtenerConexion();
 
+        // Si el barbero no tiene un ID, es una creación; de lo contrario, es una actualización
         try {
             $db->beginTransaction();
 
@@ -48,6 +50,7 @@ class Barbero {
                     $this->email,
                     $this->activo ? 1 : 0
                 ]);
+                // Asignamos el ID de usuario generado al objeto actual para usarlo en la tabla barberos
                 $this->usuarioId = (int)$stmtU->fetchColumn();
 
                 // 2. Insertar en la tabla barberos vinculando el usuario_id obtenido
@@ -94,6 +97,7 @@ class Barbero {
             $db->commit();
             return true;
         } catch (Exception $e) {
+            // Si ocurre un error, revertimos la transacción para mantener la integridad de los datos
             if ($db->inTransaction()) $db->rollBack();
             return false;
         }
@@ -121,12 +125,14 @@ class Barbero {
 
             $db->commit();
             return true;
+            // Si no se encuentra el usuario asociado, no hacemos nada y retornamos false
         } catch (Exception $e) {
             if ($db->inTransaction()) $db->rollBack();
             return false;
         }
     }
 
+    
     public static function obtenerTodos(): array {
         $db = BD::obtenerConexion();
         $stmt = $db->query("SELECT u.usuario_id, u.nombre, u.activo, u.rol, u.email, 
@@ -138,6 +144,7 @@ class Barbero {
         
         $barberos = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
             $barberos[] = new Barbero(
                 $data['nombre'],
                 $data['especialidad'] ?? 'Administrador',

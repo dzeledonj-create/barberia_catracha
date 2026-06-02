@@ -2,13 +2,15 @@
 require_once __DIR__ . '/BD.php';
 
 class Servicio {
-    public ?int $servicioId;
-    public string $nombre;
-    public ?string $descripcion;
-    public float $precio;
-    public int $duracionMinutos;
-    public ?string $categoria;
+    // Propiedades del servicio
+    private ?int $servicioId;
+    private string $nombre;
+    private ?string $descripcion;
+    private float $precio;
+    private int $duracionMinutos;
+    private ?string $categoria;
 
+    // Constructor para inicializar las propiedades del servicio
     public function __construct($nombre, $descripcion, $precio, $duracionMinutos, $servicioId = null, $categoria = null) {
         $this->servicioId = $servicioId;
         $this->nombre = $nombre;
@@ -18,12 +20,14 @@ class Servicio {
         $this->categoria = $categoria;
     }
 
-    // Métodos para formatear precio y duración
+    // Métodos para formatear el precio y la duración del servicio
     public function formatearPrecio(): string {
+        // Formatea el precio con dos decimales y el símbolo de euro
         return number_format($this->precio, 2) . " €";
     }
 
     public function formatearDuracion(): string {
+        // Formatea la duración en minutos
         return $this->duracionMinutos . " min";
     }
 
@@ -53,6 +57,7 @@ class Servicio {
             return true;
         }
 
+        // Si el servicio ya tiene un ID, actualizamos el registro existente
         $sql = "UPDATE servicios
                 SET nombre = ?, descripcion = ?, precio = ?, duracion_minutos = ?, categoria = ?
                 WHERE servicio_id = ?";
@@ -97,6 +102,7 @@ class Servicio {
             return null;
         }
 
+        // Si se encuentra el servicio, se crea una instancia de la clase Servicio con los datos obtenidos
         return new Servicio(
             $data['nombre'],
             $data['descripcion'],

@@ -2,12 +2,12 @@
 require_once __DIR__ . '/BD.php';
 
 class Cliente {
-    public ?int $clienteId;
-    public string $nombre;
-    public string $apellido;
-    public string $telefono;
-    public ?string $email;
-    public ?string $fechaRegistro;
+    private ?int $clienteId;
+    private string $nombre;
+    private string $apellido;
+    private string $telefono;
+    private ?string $email;
+    private ?string $fechaRegistro;
 
     public function __construct($nombre, $apellido, $telefono, $email = null, $clienteId = null, $fechaRegistro = null) {
         $this->clienteId = $clienteId;
@@ -27,10 +27,14 @@ class Cliente {
     public function guardar(): bool {
         $db = BD::obtenerConexion();
 
+        // Si el cliente no tiene un ID, es una creación; de lo contrario, es una actualización
         if ($this->clienteId === null) {
+            // Antes de crear un nuevo cliente, verificamos si ya existe uno con el mismo email para evitar duplicados
             if ($this->email) {
+                // Verificar si ya existe un cliente con el mismo email para evitar duplicados
                 $existingCliente = self::obtenerPorEmail($this->email);
                 if ($existingCliente) {
+                    // Si ya existe un cliente con ese email, actualizamos sus datos en lugar de crear uno nuevo
                     $this->clienteId = $existingCliente->clienteId;
                     $sql = "UPDATE clientes 
                             SET nombre = ?, apellido = ?, telefono = ?, email = ?

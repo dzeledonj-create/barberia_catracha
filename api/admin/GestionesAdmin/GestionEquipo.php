@@ -11,10 +11,12 @@ if (!$usuario instanceof Administrador) {
 }
 
 // --- PROCESAMIENTO DEL FORMULARIO UNIFICADO ---
+// Verificar que el formulario se ha enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'] ?? '';
     $rolSeleccionado = $_POST['rol'] ?? 'barbero';
     
+    // Validar que el rol seleccionado es válido
     if ($accion === 'crear') {
         if ($rolSeleccionado === 'admin') {
             $nuevoAdmin = new Administrador(
@@ -39,10 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Para actualizar, primero obtenemos el barbero existente para preservar datos no editados
     if ($accion === 'actualizar') {
         $barberoId = (int)($_POST['barbero_id'] ?? 0);
         $barbero = Barbero::obtenerPorId($barberoId);
         
+        // Si el barbero existe, actualizamos sus datos. Si se cambia el rol a admin, eliminamos el barbero y creamos un nuevo admin con los datos proporcionados.
         if ($barbero) {
             if ($rolSeleccionado === 'admin') {
                 $barbero->eliminar();
@@ -61,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Para eliminar, simplemente obtenemos el barbero por ID y lo eliminamos. Si el rol es admin, eliminamos el admin correspondiente.
     if ($accion === 'eliminar') {
         $barberoId = (int)($_POST['barbero_id'] ?? 0);
         $barbero = Barbero::obtenerPorId($barberoId);
@@ -73,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+// Obtener todos los barberos para mostrar en la tabla
 $barberos = Barbero::obtenerTodos(); 
 // Para resaltar el formulario de edición si se accede con ?editar=ID
 $editandoId = $_GET['editar'] ?? null;

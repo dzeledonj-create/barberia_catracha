@@ -1,4 +1,3 @@
-<!-- Admin hamburger (visible en tablets/móviles) -->
 <button id="admin-hamburger-btn" class="admin-hamburger" aria-label="Abrir menú admin" aria-expanded="false">☰</button>
 
 <aside class="admin-sidebar">
@@ -22,4 +21,5 @@
         <a href="/includes/logout.php">Cerrar Sesión</a>
     </section>
 </aside>
-    <script src="/assets/script.js"></script>
+
+<script src="/assets/script.js?v=<?= time() ?>"></script>

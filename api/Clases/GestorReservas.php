@@ -2,6 +2,7 @@
 require_once __DIR__ . '/BD.php';
 require_once __DIR__ . '/Reserva.php';
 
+// Clase GestorReservas para manejar la lógica de negocio relacionada con las reservas, como crear, confirmar, cancelar y obtener reservas
 class GestorReservas {
 
     // Método para crear una nueva reserva
@@ -11,7 +12,7 @@ class GestorReservas {
         return $reserva->guardar();
     }
 
-    // Métodos para cambiar el estado de la reserva
+    // Método para confirmar una reserva
     public static function confirmarReserva($reservaId): bool {
         $reserva = Reserva::obtenerPorId($reservaId);
 

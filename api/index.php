@@ -1,10 +1,4 @@
-/*
- * COMENTARIO PARA DEFENSA:
- * Pagina principal publica de la barberia. Carga cabecera, hero, enlaces de exploracion y llamada a reservar.
- * Idea clave: este archivo forma parte de la arquitectura PHP del proyecto.
- * Para explicarlo al profesor, puedes comentar que separa responsabilidades:
- * las clases manejan datos/logica, las vistas muestran HTML y los gestores coordinan acciones.
- */
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
