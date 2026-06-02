@@ -9,7 +9,7 @@
     <title>Barberia Catracha</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
-    <link rel="icon" href="/assets/img/logo.png" type="image/png">
+    <link rel="icon" href="/barberia_catracha/assets/img/logo.png" type="image/png">
 </head>
 <body>
     <?php include_once __DIR__ . '/includes/header.php'; ?>
@@ -85,7 +85,7 @@
     </div>
 
     <div class="bottom-cta-bar">
-        <a href="/vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
+        <a href="/barberia_catracha/api/vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
     </div>
 </section>
 

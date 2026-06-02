@@ -6,7 +6,7 @@ require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 // Verificar que el usuario es un administrador antes de permitir el acceso a esta página
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
-    header("Location: /login.php");
+    header("Location: /barberia_catracha/api/login.php");
     exit;
 }
 
@@ -24,7 +24,7 @@ if (isset($_POST['crear'])) {
 
     $servicio->guardar();
 
-    header("Location: /admin/GestionesAdmin/GestionServicios.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -41,7 +41,7 @@ if (isset($_POST['editar'])) {
 
     $servicio->guardar();
 
-    header("Location: /admin/GestionesAdmin/GestionServicios.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -53,7 +53,7 @@ if (isset($_GET['eliminar'])) {
         $servicio->eliminar();
     }
 
-    header("Location: /admin/GestionesAdmin/GestionServicios.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 

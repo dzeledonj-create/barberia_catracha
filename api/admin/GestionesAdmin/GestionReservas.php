@@ -3,7 +3,7 @@ require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof UsuarioBarbero && !$usuario instanceof Administrador) {
-    header("Location: /login.php");
+    header("Location: /barberia_catracha/api/login.php");
     exit;
 }
   
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($_POST['ids'] as $idEliminar) {
             Reserva::eliminar((int)$idEliminar);
         }
-        header('Location: /admin/GestionesAdmin/GestionReservas.php');
+        header('Location: /barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php');
         exit;
     }
 }
@@ -28,7 +28,7 @@ if (isset($_GET['accion'], $_GET['id'])) {
 
     // Validar que el ID es un número entero positivo
     if (!is_numeric($id) || $id <= 0) {
-        header('Location: /admin/GestionesAdmin/GestionReservas.php');
+        header('Location: /barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php');
         exit;
     }
 
@@ -47,7 +47,7 @@ if (isset($_GET['accion'], $_GET['id'])) {
         Reserva::eliminar($id);
     }
 
-    header('Location: ' . API_URL . '/admin/GestionesAdmin/GestionReservas.php');
+    header('Location: /barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php');
     exit;
 }
 

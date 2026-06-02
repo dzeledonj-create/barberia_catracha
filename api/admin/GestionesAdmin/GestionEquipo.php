@@ -6,7 +6,7 @@ require_once __DIR__ . '/../clases_admin/Administrador.php';
 //Obtenemos el usuario actual desde la sesión
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
-    header("Location: /login.php");
+    header("Location: /barberia_catracha/api/login.php");
     exit;
 }
 
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    header("Location: /admin/GestionesAdmin/GestionEquipo.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php");
     exit;
 }
 

@@ -36,14 +36,14 @@
 
         <nav id="hamburger-menu" class="hamburger-menu" aria-hidden="true">
             <ul>
-                <li><a href="/">INICIO</a></li>
-                <li><a href="/vistas/servicios.php">SERVICIOS</a></li>
-                <li><a href="/vistas/equipo.php">EQUIPO</a></li>
-                <li><a href="/vistas/galeria.php">GALERÍA</a></li>
-                <li><a href="/vistas/reseñas.php">RESEÑAS</a></li>
-                <li><a href="/vistas/ubicacion.php">UBICACIÓN</a></li>
-                <li><a href="/vistas/blog.php">BLOG</a></li>
-                        <li class="menu-reservas"><a href="/vistas/reservas.php">RESERVAS</a></li>
+                <li><a href="/barberia_catracha/">INICIO</a></li>
+                <li><a href="/barberia_catracha/api/vistas/servicios.php">SERVICIOS</a></li>
+                <li><a href="/barberia_catracha/api/vistas/equipo.php">EQUIPO</a></li>
+                <li><a href="/barberia_catracha/api/vistas/galeria.php">GALERÍA</a></li>
+                <li><a href="/barberia_catracha/api/vistas/reseñas.php">RESEÑAS</a></li>
+                <li><a href="/barberia_catracha/api/vistas/ubicacion.php">UBICACIÓN</a></li>
+                <li><a href="/barberia_catracha/api/vistas/blog.php">BLOG</a></li>
+                        <li class="menu-reservas"><a href="/barberia_catracha/api/vistas/reservas.php">RESERVAS</a></li>
             </ul>
         </nav>
     </section>

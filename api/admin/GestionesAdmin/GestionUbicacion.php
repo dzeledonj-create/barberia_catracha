@@ -7,7 +7,7 @@ require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 // Verificar que el usuario es un administrador antes de permitir el acceso a esta página
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
-    header("Location: /login.php");
+    header("Location: /barberia_catracha/api/login.php");
     exit;
 }
 
@@ -32,7 +32,7 @@ if (isset($_POST['guardar'])) {
     );
 }
 
-    header("Location: /admin/GestionesAdmin/GestionUbicacion.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionUbicacion.php");
     exit;
 }
 

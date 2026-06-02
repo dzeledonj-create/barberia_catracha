@@ -1,4 +1,3 @@
-ç
 <?php
 require_once __DIR__ . '/../Clases/DatosUbicacion.php';
 require_once __DIR__ . '/../Clases/Horario.php';
@@ -16,13 +15,13 @@ $horarios = Horario::obtenerTodos();
 
     <title>Ubicación - Barbería Catracha</title>
 
-    <link rel="stylesheet" href="../assets/style.css">>
+    <link rel="stylesheet" href="../assets/style.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
         <link rel="icon"
-            href="/assets/img/logo.png"
+            href="/barberia_catracha/assets/img/logo.png"
             type="image/png">
 </head>
 

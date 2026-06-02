@@ -6,7 +6,7 @@ require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
 // ¡AÑADIMOS SEGURIDAD AL PANEL! Solo los administradores y barberos pueden acceder
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario) {
-    header("Location: /login.php");
+    header("Location: /barberia_catracha/api/login.php");
     exit;
 }
 

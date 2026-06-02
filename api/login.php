@@ -7,7 +7,7 @@ require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 // Verificar si el usuario ya ha iniciado sesión y redirigirlo al panel de administración si es un administrador o barbero
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if ($usuario instanceof Administrador || $usuario instanceof UsuarioBarbero) {
-    header("Location: /admin/panel.php");
+    header("Location: /barberia_catracha/api/admin/panel.php");
     exit;
 }
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Redirigir al panel de administración si el usuario es un administrador o barbero
         if ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'barbero') {
-            header("Location: /admin/panel.php");
+            header("Location: /barberia_catracha/api/admin/panel.php");
             exit;
         }
     } else {
