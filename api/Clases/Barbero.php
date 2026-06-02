@@ -35,6 +35,7 @@ class Barbero {
     public function guardar(): bool {
         $db = BD::obtenerConexion();
 
+        // Si el barbero no tiene un ID, es una creación; de lo contrario, es una actualización
         try {
             $db->beginTransaction();
 
@@ -49,6 +50,7 @@ class Barbero {
                     $this->email,
                     $this->activo ? 1 : 0
                 ]);
+                // Asignamos el ID de usuario generado al objeto actual para usarlo en la tabla barberos
                 $this->usuarioId = (int)$stmtU->fetchColumn();
 
                 // 2. Insertar en la tabla barberos vinculando el usuario_id obtenido
@@ -95,6 +97,7 @@ class Barbero {
             $db->commit();
             return true;
         } catch (Exception $e) {
+            // Si ocurre un error, revertimos la transacción para mantener la integridad de los datos
             if ($db->inTransaction()) $db->rollBack();
             return false;
         }
@@ -122,6 +125,7 @@ class Barbero {
 
             $db->commit();
             return true;
+            // Si no se encuentra el usuario asociado, no hacemos nada y retornamos false
         } catch (Exception $e) {
             if ($db->inTransaction()) $db->rollBack();
             return false;
@@ -140,6 +144,7 @@ class Barbero {
         
         $barberos = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
             $barberos[] = new Barbero(
                 $data['nombre'],
                 $data['especialidad'] ?? 'Administrador',

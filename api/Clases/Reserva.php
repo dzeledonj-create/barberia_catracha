@@ -44,12 +44,14 @@ class Reserva {
 
     // Método para guardar o actualizar la reserva en la base de datos
     public function guardar(): bool {
+        // Antes de guardar, verificamos si el barbero está disponible en la fecha y hora dada para el servicio seleccionado
         if (!self::estaDisponible($this->barberoId, $this->fechaHora, $this->servicioId, $this->reservaId)) {
             return false;
         }
 
         $db = BD::obtenerConexion();
 
+        // Si la reserva no tiene un ID, es una creación; de lo contrario, es una actualización
         if ($this->reservaId === null) {
             $sql = "INSERT INTO reservas (cliente_id, barbero_id, servicio_id, fecha_hora, estado)
                     VALUES (?, ?, ?, ?, ?)
