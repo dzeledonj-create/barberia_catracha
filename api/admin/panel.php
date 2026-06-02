@@ -3,6 +3,13 @@ require_once __DIR__ . '/../Clases/BD.php';
 require_once __DIR__ . '/../Clases/Reserva.php';
 require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
 
+// ¡AÑADIMOS SEGURIDAD AL PANEL!
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario) {
+    header("Location: /login.php");
+    exit;
+}
+
 $totalReservas = Reserva::contarPorEstado('pendiente') + Reserva::contarPorEstado('confirmada') + Reserva::contarPorEstado('cancelada');
 $pendientes = Reserva::contarPorEstado('pendiente');
 $confirmadas = Reserva::contarPorEstado('confirmada');

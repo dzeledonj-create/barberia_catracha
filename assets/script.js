@@ -1,6 +1,8 @@
 // 1. Control del Header al hacer Scroll
 window.addEventListener('scroll', () => {
     const header = document.querySelector('.main-header');
+    if (!header) return; // Evita errores en páginas que no tengan este header (ej. panel admin)
+    
     if (window.scrollY > 100) {
         header.style.background = 'rgba(10, 10, 10, 0.95)';
         header.style.height = '70px';
@@ -33,8 +35,12 @@ document.querySelectorAll('.explore-card').forEach(card => {
 
 
 // 3. Reservas: filtros, calendario y selección de horas
-
 document.addEventListener('DOMContentLoaded', function () {
+    // FIX: Si no existe el contenedor de reservas en la página actual, detenemos la ejecución de este bloque.
+    // Esto evita que el panel de administrador (o cualquier otra vista) sea secuestrado por el history.replaceState
+    if (!document.querySelector('.reserva-step')) return;
+
+    // Datos de horarios por día, inyectados desde PHP en reserva.php
     const scheduleData = window.reservaScheduleData || [];
     const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const horariosPorDia = scheduleData.reduce((map, horario) => {
@@ -42,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return map;
     }, {});
 
+    // Elementos del DOM relacionados con la reserva
     const servicios = document.querySelectorAll('input[name="servicio_id"]');
     const barberos = document.querySelectorAll('.barbero-card');
     const steps = document.querySelectorAll('.reserva-step');

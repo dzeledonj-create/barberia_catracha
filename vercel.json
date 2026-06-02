@@ -5,28 +5,11 @@
     }
   },
   "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/vistas/(.*)",
-      "dest": "/api/vistas/$1"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/api/admin/$1"
-    },
-    {
-      "src": "/login.php",
-      "dest": "/api/login.php"
-    },
-    {
-      "src": "/includes/(.*)",
-      "dest": "/api/includes/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/$1"
-    }
+    { "src": "/login.php", "dest": "/api/login.php" },
+    { "src": "/admin/(.*)", "dest": "/api/admin/$1" },
+    { "src": "/vistas/(.*)", "dest": "/api/vistas/$1" },
+    { "src": "/includes/(.*)", "dest": "/api/includes/$1" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/api/$1" }
   ]
 }

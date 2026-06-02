@@ -1,13 +1,11 @@
 <?php
-
+// Configura la ruta de guardado de sesiones a un directorio temporal del sistema
+ini_set('session.save_path', sys_get_temp_dir());
+session_start();
 require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
-if ($usuario instanceof Administrador) {
-    header("Location: /admin/panel.php");
-    exit;
-}
-if ($usuario instanceof UsuarioBarbero) {
+if ($usuario instanceof Administrador || $usuario instanceof UsuarioBarbero) {
     header("Location: /admin/panel.php");
     exit;
 }
@@ -29,12 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['barbero_id'] = $datosSesion['barbero_id'];
         }
 
-        if ($_SESSION['rol'] === 'admin') {
-            header("Location: /admin/panel.php");
-            exit;
-        }
-
-        if ($_SESSION['rol'] === 'barbero') {
+        if ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'barbero') {
             header("Location: /admin/panel.php");
             exit;
         }
@@ -78,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </section>
 
-    <a href="/" class="volver-web">← Volver a la web</a>
+    <a href="index.php" class="volver-web">← Volver a la web</a>
 
 </section>
 
