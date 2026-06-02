@@ -2,12 +2,12 @@
 require_once __DIR__ . '/BD.php';
 
 class Pago {
-    public ?int $pagoId;
-    public int $reservaId;
-    public float $monto;
-    public string $metodoPago;
-    public string $estadoPago;
-    public ?string $fechaPago;
+    private ?int $pagoId;
+    private int $reservaId;
+    private float $monto;
+    private string $metodoPago;
+    private string $estadoPago;
+    private ?string $fechaPago;
 
    
     public function __construct($reservaId, $monto, $metodoPago, $estadoPago = "pagado", $pagoId = null, $fechaPago = null) {

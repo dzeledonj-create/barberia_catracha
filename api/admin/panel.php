@@ -3,6 +3,14 @@ require_once __DIR__ . '/../Clases/BD.php';
 require_once __DIR__ . '/../Clases/Reserva.php';
 require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
 
+// ¡AÑADIMOS SEGURIDAD AL PANEL! Solo los administradores y barberos pueden acceder
+$usuario = GestorUsuarios::obtenerDesdeSesion();
+if (!$usuario) {
+    header("Location: /login.php");
+    exit;
+}
+
+// total de reservas por estado para mostrar estadísticas en el panel
 $totalReservas = Reserva::contarPorEstado('pendiente') + Reserva::contarPorEstado('confirmada') + Reserva::contarPorEstado('cancelada');
 $pendientes = Reserva::contarPorEstado('pendiente');
 $confirmadas = Reserva::contarPorEstado('confirmada');

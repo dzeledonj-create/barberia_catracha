@@ -1,12 +1,15 @@
 <?php
 require_once 'Usuario.php';
 
+// Clase Administrador que hereda de Usuario y tiene permisos completos para gestionar la barbería
 class Administrador extends Usuario {
 
+// El constructor del administrador establece el rol como 'admin' y permite configurar su estado activo
     public function __construct($nombre, $email, $activo = true, $usuarioId = null) {
         parent::__construct($nombre, $email, 'admin', $activo, $usuarioId);
     }
 
+    // Funciones específicas del administrador para verificar permisos en diferentes áreas de gestión
     public function puedeVerTodasLasReservas(): bool {
         return true;
     }

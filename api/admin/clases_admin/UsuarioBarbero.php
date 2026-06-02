@@ -1,6 +1,7 @@
 <?php
 require_once 'Usuario.php';
 
+// Clase UsuarioBarbero que hereda de Usuario y representa a un barbero con permisos limitados para gestionar sus propias reservas
 class UsuarioBarbero extends Usuario {
     public int $barberoId;
 

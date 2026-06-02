@@ -2,12 +2,12 @@
 require_once __DIR__ . '/BD.php';
 
 class MuralSugerencia {
-    public ?int $sugerenciaId;
-    public ?string $nombreCorte;
-    public ?string $descripcion;
-    public string $imagenUrl;
-    public ?string $estilo;
-    public bool $activo;
+    private ?int $sugerenciaId;
+    private ?string $nombreCorte;
+    private ?string $descripcion;
+    private string $imagenUrl;
+    private ?string $estilo;
+    private bool $activo;
 
     public function __construct($imagenUrl,$nombreCorte = null, $descripcion = null, $estilo = null, $activo = true, $sugerenciaId = null) {
         $this->sugerenciaId = $sugerenciaId;

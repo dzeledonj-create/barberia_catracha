@@ -3,11 +3,13 @@
 require_once __DIR__ . '/../../Clases/Servicio.php';
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
+// Verificar que el usuario es un administrador antes de permitir el acceso a esta página
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
     header("Location: /login.php");
     exit;
 }
+
 
 /* CREAR SERVICIO */
 if (isset($_POST['crear'])) {
@@ -61,6 +63,7 @@ $servicios = Servicio::obtenerTodos();
 /* SI SE VA A EDITAR */
 $servicioEditar = null;
 
+// Si se ha pasado un ID de servicio para editar, obtener ese servicio de la base de datos
 if (isset($_GET['editar'])) {
     $servicioEditar = Servicio::obtenerPorId($_GET['editar']);
 }

@@ -4,13 +4,13 @@ require_once __DIR__ . '/Cliente.php';
 require_once __DIR__ . '/Barbero.php';
 
 class Reserva {
-    public ?int $reservaId;
-    public int $clienteId;
-    public int $barberoId;
-    public int $servicioId;
-    public string $fechaHora;
-    public string $estado;
-    public ?string $creadoEn;
+    private ?int $reservaId;
+    private int $clienteId;
+    private int $barberoId;
+    private int $servicioId;
+    private string $fechaHora;
+    private string $estado;
+    private ?string $creadoEn;
 
     public function __construct($clienteId, $barberoId, $servicioId, $fechaHora, $estado = "pendiente", $reservaId = null, $creadoEn = null) {
         $this->reservaId = $reservaId;
@@ -44,12 +44,14 @@ class Reserva {
 
     // Método para guardar o actualizar la reserva en la base de datos
     public function guardar(): bool {
+        // Antes de guardar, verificamos si el barbero está disponible en la fecha y hora dada para el servicio seleccionado
         if (!self::estaDisponible($this->barberoId, $this->fechaHora, $this->servicioId, $this->reservaId)) {
             return false;
         }
 
         $db = BD::obtenerConexion();
 
+        // Si la reserva no tiene un ID, es una creación; de lo contrario, es una actualización
         if ($this->reservaId === null) {
             $sql = "INSERT INTO reservas (cliente_id, barbero_id, servicio_id, fecha_hora, estado)
                     VALUES (?, ?, ?, ?, ?)

@@ -1,12 +1,13 @@
 <?php
 
 require_once __DIR__ . '/BD.php';
-
+// Clase Horario para manejar los horarios de apertura y cierre de la barbería, así como los días en que está cerrada
 class Horario {
 
     public static function obtenerTodos() {
         $db = BD::obtenerConexion();
 
+        // Ordenar los horarios por día de la semana utilizando una cláusula CASE para asegurar el orden correcto
         $sql = "
             SELECT * FROM horarios
             ORDER BY CASE dia_semana
@@ -24,6 +25,7 @@ class Horario {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Método para obtener el horario de un día específico de la semana
     public static function obtenerPorDiaSemana($diaSemana) {
         $db = BD::obtenerConexion();
         $sql = "SELECT * FROM horarios WHERE dia_semana = ? LIMIT 1";
@@ -32,6 +34,7 @@ class Horario {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Método para obtener el horario de un día específico a partir de una fecha
     public static function obtenerHorarioPorFecha($fecha) {
         $date = new DateTime($fecha);
         $dias = [
@@ -41,6 +44,7 @@ class Horario {
         return self::obtenerPorDiaSemana($diaSemana);
     }
 
+    // Método para actualizar el horario de un día específico
     public static function actualizar($horarioId, $horaApertura, $horaCierre, $cerrado) {
         $db = BD::obtenerConexion();
 

@@ -1,0 +1,1 @@
+{"version":2,"defects":{"ReservaTest::testCrearReserva":7},"times":{"ServicioTest::testCrearServicio":0,"ReservaTest::testCrearReserva":0.119,"ReservaTest::testCrearReservaEsObjetoReserva":0.003,"ReservaTest::testReservaTieneFecha":0.001}}

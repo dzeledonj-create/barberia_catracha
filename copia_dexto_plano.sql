@@ -1,3 +1,6 @@
+-- COMENTARIO PARA DEFENSA:
+-- Copia SQL en texto plano para importar o revisar la estructura y datos.
+-- Este archivo no se ejecuta en la web directamente; sirve como respaldo/importacion de la base de datos.
 --
 -- PostgreSQL database dump
 --

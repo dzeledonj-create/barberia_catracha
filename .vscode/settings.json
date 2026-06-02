@@ -1,4 +1,5 @@
 {
+    // Configuración de conexión a la base de datos para SQLTools
     "sqltools.connections": [
         {
             "ssh": "Disabled",

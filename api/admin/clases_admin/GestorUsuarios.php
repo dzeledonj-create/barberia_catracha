@@ -3,8 +3,10 @@ require_once __DIR__ . '/../../Clases/BD.php';
 require_once 'Administrador.php';
 require_once 'UsuarioBarbero.php';
 
+// Clase GestorUsuarios para manejar la autenticación y gestión de usuarios en el sistema
 class GestorUsuarios {
 
+// Función para autenticar a un usuario utilizando su email y contraseña
     public static function autenticar($email, $password) {
         $db = BD::obtenerConexion();
 
@@ -26,6 +28,7 @@ class GestorUsuarios {
             return null;
         }
 
+        // Dependiendo del rol del usuario, devolver una instancia de Administrador o UsuarioBarbero
         if ($data['rol'] === 'admin') {
             return new Administrador(
                 $data['nombre'],
@@ -63,9 +66,12 @@ class GestorUsuarios {
         return $datos;
     }
 
+    // Función para obtener el usuario actualmente autenticado desde la sesión
     public static function obtenerDesdeSesion(): ?Usuario {
+        // Verificar que la sesión está iniciada y que hay un usuario autenticado
         if (session_status() === PHP_SESSION_NONE) session_start();
 
+        // Si no hay un usuario_id en la sesión, significa que no hay un usuario autenticado
         if (empty($_SESSION['usuario_id'])) return null;
 
         if ($_SESSION['rol'] === 'admin') {
