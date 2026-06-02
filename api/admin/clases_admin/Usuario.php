@@ -8,6 +8,7 @@ class Usuario {
     private string $rol;
     private bool $activo;
 
+    
     public function __construct($nombre, $email, $rol, $activo = true, $usuarioId = null) {
         $this->usuarioId = $usuarioId;
         $this->nombre = $nombre;

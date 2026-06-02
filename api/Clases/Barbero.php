@@ -26,6 +26,7 @@ class Barbero {
         $this->email = $email;
     }
 
+    // Método para verificar si el barbero está activo
     public function estaActivo(): bool {
         return $this->activo;
     }
@@ -127,6 +128,7 @@ class Barbero {
         }
     }
 
+    
     public static function obtenerTodos(): array {
         $db = BD::obtenerConexion();
         $stmt = $db->query("SELECT u.usuario_id, u.nombre, u.activo, u.rol, u.email, 

@@ -13,20 +13,22 @@ if (isset($_POST['crear'])) {
 
     $imagenUrl = "";
 
+    // Si se ha proporcionado una imagen, procesarla y obtener la URL para guardarla en la base de datos
     if (!empty($_FILES['imagen']['name'])) {
-
+        // Generar un nombre único para la imagen para evitar conflictos
         $nombreImagen = time() . "_" . $_FILES['imagen']['name'];
-
+        // Mover la imagen al directorio de galería y obtener la URL para guardarla en la base de datos
         $rutaDestino = "../../assets/img/galeria/" . $nombreImagen;
-
+        // Mover el archivo subido a la ubicación deseada
         move_uploaded_file(
             $_FILES['imagen']['tmp_name'],
             $rutaDestino
         );
-
+        // Guardar la URL relativa de la imagen para almacenarla en la base de datos
         $imagenUrl = "assets/img/galeria/" . $nombreImagen;
     }
 
+    // Crear una nueva instancia de MuralSugerencia con los datos del formulario y la URL de la imagen procesada
     $sugerencia = new MuralSugerencia(
         $imagenUrl,
         $_POST['nombre_corte'],

@@ -4,14 +4,17 @@ require_once __DIR__ . '/../../Clases/DatosUbicacion.php';
 require_once __DIR__ . '/../../Clases/Horario.php';
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
+// Verificar que el usuario es un administrador antes de permitir el acceso a esta página
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario instanceof Administrador) {
     header("Location: /login.php");
     exit;
 }
 
+// Procesar actualización de datos de ubicación y horarios
 if (isset($_POST['guardar'])) {
 
+// Actualizar datos de ubicación
     DatosUbicacion::actualizar(
         $_POST['direccion'],
         $_POST['telefono'],
@@ -19,6 +22,7 @@ if (isset($_POST['guardar'])) {
         $_POST['mapa_embed']
     );
 
+    // Actualizar horarios
     foreach ($_POST['horarios'] as $horarioId => $datos) {
     Horario::actualizar(
         $horarioId,
@@ -32,6 +36,7 @@ if (isset($_POST['guardar'])) {
     exit;
 }
 
+// Obtener datos actuales de ubicación y horarios para mostrar en el formulario
 $datosUbicacion = DatosUbicacion::obtener();
 $horarios = Horario::obtenerTodos();
 ?>

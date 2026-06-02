@@ -9,8 +9,9 @@ if (!$usuario instanceof UsuarioBarbero && !$usuario instanceof Administrador) {
   
 require_once __DIR__ . '/../../Clases/Reserva.php';
 
-// Manejo de eliminación masiva desde el formulario POST
+// Procesar acciones de aceptar, cancelar o eliminar reserva
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Procesar eliminación masiva de reservas seleccionadas
     if (isset($_POST['eliminar_seleccionadas']) && !empty($_POST['ids']) && is_array($_POST['ids'])) {
         foreach ($_POST['ids'] as $idEliminar) {
             Reserva::eliminar((int)$idEliminar);
@@ -20,18 +21,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Procesar acciones individuales de aceptar, cancelar o eliminar reserva mediante GET
 if (isset($_GET['accion'], $_GET['id'])) {
     $id = $_GET['id'];
     $accion = $_GET['accion'];
 
+    // Validar que el ID es un número entero positivo
+    if (!is_numeric($id) || $id <= 0) {
+        header('Location: /admin/GestionesAdmin/GestionReservas.php');
+        exit;
+    }
+
+    // Validar que el ID es un número entero positivo
     if ($accion === 'aceptar') {
         Reserva::cambiarEstado($id, 'confirmada');
     }
 
+    // Validar que el ID es un número entero positivo
     if ($accion === 'cancelar') {
         Reserva::cambiarEstado($id, 'cancelada');
     }
 
+    // Validar que el ID es un número entero positivo
     if ($accion === 'eliminar') {
         Reserva::eliminar($id);
     }
@@ -44,10 +55,12 @@ $reservas = Reserva::obtenerTodasConDetalles();
 
 // Aplicar filtros por GET: mes, dia, anio
 if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
+    // Validar y formatear los filtros para compararlos con las fechas de las reservas
     $mesFiltro = !empty($_GET['mes']) ? str_pad((int)$_GET['mes'], 2, '0', STR_PAD_LEFT) : null;
     $diaFiltro = !empty($_GET['dia']) ? str_pad((int)$_GET['dia'], 2, '0', STR_PAD_LEFT) : null;
     $anioFiltro = !empty($_GET['anio']) ? (int)$_GET['anio'] : null;
 
+    // Filtrar las reservas según los criterios seleccionados
     $reservas = array_filter($reservas, function ($r) use ($mesFiltro, $diaFiltro, $anioFiltro) {
         $ts = strtotime($r['fecha_hora']);
         if ($ts === false) return false;
@@ -55,6 +68,7 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
         $dia = date('d', $ts);
         $anio = date('Y', $ts);
 
+        // Validar cada filtro solo si se ha proporcionado. Si el filtro es nulo, no se aplica y se acepta cualquier valor para ese campo.
         if ($mesFiltro !== null && $mes !== $mesFiltro) return false;
         if ($diaFiltro !== null && $dia !== $diaFiltro) return false;
         if ($anioFiltro !== null && (int)$anio !== $anioFiltro) return false;
@@ -93,6 +107,7 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
                     <label>Mes:
                         <select name="mes">
                             <option value="">Todos</option>
+                            // Generar opciones de mes del 1 al 12 con formato de dos dígitos para mostrar en el select
                             <?php for ($m=1;$m<=12;$m++): $val=str_pad($m,2,'0',STR_PAD_LEFT); ?>
                                 <option value="<?= $m ?>" <?= (isset($_GET['mes']) && (int)$_GET['mes']===$m)?'selected':'' ?>><?= $val ?></option>
                             <?php endfor; ?>
@@ -102,6 +117,7 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
                     <label>Día:
                         <select name="dia">
                             <option value="">Todos</option>
+                            // Generar opciones de día del 1 al 31 con formato de dos dígitos para mostrar en el select
                             <?php for ($d=1;$d<=31;$d++): $dv=str_pad($d,2,'0',STR_PAD_LEFT); ?>
                                 <option value="<?= $d ?>" <?= (isset($_GET['dia']) && (int)$_GET['dia']===$d)?'selected':'' ?>><?= $dv ?></option>
                             <?php endfor; ?>
@@ -111,6 +127,7 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
                     <label>Año:
                         <select name="anio">
                             <option value="">Todos</option>
+                            // Generar opciones de año desde el año actual hasta 5 años atrás para mostrar en el select
                             <?php $currentYear = (int)date('Y'); for ($y=$currentYear; $y>=($currentYear-5); $y--): ?>
                                 <option value="<?= $y ?>" <?= (isset($_GET['anio']) && (int)$_GET['anio']===$y)?'selected':'' ?>><?= $y ?></option>
                             <?php endfor; ?>
