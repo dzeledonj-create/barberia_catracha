@@ -25,18 +25,40 @@ class Usuario {
         return $this->nombre;
     }
 
-    // Magic methods para acceso a propiedades private
-    public function __get($name) {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
-        return null;
+    public function getUsuarioId(): ?int {
+        return $this->usuarioId;
     }
 
-    public function __set($name, $value) {
-        if (property_exists($this, $name)) {
-            $this->$name = $value;
-        }
+    public function setUsuarioId(?int $usuarioId): void {
+        $this->usuarioId = $usuarioId;
+    }
+
+    public function setNombre(string $nombre): void {
+        $this->nombre = $nombre;
+    }
+
+    public function getEmail(): string {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): void {
+        $this->email = $email;
+    }
+
+    public function getRol(): string {
+        return $this->rol;
+    }
+
+    public function setRol(string $rol): void {
+        $this->rol = $rol;
+    }
+
+    public function getActivo(): bool {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): void {
+        $this->activo = $activo;
     }
 
     // --- OPERACIONES CRUD ENCAPSULADAS ---

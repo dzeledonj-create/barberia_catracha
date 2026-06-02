@@ -31,18 +31,85 @@ class Barbero {
         return $this->activo;
     }
 
-    // Magic methods para acceso a propiedades private
-    public function __get($name) {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
-        return null;
+    // Getters y setters para las propiedades del barbero
+    public function getBarberoId(): ?int {
+        return $this->barberoId;
     }
 
-    public function __set($name, $value) {
-        if (property_exists($this, $name)) {
-            $this->$name = $value;
-        }
+    public function setBarberoId(?int $barberoId): void {
+        $this->barberoId = $barberoId;
+    }
+
+    public function getUsuarioId(): ?int {
+        return $this->usuarioId;
+    }
+
+    public function setUsuarioId(?int $usuarioId): void {
+        $this->usuarioId = $usuarioId;
+    }
+
+    public function getNombre(): string {
+        return $this->nombre;
+    }
+
+    public function setNombre(string $nombre): void {
+        $this->nombre = $nombre;
+    }
+
+    public function getDescripcion(): ?string {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(?string $descripcion): void {
+        $this->descripcion = $descripcion;
+    }
+
+    public function getEtiquetas(): ?string {
+        return $this->etiquetas;
+    }
+
+    public function setEtiquetas(?string $etiquetas): void {
+        $this->etiquetas = $etiquetas;
+    }
+
+    public function getEspecialidad(): ?string {
+        return $this->especialidad;
+    }
+
+    public function setEspecialidad(?string $especialidad): void {
+        $this->especialidad = $especialidad;
+    }
+
+    public function getFotoUrl(): ?string {
+        return $this->fotoUrl;
+    }
+
+    public function setFotoUrl(?string $fotoUrl): void {
+        $this->fotoUrl = $fotoUrl;
+    }
+
+    public function getActivo(): bool {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): void {
+        $this->activo = $activo;
+    }
+
+    public function getRol(): ?string {
+        return $this->rol;
+    }
+
+    public function setRol(?string $rol): void {
+        $this->rol = $rol;
+    }
+
+    public function getEmail(): ?string {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): void {
+        $this->email = $email;
     }
 
     // --- EL CRUD ENCAPSULADO TOTALMENTE AQUÍ ---

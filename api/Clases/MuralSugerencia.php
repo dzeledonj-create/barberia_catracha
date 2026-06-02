@@ -35,18 +35,53 @@ class MuralSugerencia {
         return !empty($this->descripcion);
     }
 
-    // Magic methods para acceso a propiedades private
-    public function __get($name) {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
-        return null;
+    // Getters y setters para las propiedades de la sugerencia
+    public function getSugerenciaId(): ?int {
+        return $this->sugerenciaId;
     }
 
-    public function __set($name, $value) {
-        if (property_exists($this, $name)) {
-            $this->$name = $value;
-        }
+    public function setSugerenciaId(?int $sugerenciaId): void {
+        $this->sugerenciaId = $sugerenciaId;
+    }
+
+    public function getNombreCorte(): ?string {
+        return $this->nombreCorte;
+    }
+
+    public function setNombreCorte(?string $nombreCorte): void {
+        $this->nombreCorte = $nombreCorte;
+    }
+
+    public function getDescripcion(): ?string {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(?string $descripcion): void {
+        $this->descripcion = $descripcion;
+    }
+
+    public function getImagenUrl(): string {
+        return $this->imagenUrl;
+    }
+
+    public function setImagenUrl(string $imagenUrl): void {
+        $this->imagenUrl = $imagenUrl;
+    }
+
+    public function getEstilo(): ?string {
+        return $this->estilo;
+    }
+
+    public function setEstilo(?string $estilo): void {
+        $this->estilo = $estilo;
+    }
+
+    public function getActivo(): bool {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): void {
+        $this->activo = $activo;
     }
 
     // Método para guardar o actualizar la sugerencia en la base de datos
