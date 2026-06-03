@@ -36,6 +36,71 @@ class BlogPost {
         return array_map('trim', explode(',', $this->etiquetas));
     }
 
+    // Getters y setters para las propiedades del post
+    public function getPostId(): ?int {
+        return $this->postId;
+    }
+
+    public function setPostId(?int $postId): void {
+        $this->postId = $postId;
+    }
+
+    public function getTitulo(): string {
+        return $this->titulo;
+    }
+
+    public function setTitulo(string $titulo): void {
+        $this->titulo = $titulo;
+    }
+
+    public function getContenido(): string {
+        return $this->contenido;
+    }
+
+    public function setContenido(string $contenido): void {
+        $this->contenido = $contenido;
+    }
+
+    public function getImagenUrl(): ?string {
+        return $this->imagenUrl;
+    }
+
+    public function setImagenUrl(?string $imagenUrl): void {
+        $this->imagenUrl = $imagenUrl;
+    }
+
+    public function getAutorId(): int {
+        return $this->autorId;
+    }
+
+    public function setAutorId(int $autorId): void {
+        $this->autorId = $autorId;
+    }
+
+    public function getFechaPublicacion(): ?string {
+        return $this->fechaPublicacion;
+    }
+
+    public function setFechaPublicacion(?string $fechaPublicacion): void {
+        $this->fechaPublicacion = $fechaPublicacion;
+    }
+
+    public function getEtiquetas(): ?string {
+        return $this->etiquetas;
+    }
+
+    public function setEtiquetas(?string $etiquetas): void {
+        $this->etiquetas = $etiquetas;
+    }
+
+    public function getInstagramEmbed(): ?string {
+        return $this->instagramEmbed;
+    }
+
+    public function setInstagramEmbed(?string $instagramEmbed): void {
+        $this->instagramEmbed = $instagramEmbed;
+    }
+
     // --- GETTERS PARA ACCESO DIRECTO A PROPIEDADES ---
     public function __get($name) {
         if (property_exists($this, $name)) {

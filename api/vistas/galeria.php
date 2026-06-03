@@ -70,7 +70,7 @@ if ($categoria_actual === 'todos') {
                 <?php foreach ($sugerencias as $corte): ?>
                     <section class="galeria-item">
                         <section class="image-wrapper">
-                            <img src="../../assets/img/<?= htmlspecialchars($corte['imagen_url']) ?>" alt="<?= htmlspecialchars($corte['nombre_corte']) ?>">
+                            <img src="/barberia_catracha/<?= htmlspecialchars(ltrim($corte['imagen_url'], '/')) ?>" alt="<?= htmlspecialchars($corte['nombre_corte']) ?>">
                             <section class="overlay">
                                 <span class="tag-estilo"><?= htmlspecialchars($corte['estilo']) ?></span>
                             </section>

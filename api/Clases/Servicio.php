@@ -35,6 +35,55 @@ class Servicio {
         return $this->duracionMinutos >= 60;
     }
 
+    // Getters y setters para las propiedades del servicio
+    public function getServicioId(): ?int {
+        return $this->servicioId;
+    }
+
+    public function setServicioId(?int $servicioId): void {
+        $this->servicioId = $servicioId;
+    }
+
+    public function getNombre(): string {
+        return $this->nombre;
+    }
+
+    public function setNombre(string $nombre): void {
+        $this->nombre = $nombre;
+    }
+
+    public function getDescripcion(): ?string {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(?string $descripcion): void {
+        $this->descripcion = $descripcion;
+    }
+
+    public function getPrecio(): float {
+        return $this->precio;
+    }
+
+    public function setPrecio(float $precio): void {
+        $this->precio = $precio;
+    }
+
+    public function getDuracionMinutos(): int {
+        return $this->duracionMinutos;
+    }
+
+    public function setDuracionMinutos(int $duracionMinutos): void {
+        $this->duracionMinutos = $duracionMinutos;
+    }
+
+    public function getCategoria(): ?string {
+        return $this->categoria;
+    }
+
+    public function setCategoria(?string $categoria): void {
+        $this->categoria = $categoria;
+    }
+
     // --- GETTERS PARA ACCESO DIRECTO A PROPIEDADES ---
     public function __get($name) {
         if (property_exists($this, $name)) {

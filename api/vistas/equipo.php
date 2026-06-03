@@ -34,19 +34,19 @@ $barberos = Barbero::obtenerActivos();
         <section class="barbero-card">
 
         <section class="barbero-img">
-            <img src="/barberia_catracha/assets/img/<?= htmlspecialchars($barbero['foto_url']) ?>" 
-                 alt="<?= htmlspecialchars($barbero['nombre']) ?>">
+            <img src="<?= htmlspecialchars($barbero->getFotoUrl()) ?>" 
+                 alt="<?= htmlspecialchars($barbero->getNombre()) ?>">
         </section>
 
         <section class="barbero-info">
-            <h2><?= htmlspecialchars($barbero['nombre']) ?></h2>
+            <h2><?= htmlspecialchars($barbero->getNombre()) ?></h2>
 
             <p class="rango">
-                <?= htmlspecialchars($barbero['especialidad'] ?? 'Barbero') ?>
+                <?= htmlspecialchars($barbero->getEspecialidad()) ?>
             </p>
 
             <p class="bio">
-                <?= htmlspecialchars($barbero['descripcion'] ?? 'Profesional de barbería.') ?>
+                <?= htmlspecialchars($barbero->getDescripcion()) ?>
             </p>
 
             <section class="tags">

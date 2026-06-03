@@ -81,7 +81,27 @@ class Barbero {
     }
 
     public function getFotoUrl(): ?string {
-        return $this->fotoUrl;
+        if ($this->fotoUrl === null) {
+            return null;
+        }
+
+        $url = trim($this->fotoUrl);
+
+        if (str_contains($url, '://')) {
+            return $url;
+        }
+
+        if (str_starts_with($url, '/')) {
+            return $url;
+        }
+
+        $normalized = ltrim($url, '/');
+
+        if (str_starts_with($normalized, 'assets/')) {
+            return '/barberia_catracha/' . $normalized;
+        }
+
+        return '/barberia_catracha/assets/img/' . $normalized;
     }
 
     public function setFotoUrl(?string $fotoUrl): void {
@@ -244,11 +264,28 @@ class Barbero {
 
     public static function obtenerActivos(): array {
         $db = BD::obtenerConexion();
-        $stmt = $db->query("SELECT b.*, u.nombre, u.activo, u.rol, u.email 
+        $stmt = $db->query("SELECT b.*, u.nombre, u.activo, u.rol, u.email, u.usuario_id
                             FROM barberos b
                             INNER JOIN usuarios u ON b.usuario_id = u.usuario_id
                             WHERE u.activo = TRUE AND u.rol = 'barbero'");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $barberos = [];
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $barberos[] = new Barbero(
+                $data['nombre'],
+                $data['especialidad'] ?? null,
+                $data['foto_url'] ?? null,
+                (bool)$data['activo'],
+                $data['barbero_id'] ? (int)$data['barbero_id'] : null,
+                $data['descripcion'] ?? null,
+                $data['etiquetas'] ?? null,
+                $data['rol'] ?? null,
+                $data['email'] ?? null,
+                $data['usuario_id'] ? (int)$data['usuario_id'] : null
+            );
+        }
+
+        return $barberos;
     }
 
     public static function obtenerPorId($barberoId): ?Barbero {

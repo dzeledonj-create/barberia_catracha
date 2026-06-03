@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $servicios = Servicio::obtenerTodos();
-$barberos = Barbero::obtenerActivos(); // Devuelve arrays asociativos limpios de la BD
+$barberos = Barbero::obtenerActivos(); // Devuelve objetos Barbero con getters disponibles
 $horarios = Horario::obtenerTodos();
 $db = BD::obtenerConexion();
 
@@ -150,20 +150,20 @@ foreach ($relaciones as $rel) {
                 <div class="barberos-grid">
                     <?php foreach ($barberos as $barbero): 
                         // Normalización inteligente de rutas de imágenes
-                        $foto = $barbero['foto_url'] ?? '';
+                        $foto = $barbero->getFotoUrl() ?? '';
                         if (!empty($foto) && !str_starts_with($foto, 'http') && !str_starts_with($foto, '/') && !str_starts_with($foto, '../')) {
                             $foto = '../' . $foto;
                         }
                         if (empty($foto)) { $foto = '../../assets/img/default-avatar.png'; }
                     ?>
-                        <label class="card-option barbero-card" data-id="<?= $barbero['barbero_id'] ?>" data-servicios="<?= htmlspecialchars(implode(',', $barberoServicios[$barbero['barbero_id']] ?? [])) ?>">
-                            <input type="radio" name="barbero_id" value="<?= $barbero['barbero_id'] ?>" required>
+                        <label class="card-option barbero-card" data-id="<?= $barbero->getBarberoId() ?>" data-servicios="<?= htmlspecialchars(implode(',', $barberoServicios[$barbero->getBarberoId()] ?? [])) ?>">
+                            <input type="radio" name="barbero_id" value="<?= $barbero->getBarberoId() ?>" required>
                             <div class="card-content-barbero">
                                 <div class="barbero-img">
-                                    <img src="<?= htmlspecialchars($foto) ?>" onerror="this.src='../assets/img/default-avatar.png';" alt="<?= htmlspecialchars($barbero['nombre']) ?>">
+                                    <img src="<?= htmlspecialchars($foto) ?>" onerror="this.src='../assets/img/default-avatar.png';" alt="<?= htmlspecialchars($barbero->getNombre()) ?>">
                                 </div>
-                                <h3><?= htmlspecialchars($barbero['nombre']) ?></h3>
-                                <span class="especialidad"><?= htmlspecialchars($barbero['especialidad'] ?? 'Barbero Profesional') ?></span>
+                                <h3><?= htmlspecialchars($barbero->getNombre()) ?></h3>
+                                <span class="especialidad"><?= htmlspecialchars($barbero->getEspecialidad() ?? 'Barbero Profesional') ?></span>
                             </div>
                         </label>
                     <?php endforeach; ?>
