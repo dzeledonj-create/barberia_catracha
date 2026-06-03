@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../Clases/BD.php';
 
 class Usuario {
-    private int $usuarioId;
+    private ?int $usuarioId;
     private string $nombre;
     private string $email;
     private string $rol;
@@ -114,17 +114,29 @@ class Usuario {
     /**
      * Elimina el registro del usuario actual en la base de datos.
      */
-    public function eliminar(): void {
+    public function eliminar(): bool {
         if ($this->usuarioId === null) {
-            throw new Exception("El usuario debe tener un ID para ser eliminado.");
+            return false;
         }
 
         $conexion = BD::obtenerConexion();
+        try {
+            $conexion->beginTransaction();
 
-        $sql = "DELETE FROM usuarios WHERE usuario_id = ?";
-        
-        $stmt = $conexion->prepare($sql);
-        $stmt->execute([$this->usuarioId]);
+            $stmtB = $conexion->prepare("DELETE FROM barberos WHERE usuario_id = ?");
+            $stmtB->execute([$this->usuarioId]);
+
+            $stmtU = $conexion->prepare("DELETE FROM usuarios WHERE usuario_id = ?");
+            $stmtU->execute([$this->usuarioId]);
+
+            $conexion->commit();
+            return true;
+        } catch (Exception $e) {
+            if ($conexion->inTransaction()) {
+                $conexion->rollBack();
+            }
+            return false;
+        }
     }
 
     // --- MÉTODOS ESTÁTICOS DE CONSULTA (READ) ---

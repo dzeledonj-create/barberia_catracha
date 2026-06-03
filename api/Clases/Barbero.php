@@ -205,6 +205,10 @@ class Barbero {
     }
 
     public function eliminar(): bool {
+        if ($this->barberoId === null) {
+            return false;
+        }
+
         $db = BD::obtenerConexion();
         try {
             $db->beginTransaction();
