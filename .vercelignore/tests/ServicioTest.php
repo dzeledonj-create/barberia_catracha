@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../Clases/Servicio.php';
+require_once __DIR__ . '/../../api/Clases/Servicio.php';
 
 //extends TestCase es necesario para que PHPUnit reconozca esta clase como una clase de prueba
 class ServicioTest extends TestCase
