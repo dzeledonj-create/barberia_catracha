@@ -256,6 +256,11 @@ class Reserva {
         return $stmt->execute([$reservaId]);
     }
 
+    // Método de instancia para eliminar esta reserva
+    public function eliminar(): bool {
+        return $this->reservaId !== null && self::eliminar($this->reservaId);
+    }
+
     // para obtener por barbero
     public static function contarTotalPorBarbero(int $barberoId): int {
         $stmt = BD::obtenerConexion()->prepare(
