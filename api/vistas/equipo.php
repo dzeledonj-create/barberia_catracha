@@ -10,8 +10,8 @@ $barberos = Barbero::obtenerActivos();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equipo - Barbería Catracha</title>
-    <link rel="stylesheet" href="../../../assets/style.css">
-    <link rel="icon" href="../../../assets/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="../../assets/style.css">
+    <link rel="icon" href="../../assets/img/logo.png" type="image/png">
 </head>
 <body>
 
@@ -27,14 +27,14 @@ $barberos = Barbero::obtenerActivos();
             </p>
         </header>
 
-       <section class="equipo-grid">
+        <section class="equipo-grid">
 
-<?php foreach ($barberos as $barbero): ?>
+        <?php foreach ($barberos as $barbero): ?>
 
-    <section class="barbero-card">
+        <section class="barbero-card">
 
         <section class="barbero-img">
-            <img src="../../../assets/img/<?= htmlspecialchars($barbero['foto_url']) ?>" 
+            <img src="/barberia_catracha/assets/img/<?= htmlspecialchars($barbero['foto_url']) ?>" 
                  alt="<?= htmlspecialchars($barbero['nombre']) ?>">
         </section>
 
@@ -57,16 +57,12 @@ $barberos = Barbero::obtenerActivos();
         </section>
 
     </section>
-
-<?php endforeach; ?>
-
-</section>
-
+        <?php endforeach; ?>
+    </section>
+    <section class="equipo-cta">
+            <a href="/barberia_catracha/api/vistas/reservas.php" class="btn-reservar-equipo">ELIGE TU BARBERO Y RESERVA</a>
         </section>
-
-        <section class="equipo-cta">
-            <a href="/vistas/reservas.php" class="btn-reservar-equipo">ELIGE TU BARBERO Y RESERVA</a>
-        </section>
+    </section>
     </section>
 </main>
 

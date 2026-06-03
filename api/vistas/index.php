@@ -23,8 +23,8 @@
                     La experiencia premium que mereces en el corazón de Zaragoza.
                 </p>
                 <section class="buttons">
-                    <a href="vistas/reservas.php" class="btn-reservas">RESERVA TU CITA AHORA</a>
-                    <a href="vistas/servicios.php" class="btn-servicios">VER SERVICIOS</a>
+                    <a href="/barberia_catracha/api/vistas/reservas.php" class="btn-reservas">RESERVA TU CITA AHORA</a>
+                    <a href="/barberia_catracha/api/vistas/servicios.php" class="btn-servicios">VER SERVICIOS</a>
                 </section>
             </section>
         </section>
@@ -37,7 +37,7 @@
         <div class="title-underline"></div>
 
         <div class="explore-grid">
-            <a href="vistas/servicios.php" class="explore-card">
+            <a href="/barberia_catracha/api/vistas/servicios.php" class="explore-card">
                 <div class="card-icon">✂</div>
                 <div class="card-info">
                     <h3>SERVICIOS & PRECIOS</h3>
@@ -46,7 +46,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="vistas/equipo.php" class="explore-card">
+            <a href="/barberia_catracha/api/vistas/equipo.php" class="explore-card">
                 <div class="card-icon">👥</div>
                 <div class="card-info">
                     <h3>NUESTRO EQUIPO</h3>
