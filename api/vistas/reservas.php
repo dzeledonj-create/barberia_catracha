@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mensajeError = 'No se pudo guardar la información del cliente. Por favor, inténtalo de nuevo.';
             } else {
                 $reserva = new Reserva(
-                    $cliente->clienteId,
+                    $cliente->getClienteId(),
                     (int)$barberoId,
                     (int)$servicioId,
                     $fechaHora->format('Y-m-d H:i:s')
@@ -72,9 +72,9 @@ foreach ($relaciones as $rel) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservas - Barbería Catracha</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../../assets/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="icon" href="/assets/img/logo.png" type="image/png">
+    <link rel="icon" href="../../assets/img/logo.png" type="image/png">
 </head>
 <body>
 
@@ -154,7 +154,7 @@ foreach ($relaciones as $rel) {
                         if (!empty($foto) && !str_starts_with($foto, 'http') && !str_starts_with($foto, '/') && !str_starts_with($foto, '../')) {
                             $foto = '../' . $foto;
                         }
-                        if (empty($foto)) { $foto = '../assets/img/default-avatar.png'; }
+                        if (empty($foto)) { $foto = '../../assets/img/default-avatar.png'; }
                     ?>
                         <label class="card-option barbero-card" data-id="<?= $barbero['barbero_id'] ?>" data-servicios="<?= htmlspecialchars(implode(',', $barberoServicios[$barbero['barbero_id']] ?? [])) ?>">
                             <input type="radio" name="barbero_id" value="<?= $barbero['barbero_id'] ?>" required>
@@ -247,6 +247,7 @@ foreach ($relaciones as $rel) {
     window.reservaScheduleData = <?= json_encode($horarios, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script src="../../assets/script.js"></script>
 </body>
 <?php include_once __DIR__ . '/../includes/footer.php'; ?>
 </html>

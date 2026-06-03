@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reseñas - Barbería Catracha</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../../assets/style.css">
 </head>
 
 <body>
@@ -31,7 +31,7 @@
                class="btn-google">
                 Escribir reseña en Google
             </a>
-            <a href="/vistas/reservas.php" class="btn-resenas-reserva">Reservar Cita</a>
+            <a href="reservas.php" class="btn-resenas-reserva">Reservar Cita</a>
         </div>
     </section>
 

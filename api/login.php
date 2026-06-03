@@ -7,7 +7,7 @@ require_once __DIR__ . '/admin/clases_admin/GestorUsuarios.php';
 // Verificar si el usuario ya ha iniciado sesión y redirigirlo al panel de administración si es un administrador o barbero
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if ($usuario instanceof Administrador || $usuario instanceof UsuarioBarbero) {
-    header("Location: /admin/panel.php");
+    header("Location: admin/GestionesAdmin/panel.php");
     exit;
 }
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Redirigir al panel de administración si el usuario es un administrador o barbero
         if ($_SESSION['rol'] === 'admin' || $_SESSION['rol'] === 'barbero') {
-            header("Location: /admin/panel.php");
+            header("Location: admin/GestionesAdmin/panel.php");
             exit;
         }
     } else {
@@ -47,14 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Barbería Catracha</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
 
 <section class="login-page">
 
     <section class="login-icon">
-    <img src="/assets/img/logo.png" alt="Logo Barbería Catracha">
+    <img src="../assets/img/logo.png" alt="Logo Barbería Catracha">
 </section>
 
     <section class="login-box">
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </section>
 
-    <a href="index.php" class="volver-web">← Volver a la web</a>
+    <a href="vistas/index.php" class="volver-web">← Volver a la web</a>
 
 </section>
 

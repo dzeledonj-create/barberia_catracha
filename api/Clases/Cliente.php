@@ -135,4 +135,7 @@ class Cliente {
             $data['fecha_registro']
         );
     }
+     public function getClienteId(): int {
+        return $this->clienteId;
+    }
 }

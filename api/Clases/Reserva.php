@@ -257,4 +257,5 @@ class Reserva {
         $stmt->execute([$limite]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
 }

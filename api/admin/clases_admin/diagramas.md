@@ -3,7 +3,7 @@
 ```mermaid
 classDiagram
     class Administrador {
-        +__construct(nombre,email,activo = true,usuarioId = null)
+        +__construct(nombre,email,activo = true,usuarioId)
         +puedeVerTodasLasReservas() : bool
         +puedeGestionarReservas() : bool
         +puedeGestionarEquipo() : bool
@@ -21,14 +21,23 @@ classDiagram
     }
 
     class Usuario {
-        +?int usuarioId
-        +string nombre
-        +string email
-        +string rol
-        +bool activo
+        -int usuarioId
+        -string nombre
+        -string email
+        -string rol
+        -bool activo
         +__construct(nombre,email,rol,activo = true,usuarioId = null)
         +estaActivo() : bool
         +getNombre() : string
+        +getUsuarioId() : ?int
+        +setUsuarioId(usuarioId) : void
+        +setNombre(nombre) : void
+        +getEmail() : string
+        +setEmail(email) : void
+        +getRol() : string
+        +setRol(rol) : void
+        +getActivo() : bool
+        +setActivo(activo) : void
         +crear() : void
         +actualizar() : void
         +eliminar() : void

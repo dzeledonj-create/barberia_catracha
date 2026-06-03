@@ -16,13 +16,13 @@ $horarios = Horario::obtenerTodos();
 
     <title>Ubicación - Barbería Catracha</title>
 
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../../assets/style.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
         <link rel="icon"
-            href="/assets/img/logo.png"
+            href="../../assets/img/logo.png"
             type="image/png">
 </head>
 
@@ -147,7 +147,7 @@ $horarios = Horario::obtenerTodos();
     </section>
 
     <section class="equipo-cta">
-        <a href="/vistas/reservas.php" class="btn-reservar-equipo">
+        <a href="reservas.php" class="btn-reservar-equipo">
             SOLICITAR CITA AHORA
         </a>
     </section>

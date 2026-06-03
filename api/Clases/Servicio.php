@@ -35,6 +35,14 @@ class Servicio {
         return $this->duracionMinutos >= 60;
     }
 
+    // --- GETTERS PARA ACCESO DIRECTO A PROPIEDADES ---
+    public function __get($name) {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        }
+        return null;
+    }
+
     // Método para guardar o actualizar el servicio en la base de datos
     public function guardar(): bool {
         $db = BD::obtenerConexion();

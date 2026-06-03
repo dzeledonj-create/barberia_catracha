@@ -6,10 +6,11 @@ require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 // Verificar que el usuario es un administrador antes de permitir el acceso a esta página
 $usuario = GestorUsuarios::obtenerDesdeSesion();
-if (!$usuario instanceof Administrador) {
-    header("Location: /login.php");
+if (!$usuario) {
+    header("Location: ../login.php");
     exit;
 }
+
 
 // Procesar actualización de datos de ubicación y horarios
 if (isset($_POST['guardar'])) {
@@ -47,8 +48,7 @@ $horarios = Horario::obtenerTodos();
     <meta charset="UTF-8">
     <title>Gestión Ubicación</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/style.css">
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../../../assets/style.css">
 </head>
 <body>
 

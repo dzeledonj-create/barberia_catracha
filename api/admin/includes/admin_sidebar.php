@@ -7,19 +7,19 @@
     </section>
 
     <nav class="admin-menu">
-        <a href="/admin/panel.php">Dashboard</a>
-        <a href="/admin/GestionesAdmin/GestionReservas.php">Reservas</a>
-        <a href="/admin/GestionesAdmin/GestionServicios.php">Servicios</a>
-        <a href="/admin/GestionesAdmin/GestionEquipo.php">Equipo</a>
-        <a href="/admin/GestionesAdmin/GestionGaleria.php">Galería</a>
-        <a href="/admin/GestionesAdmin/GestionBlog.php">Blog</a>
-        <a href="/admin/GestionesAdmin/GestionUbicacion.php">Ubicación</a>
+        <a href="panel.php">Dashboard</a>
+        <a href="GestionReservas.php">Reservas</a>
+        <a href="GestionServicios.php">Servicios</a>
+        <a href="GestionEquipo.php">Equipo</a>
+        <a href="GestionGaleria.php">Galería</a>
+        <a href="GestionBlog.php">Blog</a>
+        <a href="GestionUbicacion.php">Ubicación</a>
     </nav>
 
     <section class="admin-bottom">
         <a href="/">Ver Web Pública</a>
-        <a href="/includes/logout.php">Cerrar Sesión</a>
+        <a href="../../includes/logout.php">Cerrar Sesión</a>
     </section>
 </aside>
 
-<script src="/assets/script.js?v=<?= time() ?>"></script>
+<script src="../../assets/script.js?v=<?= time() ?>"></script>

@@ -53,14 +53,14 @@ class GestorUsuarios {
 
     public static function obtenerDatosSesion($usuario): array {
         $datos = [
-            'usuario_id' => $usuario->usuarioId,
-            'nombre' => $usuario->nombre,
-            'email' => $usuario->email,
-            'rol' => $usuario->rol
+            'usuario_id' => $usuario->GetusuarioId(),
+            'nombre' => $usuario->Getnombre(),
+            'email' => $usuario->Getemail(),
+            'rol' => $usuario->Getrol()
         ];
 
         if ($usuario instanceof UsuarioBarbero) {
-            $datos['barbero_id'] = $usuario->barberoId;
+            $datos['barbero_id'] = $usuario->GetbarberoId();
         }
 
         return $datos;
@@ -72,7 +72,7 @@ class GestorUsuarios {
         if (session_status() === PHP_SESSION_NONE) session_start();
 
         // Si no hay un usuario_id en la sesión, significa que no hay un usuario autenticado
-        if (empty($_SESSION['usuario_id'])) return null;
+        //if (empty($_SESSION['usuario_id'])) return null;
 
         if ($_SESSION['rol'] === 'admin') {
             return new Administrador(

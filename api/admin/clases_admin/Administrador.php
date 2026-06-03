@@ -5,7 +5,7 @@ require_once 'Usuario.php';
 class Administrador extends Usuario {
 
 // El constructor del administrador establece el rol como 'admin' y permite configurar su estado activo
-    public function __construct($nombre, $email, $activo = true, $usuarioId = null) {
+    public function __construct($nombre, $email, $activo = true, $usuarioId) {
         parent::__construct($nombre, $email, 'admin', $activo, $usuarioId);
     }
 

@@ -1,9 +1,9 @@
 <?php
-require_once __DIR__ . '/../Clases/BD.php';
-require_once __DIR__ . '/../Clases/Reserva.php';
-require_once __DIR__ . '/clases_admin/GestorUsuarios.php';
+require_once __DIR__ . '/../../Clases/BD.php';
+require_once __DIR__ . '/../../Clases/Reserva.php';
+require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
+ini_set('session.save_path', sys_get_temp_dir());
 session_start();
-var_dump($_SESSION);
 
 // ¡AÑADIMOS SEGURIDAD AL PANEL! Solo los administradores y barberos pueden acceder
 $usuario = GestorUsuarios::obtenerDesdeSesion();
@@ -26,13 +26,13 @@ $recientesReservas = Reserva::obtenerRecientes(5);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin</title>
-    <link rel="stylesheet" href="../../assets/style.css">
+    <link rel="stylesheet" href="../../../assets/style.css">
 </head>
 <body>
 
 <section class="admin-layout">
 
-    <?php include_once __DIR__ . '/includes/admin_sidebar.php'; ?>
+    <?php include_once __DIR__ . '/../includes/admin_sidebar.php'; ?>
 
     <main class="admin-main">
         <p class="admin-small-title">DASHBOARD</p>

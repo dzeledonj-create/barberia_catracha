@@ -2,11 +2,11 @@
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
-if (!$usuario instanceof UsuarioBarbero && !$usuario instanceof Administrador) {
-    header("Location: /login.php");
+if (!$usuario) {
+    header("Location: ../login.php");
     exit;
 }
-  
+
 require_once __DIR__ . '/../../Clases/Reserva.php';
 
 // Procesar acciones de aceptar, cancelar o eliminar reserva
@@ -85,7 +85,7 @@ if (!empty($_GET['mes']) || !empty($_GET['dia']) || !empty($_GET['anio'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión de Reservas</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../../../assets/style.css">
 </head>
 <body>
 

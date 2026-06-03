@@ -5,10 +5,11 @@ require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 // Verificar que el usuario es un administrador antes de permitir el acceso a esta página
 $usuario = GestorUsuarios::obtenerDesdeSesion();
-if (!$usuario instanceof Administrador) {
-    header("Location: /login.php");
+if (!$usuario) {
+    header("Location: ../login.php");
     exit;
 }
+
 
 
 /* CREAR SERVICIO */
@@ -75,7 +76,7 @@ if (isset($_GET['editar'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión de Servicios</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../../../assets/style.css">
 </head>
 <body>
 

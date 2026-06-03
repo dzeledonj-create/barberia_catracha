@@ -3,10 +3,11 @@ require_once __DIR__ . '/../../Clases/MuralSugerencia.php';
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
-if (!$usuario instanceof Administrador) {
-    header("Location: /login.php");
+if (!$usuario) {
+    header("Location: ../login.php");
     exit;
 }
+
 
 /* CREAR */
 if (isset($_POST['crear'])) {
@@ -18,14 +19,14 @@ if (isset($_POST['crear'])) {
         // Generar un nombre único para la imagen para evitar conflictos
         $nombreImagen = time() . "_" . $_FILES['imagen']['name'];
         // Mover la imagen al directorio de galería y obtener la URL para guardarla en la base de datos
-        $rutaDestino = "../../assets/img/galeria/" . $nombreImagen;
+        $rutaDestino = "../../../assets/img/mural/" . $nombreImagen;
         // Mover el archivo subido a la ubicación deseada
         move_uploaded_file(
             $_FILES['imagen']['tmp_name'],
             $rutaDestino
         );
         // Guardar la URL relativa de la imagen para almacenarla en la base de datos
-        $imagenUrl = "assets/img/galeria/" . $nombreImagen;
+        $imagenUrl = "../../../assets/img/mural/" . $nombreImagen;
     }
 
     // Crear una nueva instancia de MuralSugerencia con los datos del formulario y la URL de la imagen procesada
@@ -39,7 +40,7 @@ if (isset($_POST['crear'])) {
 
     $sugerencia->guardar();
 
-    header("Location: /admin/GestionesAdmin/GestionGaleria.php");
+    header("Location: GestionGaleria.php");
     exit;
 }
 
@@ -52,14 +53,14 @@ if (isset($_POST['editar'])) {
 
         $nombreImagen = time() . "_" . $_FILES['imagen']['name'];
 
-        $rutaDestino = "../../assets/img/galeria/" . $nombreImagen;
+        $rutaDestino = "../../assets/img/mural/" . $nombreImagen;
 
         move_uploaded_file(
             $_FILES['imagen']['tmp_name'],
             $rutaDestino
         );
 
-        $imagenUrl = "assets/img/galeria/" . $nombreImagen;
+        $imagenUrl = "../../../assets/img/mural/" . $nombreImagen;
     }
 
     $sugerencia = new MuralSugerencia(
@@ -73,7 +74,7 @@ if (isset($_POST['editar'])) {
 
     $sugerencia->guardar();
 
-    header("Location: /admin/GestionesAdmin/GestionGaleria.php");
+    header("Location: GestionGaleria.php");
     exit;
 }
 
@@ -86,7 +87,7 @@ if (isset($_GET['eliminar'])) {
         $sugerencia->eliminar();
     }
 
-    header("Location: /admin/GestionesAdmin/GestionGaleria.php");
+    header("Location: GestionGaleria.php");
     exit;
 }
 
@@ -108,7 +109,7 @@ $sugerencias = MuralSugerencia::obtenerTodos();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión Galería</title>
 
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../../../assets/style.css">
 </head>
 
 <body>

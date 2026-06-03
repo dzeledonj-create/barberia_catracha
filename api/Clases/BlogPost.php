@@ -36,6 +36,14 @@ class BlogPost {
         return array_map('trim', explode(',', $this->etiquetas));
     }
 
+    // --- GETTERS PARA ACCESO DIRECTO A PROPIEDADES ---
+    public function __get($name) {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        }
+        return null;
+    }
+
     // Método para guardar o actualizar el post en la base de datos
     public function guardar(): bool {
         $db = BD::obtenerConexion();

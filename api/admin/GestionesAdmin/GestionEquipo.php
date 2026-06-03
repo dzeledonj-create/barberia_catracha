@@ -5,8 +5,8 @@ require_once __DIR__ . '/../clases_admin/Administrador.php';
 
 //Obtenemos el usuario actual desde la sesión
 $usuario = GestorUsuarios::obtenerDesdeSesion();
-if (!$usuario instanceof Administrador) {
-    header("Location: /login.php");
+if (!$usuario) {
+    header("Location: ../login.php");
     exit;
 }
 
@@ -53,13 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $nuevoAdmin = new Administrador($_POST['nombre'], $_POST['email'], isset($_POST['activo']));
                 $nuevoAdmin->crear();
             } else {
-                $barbero->nombre = $_POST['nombre'] ?? $barbero->nombre;
-                $barbero->email = $_POST['email'] ?? $barbero->email;
-                $barbero->especialidad = $_POST['especialidad'] ?? $barbero->especialidad;
-                $barbero->descripcion = $_POST['descripcion'] ?? $barbero->descripcion;
-                $barbero->etiquetas = $_POST['etiquetas'] ?? $barbero->etiquetas;
-                $barbero->fotoUrl = $_POST['foto_url'] ?? $barbero->fotoUrl;
-                $barbero->activo = isset($_POST['activo']);
+                $barbero->SetNombre($_POST['nombre'] ?? $barbero->getNombre());
+                $barbero->SetEmail($_POST['email'] ?? $barbero->getEmail());
+                $barbero->SetEspecialidad($_POST['especialidad'] ?? $barbero->getEspecialidad());
+                $barbero->SetDescripcion($_POST['descripcion'] ?? $barbero->getDescripcion());
+                $barbero->SetEtiquetas($_POST['etiquetas'] ?? $barbero->getEtiquetas());
+                $barbero->SetFotoUrl($_POST['foto_url'] ?? $barbero->getFotoUrl());
+                $barbero->SetActivo(isset($_POST['activo']));
                 $barbero->guardar();
             }
         }
@@ -91,7 +91,7 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin - Gestión de Equipo</title>
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="../../../assets/style.css">
 </head>
 <body class="admin-panel">
     <?php include_once __DIR__ . '/../includes/admin_sidebar.php'; ?>
