@@ -90,24 +90,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Para eliminar, determinamos el tipo de usuario por su rol
     if ($accion === 'eliminar') {
-        $barberoId = (int)($_POST['barbero_id'] ?? 0);
+        $barberoId = isset($_POST['barbero_id']) ? (int)$_POST['barbero_id'] : 0;
         $usuarioId = (int)($_POST['usuario_id'] ?? 0);
         $rolSeleccionado = $_POST['rol'] ?? '';
 
-        if ($rolSeleccionado === 'admin') {
-            // Eliminar admin
-            if ($usuarioId) {
-                $admin = Administrador::obtenerPorId($usuarioId);
-                if ($admin) {
-                    $admin->eliminar();
-                    $procesado = true;
-                }
+        if ($rolSeleccionado === 'admin' && $usuarioId) {
+            // Si el usuario es administrador, eliminamos el usuario completo
+            // incluyendo cualquier perfil de barbero asociado.
+            $admin = Administrador::obtenerPorId($usuarioId);
+            if ($admin) {
+                $admin->eliminar();
+                $procesado = true;
             }
-        } else {
-            // Eliminar barbero
+        } elseif ($barberoId) {
+            // Si no es admin, eliminamos solo el perfil de barbero.
             $barbero = Barbero::obtenerPorId($barberoId);
             if ($barbero) {
                 $barbero->eliminar();
+                $procesado = true;
+            }
+        } elseif ($usuarioId) {
+            $usuario = Usuario::obtenerPorId($usuarioId);
+            if ($usuario) {
+                $usuario->eliminar();
+                $procesado = true;
+            }
+        }
+    }
+
+    if ($accion === 'autorizar_vista') {
+        $barberoId = isset($_POST['barbero_id']) ? (int)$_POST['barbero_id'] : 0;
+        if ($barberoId) {
+            $barbero = Barbero::obtenerPorId($barberoId);
+            if ($barbero && $barbero->autorizarEnVista()) {
                 $procesado = true;
             }
         }
@@ -282,7 +297,19 @@ $editandoId = $_GET['editar'] ?? null;
                             
                             <div class="actions-group">
                                 <a href="?editar=<?= $idActual ?>" class="btn-edit">EDITAR</a>
-                                
+
+                                <?php if (Barbero::tieneColumnaMostrarEnVista() && $barber->getRol() === 'admin' && $barber->getBarberoId()): ?>
+                                    <?php if (!$barber->getMostrarEnVista()): ?>
+                                        <form action="" method="POST" class="delete-form">
+                                            <input type="hidden" name="accion" value="autorizar_vista">
+                                            <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
+                                            <button type="submit" class="btn-authorize">AUTORIZAR VISTA CLIENTE</button>
+                                        </form>
+                                    <?php else: ?>
+                                        <span class="role-text" style="color: #2a7a2a; font-size: 0.75rem;">AUTORIZADO EN VISTA</span>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+
                                 <form action="" method="POST" class="delete-form" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este miembro?');">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">

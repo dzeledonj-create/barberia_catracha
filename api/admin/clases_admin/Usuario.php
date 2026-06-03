@@ -123,11 +123,14 @@ class Usuario {
         try {
             $conexion->beginTransaction();
 
-            $stmtB = $conexion->prepare("DELETE FROM barberos WHERE usuario_id = ?");
-            $stmtB->execute([$this->usuarioId]);
-
+            // Eliminar el usuario primero para evitar conflictos con claves foráneas en barberos
             $stmtU = $conexion->prepare("DELETE FROM usuarios WHERE usuario_id = ?");
             $stmtU->execute([$this->usuarioId]);
+
+            // Si existe un barbero vinculado, el trigger o la regla ON DELETE CASCADE debería
+            // eliminarlo automáticamente. Aun así, intentamos limpiar la fila del barbero.
+            $stmtB = $conexion->prepare("DELETE FROM barberos WHERE usuario_id = ?");
+            $stmtB->execute([$this->usuarioId]);
 
             $conexion->commit();
             return true;

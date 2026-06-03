@@ -12,8 +12,10 @@ class Barbero {
     private bool $activo;
     private ?string $rol;
     private ?string $email;
+    private bool $mostrarEnVista;
+    private static ?bool $tieneMostrarEnVista = null;
 
-    public function __construct($nombre, $especialidad = null, $fotoUrl = null, $activo = true, $barberoId = null, $descripcion = null, $etiquetas = null, $rol = null, $email = null, $usuarioId = null) {
+    public function __construct($nombre, $especialidad = null, $fotoUrl = null, $activo = true, $barberoId = null, $descripcion = null, $etiquetas = null, $rol = null, $email = null, $usuarioId = null, bool $mostrarEnVista = false) {
         $this->barberoId = $barberoId;
         $this->usuarioId = $usuarioId;
         $this->nombre = $nombre;
@@ -24,6 +26,7 @@ class Barbero {
         $this->etiquetas = $etiquetas;
         $this->rol = $rol;
         $this->email = $email;
+        $this->mostrarEnVista = $mostrarEnVista;
     }
 
     // Método para verificar si el barbero está activo
@@ -132,7 +135,28 @@ class Barbero {
         $this->email = $email;
     }
 
-    // --- EL CRUD ENCAPSULADO TOTALMENTE AQUÍ ---
+    public function getMostrarEnVista(): bool {
+        return $this->mostrarEnVista;
+    }
+
+    public function setMostrarEnVista(bool $mostrarEnVista): void {
+        $this->mostrarEnVista = $mostrarEnVista;
+    }
+
+    public static function tieneColumnaMostrarEnVista(): bool {
+        if (self::$tieneMostrarEnVista !== null) {
+            return self::$tieneMostrarEnVista;
+        }
+
+        $db = BD::obtenerConexion();
+        $stmt = $db->prepare(
+            "SELECT 1 FROM information_schema.columns WHERE table_name = 'barberos' AND column_name = 'mostrar_en_vista' LIMIT 1"
+        );
+        $stmt->execute();
+        self::$tieneMostrarEnVista = (bool)$stmt->fetchColumn();
+        return self::$tieneMostrarEnVista;
+    }
+
     public function guardar(): bool {
         $db = BD::obtenerConexion();
 
@@ -155,32 +179,47 @@ class Barbero {
                 $this->usuarioId = (int)$stmtU->fetchColumn();
 
                 // 2. Insertar en la tabla barberos vinculando el usuario_id obtenido
-                $sqlBarbero = "INSERT INTO barberos (usuario_id, especialidad, foto_url, descripcion, etiquetas) 
-                               VALUES (?, ?, ?, ?, ?)
-                               RETURNING barbero_id";
+                $sqlBarbero = "INSERT INTO barberos (usuario_id, especialidad, foto_url, descripcion, etiquetas";
+                $sqlBarbero .= self::tieneColumnaMostrarEnVista() ? ", mostrar_en_vista" : "";
+                $sqlBarbero .= ") VALUES (?, ?, ?, ?, ?";
+                $sqlBarbero .= self::tieneColumnaMostrarEnVista() ? ", ?" : "";
+                $sqlBarbero .= ") RETURNING barbero_id";
+
                 $stmtB = $db->prepare($sqlBarbero);
-                $stmtB->execute([
+                $params = [
                     $this->usuarioId,
                     $this->especialidad,
                     $this->fotoUrl,
                     $this->descripcion,
                     $this->etiquetas
-                ]);
+                ];
+                if (self::tieneColumnaMostrarEnVista()) {
+                    $params[] = $this->mostrarEnVista;
+                }
+                $stmtB->execute($params);
                 $this->barberoId = (int)$stmtB->fetchColumn();
 
             } else {
                 // 2. OPERACIÓN ACTUALIZAR: Modificar tabla barberos
                 $sqlBarbero = "UPDATE barberos
-                               SET especialidad = ?, foto_url = ?, descripcion = ?, etiquetas = ?
-                               WHERE barbero_id = ?";
+                               SET especialidad = ?, foto_url = ?, descripcion = ?, etiquetas = ?";
+                if (self::tieneColumnaMostrarEnVista()) {
+                    $sqlBarbero .= ", mostrar_en_vista = ?";
+                }
+                $sqlBarbero .= " WHERE barbero_id = ?";
+
                 $stmtB = $db->prepare($sqlBarbero);
-                $stmtB->execute([
+                $params = [
                     $this->especialidad,
                     $this->fotoUrl,
                     $this->descripcion,
-                    $this->etiquetas,
-                    $this->barberoId
-                ]);
+                    $this->etiquetas
+                ];
+                if (self::tieneColumnaMostrarEnVista()) {
+                    $params[] = $this->mostrarEnVista;
+                }
+                $params[] = $this->barberoId;
+                $stmtB->execute($params);
 
                 // Modificar tabla usuarios (nombre, email y estado activo)
                 $sqlUsuario = "UPDATE usuarios 
@@ -205,7 +244,7 @@ class Barbero {
     }
 
     public function eliminar(): bool {
-        if ($this->barberoId === null) {
+        if ($this->usuarioId === null) {
             return false;
         }
 
@@ -213,35 +252,36 @@ class Barbero {
         try {
             $db->beginTransaction();
 
-            // Averiguamos el usuario_id asociado antes de borrar el perfil profesional
-            $stmt = $db->prepare("SELECT usuario_id FROM barberos WHERE barbero_id = ?");
-            $stmt->execute([$this->barberoId]);
-            $uId = $stmt->fetchColumn();
-
-            if ($uId) {
-                // 1. Borramos el registro de la tabla barberos
+            // Si este usuario también tiene rol admin, solo borramos el perfil de barbero.
+            // La eliminación completa del usuario debe hacerse desde el flujo de admin.
+            if ($this->rol === 'admin') {
                 $stmtB = $db->prepare("DELETE FROM barberos WHERE barbero_id = ?");
                 $stmtB->execute([$this->barberoId]);
+            } else {
+                // Si es un usuario exclusivamente barbero, eliminamos tanto el perfil como el usuario.
+                $stmtB = $db->prepare("DELETE FROM barberos WHERE usuario_id = ?");
+                $stmtB->execute([$this->usuarioId]);
 
-                // 2. Borramos el registro de la tabla usuarios
                 $stmtU = $db->prepare("DELETE FROM usuarios WHERE usuario_id = ?");
-                $stmtU->execute([$uId]);
+                $stmtU->execute([$this->usuarioId]);
             }
 
             $db->commit();
             return true;
-            // Si no se encuentra el usuario asociado, no hacemos nada y retornamos false
         } catch (Exception $e) {
-            if ($db->inTransaction()) $db->rollBack();
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
             return false;
         }
     }
 
-    
     public static function obtenerTodos(): array {
         $db = BD::obtenerConexion();
+        $mostrarEnVistaCampo = self::tieneColumnaMostrarEnVista() ? 'b.mostrar_en_vista' : 'FALSE AS mostrar_en_vista';
+
         $stmt = $db->query("SELECT u.usuario_id, u.nombre, u.activo, u.rol, u.email, 
-                                b.barbero_id, b.especialidad, b.foto_url, b.descripcion, b.etiquetas 
+                                b.barbero_id, b.especialidad, b.foto_url, b.descripcion, b.etiquetas, " . $mostrarEnVistaCampo . "
                             FROM usuarios u
                             LEFT JOIN barberos b ON u.usuario_id = b.usuario_id 
                             WHERE u.rol IN ('barbero', 'admin')
@@ -250,17 +290,21 @@ class Barbero {
         $barberos = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
+            $defaultEspecialidad = $data['rol'] === 'admin' ? 'Administrador' : 'Barbero profesional';
+            $defaultDescripcion = $data['rol'] === 'admin' ? 'Administrador del sistema.' : 'Barbero del equipo.';
+
             $barberos[] = new Barbero(
                 $data['nombre'],
-                $data['especialidad'] ?? 'Administrador',
+                $data['especialidad'] ?? $defaultEspecialidad,
                 $data['foto_url'] ?? 'assets/img/default-user.jpg',
                 (bool)$data['activo'],
                 $data['barbero_id'] ? (int)$data['barbero_id'] : null,
-                $data['descripcion'] ?? 'Administrador del sistema.',
+                $data['descripcion'] ?? $defaultDescripcion,
                 $data['etiquetas'] ?? '',
                 $data['rol'],
                 $data['email'],
-                (int)$data['usuario_id']
+                (int)$data['usuario_id'],
+                isset($data['mostrar_en_vista']) ? (bool)$data['mostrar_en_vista'] : false
             );
         }
         return $barberos;
@@ -268,10 +312,13 @@ class Barbero {
 
     public static function obtenerActivos(): array {
         $db = BD::obtenerConexion();
-        $stmt = $db->query("SELECT b.*, u.nombre, u.activo, u.rol, u.email, u.usuario_id
+        $mostrarEnVistaCampo = self::tieneColumnaMostrarEnVista() ? 'b.mostrar_en_vista' : 'FALSE AS mostrar_en_vista';
+        $condicionAdmin = self::tieneColumnaMostrarEnVista() ? " OR (u.rol = 'admin' AND b.mostrar_en_vista = TRUE)" : '';
+
+        $stmt = $db->query("SELECT b.*, u.nombre, u.activo, u.rol, u.email, u.usuario_id, " . $mostrarEnVistaCampo . "
                             FROM barberos b
                             INNER JOIN usuarios u ON b.usuario_id = u.usuario_id
-                            WHERE u.activo = TRUE AND u.rol = 'barbero'");
+                            WHERE u.activo = TRUE AND (u.rol = 'barbero'" . $condicionAdmin . ")");
 
         $barberos = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -285,7 +332,8 @@ class Barbero {
                 $data['etiquetas'] ?? null,
                 $data['rol'] ?? null,
                 $data['email'] ?? null,
-                $data['usuario_id'] ? (int)$data['usuario_id'] : null
+                $data['usuario_id'] ? (int)$data['usuario_id'] : null,
+                isset($data['mostrar_en_vista']) ? (bool)$data['mostrar_en_vista'] : false
             );
         }
 
@@ -294,7 +342,9 @@ class Barbero {
 
     public static function obtenerPorId($barberoId): ?Barbero {
         $db = BD::obtenerConexion();
-        $stmt = $db->prepare("SELECT b.*, u.nombre, u.activo, u.rol, u.email 
+        $mostrarEnVistaCampo = self::tieneColumnaMostrarEnVista() ? ', b.mostrar_en_vista' : ', FALSE AS mostrar_en_vista';
+
+        $stmt = $db->prepare("SELECT b.*, u.nombre, u.activo, u.rol, u.email" . $mostrarEnVistaCampo . " 
                               FROM barberos b 
                               INNER JOIN usuarios u ON b.usuario_id = u.usuario_id 
                               WHERE b.barbero_id = ?");
@@ -313,7 +363,17 @@ class Barbero {
             $data['etiquetas'],
             $data['rol'],
             $data['email'],
-            $data['usuario_id']
+            $data['usuario_id'],
+            isset($data['mostrar_en_vista']) ? (bool)$data['mostrar_en_vista'] : false
         );
+    }
+
+    public function autorizarEnVista(): bool {
+        if (!self::tieneColumnaMostrarEnVista()) {
+            return false;
+        }
+
+        $this->mostrarEnVista = true;
+        return $this->guardar();
     }
 }
