@@ -257,7 +257,7 @@ class Reserva {
     }
 
     // Método de instancia para eliminar esta reserva
-    public function eliminar(): bool {
+    public function eliminarReserva(): bool {
         return $this->reservaId !== null && self::eliminar($this->reservaId);
     }
 

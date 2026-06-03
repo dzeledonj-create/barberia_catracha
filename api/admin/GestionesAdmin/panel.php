@@ -102,12 +102,12 @@ $recientesReservas = Reserva::obtenerRecientes(5);
         </section>
 
         <section class="admin-actions">
-            <a href="/admin/GestionesAdmin/GestionServicios.php">Gestionar Servicios</a>
-            <a href="/admin/GestionesAdmin/GestionEquipo.php">Gestionar Equipo</a>
-            <a href="/admin/GestionesAdmin/GestionReservas.php">Ver Reservas</a>
-            <a href="/admin/GestionesAdmin/GestionGaleria.php">Gestionar Galería</a>
-            <a href="/admin/GestionesAdmin/GestionBlog.php">Editar Blog</a>
-            <a href="/admin/GestionesAdmin/GestionUbicacion.php">Actualizar Ubicación</a>
+            <a href="GestionServicios.php">Gestionar Servicios</a>
+            <a href="GestionEquipo.php">Gestionar Equipo</a>
+            <a href="GestionReservas.php">Ver Reservas</a>
+            <a href="GestionGaleria.php">Gestionar Galería</a>
+            <a href="GestionBlog.php">Editar Blog</a>
+            <a href="GestionUbicacion.php">Actualizar Ubicación</a>
         </section>
     </main>
 

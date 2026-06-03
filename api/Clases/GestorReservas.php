@@ -124,6 +124,6 @@ class GestorReservas {
             return false;
         }
 
-        return $reserva->eliminar();
+        return $reserva->eliminarReserva();
     }
 }

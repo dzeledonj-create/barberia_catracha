@@ -338,7 +338,5 @@ DROP CONSTRAINT reservas_barbero_id_fkey,
 ADD CONSTRAINT reservas_barbero_id_fkey 
     FOREIGN KEY (barbero_id) REFERENCES barberos(barbero_id) ON DELETE SET NULL;
 
-INSERT INTO usuarios (nombre, email, password, rol, activo) VALUES
-('Administrador', 'admin@barberia.com', '1234', 'administrador', TRUE);
 
 COMMIT;
