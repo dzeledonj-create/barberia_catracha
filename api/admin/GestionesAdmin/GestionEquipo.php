@@ -7,6 +7,7 @@ require_once __DIR__ . '/../clases_admin/Administrador.php';
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario) {
     header("Location: ../login.php");
+}
 if (!$usuario instanceof Administrador) {
     header("Location: /barberia_catracha/api/login.php");
     exit;
