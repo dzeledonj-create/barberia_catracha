@@ -30,7 +30,7 @@ class BD {
                 $sslmode    = $query['sslmode'] ?? 'require';
             } else {
                 // Si NO existe (entorno local en tu PC), usa tus datos locales por defecto
-                $host       = 'localhost';
+                $host       = '192.168.4.24';
                 $puerto     = '5432';
                 $bd         = 'barberia_catracha';
                 $usuario    = 'postgres';
