@@ -34,3 +34,5 @@ class ReservaTest extends TestCase
         $this->assertNotEmpty($reserva);
     }
 }
+
+//.\vendor\bin\phpunit.bat .vercelignore/tests
