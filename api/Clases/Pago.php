@@ -40,6 +40,55 @@ class Pago {
         return number_format($this->monto, 2) . " €";
     }
 
+    // Getters y setters para las propiedades del pago
+    public function getPagoId(): ?int {
+        return $this->pagoId;
+    }
+
+    public function setPagoId(?int $pagoId): void {
+        $this->pagoId = $pagoId;
+    }
+
+    public function getReservaId(): int {
+        return $this->reservaId;
+    }
+
+    public function setReservaId(int $reservaId): void {
+        $this->reservaId = $reservaId;
+    }
+
+    public function getMonto(): float {
+        return $this->monto;
+    }
+
+    public function setMonto(float $monto): void {
+        $this->monto = $monto;
+    }
+
+    public function getMetodoPago(): string {
+        return $this->metodoPago;
+    }
+
+    public function setMetodoPago(string $metodoPago): void {
+        $this->metodoPago = $metodoPago;
+    }
+
+    public function getEstadoPago(): string {
+        return $this->estadoPago;
+    }
+
+    public function setEstadoPago(string $estadoPago): void {
+        $this->estadoPago = $estadoPago;
+    }
+
+    public function getFechaPago(): ?string {
+        return $this->fechaPago;
+    }
+
+    public function setFechaPago(?string $fechaPago): void {
+        $this->fechaPago = $fechaPago;
+    }
+
     // Método para guardar o actualizar el pago en la base de datos
     public function guardar(): bool {
         $db = BD::obtenerConexion();

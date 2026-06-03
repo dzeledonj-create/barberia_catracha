@@ -1,4 +1,6 @@
 
+<?php
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -53,7 +55,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="/vistas/galeria.php" class="explore-card">
+            <a href="/barberia_catracha/api/vistas/galeria.php" class="explore-card">
                 <div class="card-icon">🖼</div>
                 <div class="card-info">
                     <h3>GALERÍA</h3>
@@ -62,7 +64,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="/vistas/reseñas.php" class="explore-card">
+            <a href="/barberia_catracha/api/vistas/reseñas.php" class="explore-card">
                 <div class="card-icon"><i class="fa-solid fa-star"></i></div>
                 <div class="card-info">
                     <h3>RESEÑAS</h3>
@@ -71,7 +73,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="/vistas/ubicacion.php" class="explore-card">
+            <a href="/barberia_catracha/api/vistas/ubicacion.php" class="explore-card">
                 <div class="card-icon">📍</div>
                 <div class="card-info">
                     <h3>UBICACIÓN</h3>
@@ -83,7 +85,7 @@
     </div>
 
     <div class="bottom-cta-bar">
-        <a href="/vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
+        <a href="/barberia_catracha/api/vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
     </div>
 </section>
 

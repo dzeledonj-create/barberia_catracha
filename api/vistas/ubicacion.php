@@ -1,4 +1,3 @@
-ç
 <?php
 require_once __DIR__ . '/../Clases/DatosUbicacion.php';
 require_once __DIR__ . '/../Clases/Horario.php';

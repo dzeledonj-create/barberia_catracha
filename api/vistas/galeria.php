@@ -42,7 +42,7 @@ if ($categoria_actual === 'todos') {
         <nav class="categorias-nav">
             <ul class="categorias-lista">
                 <li>
-                    <a href="/vistas/galeria.php?categoria=todos" 
+                    <a href="./galeria.php?categoria=todos" 
                        class="<?= $categoria_actual === 'todos' ? 'active' : '' ?>">
                        TODOS
                     </a>
@@ -50,7 +50,7 @@ if ($categoria_actual === 'todos') {
 
                 <?php foreach ($categorias_db as $cat): ?>
                     <li>
-                        <a href="/vistas/galeria.php?categoria=<?= urlencode(strtolower($cat)) ?>" 
+                        <a href="./galeria.php?categoria=<?= urlencode(strtolower($cat)) ?>" 
                            class="<?= strtolower($categoria_actual) === strtolower($cat) ? 'active' : '' ?>">
                             <?= strtoupper(htmlspecialchars($cat)) ?>
                         </a>

@@ -33,7 +33,7 @@ if (isset($_POST['guardar'])) {
     );
 }
 
-    header("Location: /admin/GestionesAdmin/GestionUbicacion.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionUbicacion.php");
     exit;
 }
 

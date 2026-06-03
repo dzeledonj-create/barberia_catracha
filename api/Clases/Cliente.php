@@ -23,6 +23,55 @@ class Cliente {
         return $this->nombre . " " . $this->apellido;
     }
 
+    // Getters y setters para las propiedades del cliente
+    public function getClienteId(): ?int {
+        return $this->clienteId;
+    }
+
+    public function setClienteId(?int $clienteId): void {
+        $this->clienteId = $clienteId;
+    }
+
+    public function getNombre(): string {
+        return $this->nombre;
+    }
+
+    public function setNombre(string $nombre): void {
+        $this->nombre = $nombre;
+    }
+
+    public function getApellido(): string {
+        return $this->apellido;
+    }
+
+    public function setApellido(string $apellido): void {
+        $this->apellido = $apellido;
+    }
+
+    public function getTelefono(): string {
+        return $this->telefono;
+    }
+
+    public function setTelefono(string $telefono): void {
+        $this->telefono = $telefono;
+    }
+
+    public function getEmail(): ?string {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): void {
+        $this->email = $email;
+    }
+
+    public function getFechaRegistro(): ?string {
+        return $this->fechaRegistro;
+    }
+
+    public function setFechaRegistro(?string $fechaRegistro): void {
+        $this->fechaRegistro = $fechaRegistro;
+    }
+
     // Método para guardar o actualizar el cliente en la base de datos
     public function guardar(): bool {
         $db = BD::obtenerConexion();

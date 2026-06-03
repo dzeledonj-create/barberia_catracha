@@ -210,7 +210,7 @@ $sugerencias = MuralSugerencia::obtenerTodos();
 
                 <article class="galeria-admin-card">
 
-                    <img src="/<?= htmlspecialchars($sugerencia['imagen_url']) ?>">
+                    <img src="/barberia_catracha/<?= htmlspecialchars($sugerencia['imagen_url']) ?>">
 
                     <section class="galeria-admin-info">
 

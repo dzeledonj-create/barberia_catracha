@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($_POST['ids'] as $idEliminar) {
             Reserva::eliminar((int)$idEliminar);
         }
-        header('Location: /admin/GestionesAdmin/GestionReservas.php');
+        header('Location: /barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php');
         exit;
     }
 }
@@ -28,7 +28,7 @@ if (isset($_GET['accion'], $_GET['id'])) {
 
     // Validar que el ID es un número entero positivo
     if (!is_numeric($id) || $id <= 0) {
-        header('Location: /admin/GestionesAdmin/GestionReservas.php');
+        header('Location: /barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php');
         exit;
     }
 
@@ -47,7 +47,7 @@ if (isset($_GET['accion'], $_GET['id'])) {
         Reserva::eliminar($id);
     }
 
-    header('Location: /admin/GestionesAdmin/GestionReservas.php');
+    header('Location: /barberia_catracha/api/admin/GestionesAdmin/GestionReservas.php');
     exit;
 }
 

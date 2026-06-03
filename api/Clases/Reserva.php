@@ -42,6 +42,63 @@ class Reserva {
         return $this->estado === "pendiente";
     }
 
+    // Getters y setters para las propiedades de la reserva
+    public function getReservaId(): ?int {
+        return $this->reservaId;
+    }
+
+    public function setReservaId(?int $reservaId): void {
+        $this->reservaId = $reservaId;
+    }
+
+    public function getClienteId(): int {
+        return $this->clienteId;
+    }
+
+    public function setClienteId(int $clienteId): void {
+        $this->clienteId = $clienteId;
+    }
+
+    public function getBarberoId(): int {
+        return $this->barberoId;
+    }
+
+    public function setBarberoId(int $barberoId): void {
+        $this->barberoId = $barberoId;
+    }
+
+    public function getServicioId(): int {
+        return $this->servicioId;
+    }
+
+    public function setServicioId(int $servicioId): void {
+        $this->servicioId = $servicioId;
+    }
+
+    public function getFechaHora(): string {
+        return $this->fechaHora;
+    }
+
+    public function setFechaHora(string $fechaHora): void {
+        $this->fechaHora = $fechaHora;
+    }
+
+    public function getEstado(): string {
+        return $this->estado;
+    }
+
+    public function setEstado(string $estado): void {
+        $this->estado = $estado;
+    }
+
+    public function getCreadoEn(): ?string {
+        return $this->creadoEn;
+    }
+
+    public function setCreadoEn(?string $creadoEn): void {
+        $this->creadoEn = $creadoEn;
+    }
+
     // Método para guardar o actualizar la reserva en la base de datos
     public function guardar(): bool {
         // Antes de guardar, verificamos si el barbero está disponible en la fecha y hora dada para el servicio seleccionado
@@ -132,7 +189,10 @@ class Reserva {
     public static function estaDisponible($barberoId, $fechaHora, $servicioId, $reservaId = null): bool {
         $db = BD::obtenerConexion();
 
+        // Para verificar la disponibilidad, necesitamos considerar la duración del servicio
+        // Primero, obtenemos la duración del servicio
         $duracion = 30;
+        // Obtenemos la duración del servicio
         $finNueva = date("Y-m-d H:i:s", strtotime($fechaHora . " + $duracion minutes"));
 
         $sql = "SELECT COUNT(*)

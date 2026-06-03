@@ -14,6 +14,7 @@ class Administrador extends Usuario {
         return true;
     }
     
+    // Función para verificar si el administrador puede gestionar las reservas
     public function puedeGestionarReservas(): bool { 
         return true; 
     }

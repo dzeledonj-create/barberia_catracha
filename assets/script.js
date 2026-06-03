@@ -107,9 +107,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Cambia visualmente el paso visible del formulario y actualiza la barra de progreso superior
     function mostrarPaso(index) {
+        // 
         steps.forEach(step => step.classList.remove('activo'));
+        
         pasosBar.forEach(paso => paso.classList.remove('activo'));
 
+        //
         if (steps[index]) steps[index].classList.add('activo');
         if (pasosBar[index]) pasosBar[index].classList.add('activo');
 
@@ -457,6 +460,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const tarjetasServicios = document.querySelectorAll('.servicio-card');
 
     botonesFiltro.forEach(boton => {
+        // Al hacer clic en un botón de filtro, actualizamos la interfaz para mostrar solo las tarjetas que correspondan a la categoría seleccionada
         boton.addEventListener('click', function () {
             botonesFiltro.forEach(btn => btn.classList.remove('activo'));
             this.classList.add('activo');

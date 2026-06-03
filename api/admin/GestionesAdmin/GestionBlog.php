@@ -52,7 +52,7 @@ if (isset($_POST['crear'])) {
 
     $post->guardar();
 
-    header("Location: /admin/GestionesAdmin/GestionBlog.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -84,7 +84,7 @@ if (isset($_POST['editar'])) {
 
     $post->guardar();
 
-    header("Location: /admin/GestionesAdmin/GestionBlog.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -96,7 +96,7 @@ if (isset($_GET['eliminar'])) {
         $post->eliminar();
     }
 
-    header("Location: /admin/GestionesAdmin/GestionBlog.php");
+    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -166,7 +166,7 @@ $posts = BlogPost::obtenerTodos();
                 </button>
 
                 <?php if ($postEditar): ?>
-                    <a href="/admin/GestionesAdmin/GestionBlog.php" class="admin-btn-cancelar">Cancelar</a>
+                    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php" class="admin-btn-cancelar">Cancelar</a>
                 <?php endif; ?>
 
             </form>

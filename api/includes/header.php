@@ -1,3 +1,6 @@
+<?php
+?>
+
 <header class="main-header">
     <section class="container">
         <section class="icon">
