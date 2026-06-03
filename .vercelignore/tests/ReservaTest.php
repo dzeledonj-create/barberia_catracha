@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../Clases/Reserva.php';
+require_once __DIR__ . '/../../api/Clases/Reserva.php';
 
 // Extends TestCase para crear pruebas unitarias con PHPUnit
 class ReservaTest extends TestCase
