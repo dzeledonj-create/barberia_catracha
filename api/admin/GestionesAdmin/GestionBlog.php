@@ -139,20 +139,20 @@ $posts = BlogPost::obtenerTodos();
             <form method="POST" class="admin-form-blog">
 
                 <?php if ($postEditar): ?>
-                    <input type="hidden" name="post_id" value="<?= $postEditar->postId ?>">
-                    <input type="hidden" name="instagram_embed_actual" value="<?= htmlspecialchars($postEditar->instagramEmbed) ?>">
+                    <input type="hidden" name="post_id" value="<?= $postEditar->getPostId() ?>">
+                    <input type="hidden" name="instagram_embed_actual" value="<?= htmlspecialchars($postEditar->getInstagramEmbed()) ?>">
                 <?php endif; ?>
 
                 <input type="text"
                        name="titulo"
                        placeholder="Título"
-                       value="<?= $postEditar ? htmlspecialchars($postEditar->titulo) : '' ?>"
+                       value="<?= $postEditar ? htmlspecialchars($postEditar->getTitulo()) : '' ?>"
                        required>
 
                 <input type="text"
                        name="etiquetas"
                        placeholder="Etiqueta"
-                       value="<?= $postEditar ? htmlspecialchars($postEditar->etiquetas) : '' ?>">
+                       value="<?= $postEditar ? htmlspecialchars($postEditar->getEtiquetas()) : '' ?>">
 
                 <input type="text"
                        name="instagram_url"
@@ -160,7 +160,7 @@ $posts = BlogPost::obtenerTodos();
 
                 <textarea name="contenido"
                           placeholder="Contenido"
-                          required><?= $postEditar ? htmlspecialchars($postEditar->contenido) : '' ?></textarea>
+                          required><?= $postEditar ? htmlspecialchars($postEditar->getContenido()) : '' ?></textarea>
 
                 <button type="submit" name="<?= $postEditar ? 'editar' : 'crear' ?>">
                     <?= $postEditar ? 'Guardar cambios' : 'Añadir reel' ?>
@@ -182,10 +182,10 @@ $posts = BlogPost::obtenerTodos();
 
                     <section class="blog-admin-media">
 
-                    <?php if (!empty($post['instagram_embed'])): ?>
+                    <?php if (!empty($post->getInstagramEmbed())): ?>
 
                         <div class="instagram-admin-preview">
-                            <?= $post['instagram_embed'] ?>
+                            <?= $post->getInstagramEmbed() ?>
                         </div>
 
                     <?php else: ?>
@@ -200,16 +200,16 @@ $posts = BlogPost::obtenerTodos();
 
                     <section class="blog-admin-info">
 
-                        <span><?= htmlspecialchars($post['etiquetas'] ?? 'BLOG') ?></span>
+                        <span><?= htmlspecialchars($post->getEtiquetas() ?? 'BLOG') ?></span>
 
-                        <h3><?= htmlspecialchars($post['titulo']) ?></h3>
+                        <h3><?= htmlspecialchars($post->getTitulo()) ?></h3>
 
-                        <p><?= htmlspecialchars(substr($post['contenido'], 0, 100)) ?>...</p>
+                        <p><?= htmlspecialchars(substr($post->getContenido(), 0, 100)) ?>...</p>
 
                         <section class="admin-actions-mini">
-                            <a href="?editar=<?= $post['post_id'] ?>">Editar</a>
+                            <a href="?editar=<?= $post->getPostId() ?>">Editar</a>
 
-                            <a href="?eliminar=<?= $post['post_id'] ?>"
+                            <a href="?eliminar=<?= $post->getPostId() ?>"
                                onclick="return confirm('¿Eliminar publicación?')">
                                 Eliminar
                             </a>

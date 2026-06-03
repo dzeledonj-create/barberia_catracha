@@ -61,7 +61,30 @@ class MuralSugerencia {
     }
 
     public function getImagenUrl(): string {
-        return $this->imagenUrl;
+        if (empty($this->imagenUrl)) {
+            return 'assets/img/default-user.jpg';
+        }
+
+        $url = trim($this->imagenUrl);
+
+        // Si contiene protocolo (http://, https://), es URL absoluta
+        if (str_contains($url, '://')) {
+            return $url;
+        }
+
+        // Si comienza con /, es ruta absoluta
+        if (str_starts_with($url, '/')) {
+            return $url;
+        }
+
+        // Normalizar y añadir prefijo de barberia_catracha
+        $normalized = ltrim($url, '/');
+
+        if (str_starts_with($normalized, 'assets/')) {
+            return '/barberia_catracha/' . $normalized;
+        }
+
+        return '/barberia_catracha/assets/img/' . $normalized;
     }
 
     public function setImagenUrl(string $imagenUrl): void {
@@ -82,14 +105,6 @@ class MuralSugerencia {
 
     public function setActivo(bool $activo): void {
         $this->activo = $activo;
-    }
-
-    // --- GETTERS PARA ACCESO DIRECTO A PROPIEDADES ---
-    public function __get($name) {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
-        return null;
     }
 
     // Método para guardar o actualizar la sugerencia en la base de datos
@@ -144,7 +159,19 @@ class MuralSugerencia {
         $db = BD::obtenerConexion();
 
         $stmt = $db->query("SELECT * FROM mural_sugerencias ORDER BY sugerencia_id DESC");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $sugerencias = [];
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $sugerencias[] = new MuralSugerencia(
+                $data['imagen_url'],
+                $data['nombre_corte'],
+                $data['descripcion'],
+                $data['estilo'],
+                (bool)$data['activo'],
+                (int)$data['sugerencia_id']
+            );
+        }
+        return $sugerencias;
     }
 
     // Método para obtener solo las sugerencias activas
@@ -152,7 +179,19 @@ class MuralSugerencia {
         $db = BD::obtenerConexion();
 
         $stmt = $db->query("SELECT * FROM mural_sugerencias WHERE activo = TRUE ORDER BY sugerencia_id DESC");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $sugerencias = [];
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $sugerencias[] = new MuralSugerencia(
+                $data['imagen_url'],
+                $data['nombre_corte'],
+                $data['descripcion'],
+                $data['estilo'],
+                (bool)$data['activo'],
+                (int)$data['sugerencia_id']
+            );
+        }
+        return $sugerencias;
     }
 
     // Método para obtener todas las categorías (estilos) únicas que tienen cortes activos
@@ -198,6 +237,17 @@ public static function obtenerCategoriasRecientes(): array {
 
         $stmt->execute(['%' . $estilo . '%']);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sugerencias = [];
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $sugerencias[] = new MuralSugerencia(
+                $data['imagen_url'],
+                $data['nombre_corte'],
+                $data['descripcion'],
+                $data['estilo'],
+                (bool)$data['activo'],
+                (int)$data['sugerencia_id']
+            );
+        }
+        return $sugerencias;
     }
 }

@@ -100,14 +100,14 @@ if (isset($_GET['editar'])) {
             <form method="POST" class="admin-form-servicios">
 
                 <?php if ($servicioEditar): ?>
-                    <input type="hidden" name="servicio_id" value="<?= $servicioEditar->servicioId ?>">
+                    <input type="hidden" name="servicio_id" value="<?= $servicioEditar->getServicioId() ?>">
                 <?php endif; ?>
 
                 <input 
                     type="text" 
                     name="nombre" 
                     placeholder="Nombre del servicio"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->nombre) : '' ?>"
+                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getNombre()) : '' ?>"
                     required
                 >
 
@@ -115,7 +115,7 @@ if (isset($_GET['editar'])) {
                     type="text" 
                     name="descripcion" 
                     placeholder="Descripción"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->descripcion) : '' ?>"
+                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getDescripcion()) : '' ?>"
                 >
 
                 <input 
@@ -123,7 +123,7 @@ if (isset($_GET['editar'])) {
                     step="0.01" 
                     name="precio" 
                     placeholder="Precio"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->precio) : '' ?>"
+                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getPrecio()) : '' ?>"
                     required
                 >
 
@@ -131,7 +131,7 @@ if (isset($_GET['editar'])) {
                     type="number" 
                     name="duracion_minutos" 
                     placeholder="Duración en minutos"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->duracionMinutos) : '' ?>"
+                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getDuracionMinutos()) : '' ?>"
                     required
                 >
 
@@ -139,7 +139,7 @@ if (isset($_GET['editar'])) {
                     type="text" 
                     name="categoria" 
                     placeholder="Categoría"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->categoria) : '' ?>"
+                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getCategoria()) : '' ?>"
                     required
                 >
 
@@ -158,31 +158,29 @@ if (isset($_GET['editar'])) {
 
             <h2>Servicios registrados</h2>
 
-            <table class="admin-table-servicios">
+            <table class="admin-table-servicios" style="width: 100%; table-layout: auto;">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Precio</th>
-                        <th>Duración</th>
-                        <th>Categoría</th>
-                        <th>Acciones</th>
+                        <th style="width: 15%;">Nombre</th>
+                        <th style="width: 30%;">Descripción</th>
+                        <th style="width: 10%;">Precio</th>
+                        <th style="width: 12%;">Duración</th>
+                        <th style="width: 15%;">Categoría</th>
+                        <th style="width: 18%;">Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <?php foreach ($servicios as $servicio): ?>
                         <tr>
-                            <td><?= htmlspecialchars($servicio['nombre']) ?></td>
-                            <td><?= htmlspecialchars($servicio['descripcion']) ?></td>
-                            <td><?= htmlspecialchars($servicio['precio']) ?> €</td>
-                            <td><?= htmlspecialchars($servicio['duracion_minutos']) ?> min</td>
-                            <td><?= htmlspecialchars($servicio['categoria']) ?></td>
-                            <td>
-                                <td class="admin-actions-mini">
-                                    <a href="?editar=<?= $servicio['servicio_id'] ?>">✎</a>
-                                    <a href="?eliminar=<?= $servicio['servicio_id'] ?>" onclick="return confirm('¿Eliminar servicio?')">🗑</a>
-                                </td>
+                            <td style="word-break: break-word;"><?= htmlspecialchars($servicio->getNombre()) ?></td>
+                            <td style="word-break: break-word; max-width: 300px;"><?= htmlspecialchars($servicio->getDescripcion()) ?></td>
+                            <td style="text-align: center;"><?= htmlspecialchars($servicio->getPrecio()) ?> €</td>
+                            <td style="text-align: center;"><?= htmlspecialchars($servicio->getDuracionMinutos()) ?> min</td>
+                            <td style="text-align: center;"><?= htmlspecialchars($servicio->getCategoria()) ?></td>
+                            <td class="admin-actions-mini" style="text-align: center;">
+                                <a href="?editar=<?= $servicio->getServicioId() ?>">✎</a>
+                                <a href="?eliminar=<?= $servicio->getServicioId() ?>" onclick="return confirm('¿Eliminar servicio?')">🗑</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

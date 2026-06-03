@@ -28,7 +28,7 @@ if (isset($_POST['crear'])) {
             $rutaDestino
         );
         // Guardar la URL relativa de la imagen para almacenarla en la base de datos
-        $imagenUrl = "../../../assets/img/mural/" . $nombreImagen;
+        $imagenUrl = "assets/img/mural/" . $nombreImagen;
     }
 
     // Crear una nueva instancia de MuralSugerencia con los datos del formulario y la URL de la imagen procesada
@@ -55,14 +55,14 @@ if (isset($_POST['editar'])) {
 
         $nombreImagen = time() . "_" . $_FILES['imagen']['name'];
 
-        $rutaDestino = "../../assets/img/mural/" . $nombreImagen;
+        $rutaDestino = "../../../assets/img/mural/" . $nombreImagen;
 
         move_uploaded_file(
             $_FILES['imagen']['tmp_name'],
             $rutaDestino
         );
 
-        $imagenUrl = "../../../assets/img/mural/" . $nombreImagen;
+        $imagenUrl = "assets/img/mural/" . $nombreImagen;
     }
 
     $sugerencia = new MuralSugerencia(
@@ -140,44 +140,44 @@ $sugerencias = MuralSugerencia::obtenerTodos();
 
                     <input type="hidden"
                            name="sugerencia_id"
-                           value="<?= $sugerenciaEditar->sugerenciaId ?>">
+                           value="<?= $sugerenciaEditar->getSugerenciaId() ?>">
 
                     <input type="hidden"
                            name="imagen_actual"
-                           value="<?= htmlspecialchars($sugerenciaEditar->imagenUrl) ?>">
+                           value="<?= htmlspecialchars($sugerenciaEditar->getImagenUrl()) ?>">
 
                 <?php endif; ?>
 
                 <input type="text"
                        name="nombre_corte"
                        placeholder="Título del corte"
-                       value="<?= $sugerenciaEditar ? htmlspecialchars($sugerenciaEditar->nombreCorte) : '' ?>"
+                       value="<?= $sugerenciaEditar ? htmlspecialchars($sugerenciaEditar->getNombreCorte()) : '' ?>"
                        required>
 
                 <input type="text"
                        name="descripcion"
                        placeholder="Descripción"
-                       value="<?= $sugerenciaEditar ? htmlspecialchars($sugerenciaEditar->descripcion) : '' ?>">
+                       value="<?= $sugerenciaEditar ? htmlspecialchars($sugerenciaEditar->getDescripcion()) : '' ?>">
 
                 <select name="estilo">
 
                     <option value="Fade"
-                        <?= ($sugerenciaEditar && $sugerenciaEditar->estilo === 'Fade') ? 'selected' : '' ?>>
+                        <?= ($sugerenciaEditar && $sugerenciaEditar->getEstilo() === 'Fade') ? 'selected' : '' ?>>
                         Fades
                     </option>
 
                     <option value="Barba"
-                        <?= ($sugerenciaEditar && $sugerenciaEditar->estilo === 'Barba') ? 'selected' : '' ?>>
+                        <?= ($sugerenciaEditar && $sugerenciaEditar->getEstilo() === 'Barba') ? 'selected' : '' ?>>
                         Barba
                     </option>
 
                     <option value="Diseño"
-                        <?= ($sugerenciaEditar && $sugerenciaEditar->estilo === 'Diseño') ? 'selected' : '' ?>>
+                        <?= ($sugerenciaEditar && $sugerenciaEditar->getEstilo() === 'Diseño') ? 'selected' : '' ?>>
                         Diseños
                     </option>
 
                     <option value="Tinte"
-                        <?= ($sugerenciaEditar && $sugerenciaEditar->estilo === 'Tinte') ? 'selected' : '' ?>>
+                        <?= ($sugerenciaEditar && $sugerenciaEditar->getEstilo() === 'Tinte') ? 'selected' : '' ?>>
                         Tinte
                     </option>
 
@@ -189,7 +189,7 @@ $sugerencias = MuralSugerencia::obtenerTodos();
 
                     <input type="checkbox"
                            name="activo"
-                        <?= (!$sugerenciaEditar || $sugerenciaEditar->activo) ? 'checked' : '' ?>>
+                        <?= (!$sugerenciaEditar || $sugerenciaEditar->getActivo()) ? 'checked' : '' ?>>
 
                     Visible
 
@@ -212,25 +212,25 @@ $sugerencias = MuralSugerencia::obtenerTodos();
 
                 <article class="galeria-admin-card">
 
-                    <img src="/barberia_catracha/<?= htmlspecialchars($sugerencia['imagen_url']) ?>">
+                    <img src="<?= htmlspecialchars($sugerencia->getImagenUrl()) ?>" alt="<?= htmlspecialchars($sugerencia->getNombreCorte()) ?>">
 
                     <section class="galeria-admin-info">
 
                         <h3>
-                            <?= htmlspecialchars($sugerencia['nombre_corte']) ?>
+                            <?= htmlspecialchars($sugerencia->getNombreCorte()) ?>
                         </h3>
 
                         <p>
-                            <?= htmlspecialchars($sugerencia['estilo']) ?>
+                            <?= htmlspecialchars($sugerencia->getEstilo()) ?>
                         </p>
 
                         <section class="admin-actions-mini">
 
-                            <a href="?editar=<?= $sugerencia['sugerencia_id'] ?>">
+                            <a href="?editar=<?= $sugerencia->getSugerenciaId() ?>">
                                 Editar
                             </a>
 
-                            <a href="?eliminar=<?= $sugerencia['sugerencia_id'] ?>"
+                            <a href="?eliminar=<?= $sugerencia->getSugerenciaId() ?>"
                                onclick="return confirm('¿Eliminar imagen?')">
 
                                 Eliminar

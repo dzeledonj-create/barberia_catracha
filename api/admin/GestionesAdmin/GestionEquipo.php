@@ -21,6 +21,7 @@ if (!$usuario instanceof Administrador) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'] ?? '';
     $rolSeleccionado = $_POST['rol'] ?? 'barbero';
+    $procesado = false;
     
     // Validar que el rol seleccionado es válido
     if ($accion === 'crear') {
@@ -31,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 true
             );
             $nuevoAdmin->crear(); 
+            $procesado = true;
         } else {
             $barbero = new Barbero(
                 $_POST['nombre'] ?? '',
@@ -43,22 +45,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'barbero',
                 $_POST['email'] ?? ''
             );
-            $barbero->guardar();
+            if ($barbero->guardar()) {
+                $procesado = true;
+            }
         }
     }
 
-    // Para actualizar, primero obtenemos el barbero existente para preservar datos no editados
+    // Para actualizar, primero determinamos el tipo de usuario por su rol
     if ($accion === 'actualizar') {
         $barberoId = (int)($_POST['barbero_id'] ?? 0);
-        $barbero = Barbero::obtenerPorId($barberoId);
-        
-        // Si el barbero existe, actualizamos sus datos. Si se cambia el rol a admin, eliminamos el barbero y creamos un nuevo admin con los datos proporcionados.
-        if ($barbero) {
-            if ($rolSeleccionado === 'admin') {
-                $barbero->eliminar();
-                $nuevoAdmin = new Administrador($_POST['nombre'], $_POST['email'], isset($_POST['activo']));
-                $nuevoAdmin->crear();
-            } else {
+        $usuarioId = (int)($_POST['usuario_id'] ?? 0);
+        $rolSeleccionado = $_POST['rol'] ?? '';
+
+        if ($rolSeleccionado === 'admin') {
+            // Actualizar o crear admin
+            if ($usuarioId) {
+                // Si ya existe usuario_id, es actualización
+                $admin = Administrador::obtenerPorId($usuarioId);
+                if ($admin) {
+                    $admin->setNombre($_POST['nombre'] ?? $admin->getNombre());
+                    $admin->setEmail($_POST['email'] ?? $admin->getEmail());
+                    $admin->setActivo(isset($_POST['activo']));
+                    $admin->actualizar();
+                    $procesado = true;
+                }
+            }
+        } else {
+            // Actualizar barbero
+            $barbero = Barbero::obtenerPorId($barberoId);
+            if ($barbero) {
                 $barbero->setNombre($_POST['nombre'] ?? $barbero->getNombre());
                 $barbero->setEmail($_POST['email'] ?? $barbero->getEmail());
                 $barbero->setEspecialidad($_POST['especialidad'] ?? $barbero->getEspecialidad());
@@ -66,29 +81,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $barbero->setEtiquetas($_POST['etiquetas'] ?? $barbero->getEtiquetas());
                 $barbero->setFotoUrl($_POST['foto_url'] ?? $barbero->getFotoUrl());
                 $barbero->setActivo(isset($_POST['activo']));
-                $barbero->guardar();
+                if ($barbero->guardar()) {
+                    $procesado = true;
+                }
             }
         }
     }
 
-    // Para eliminar, simplemente obtenemos el barbero por ID y lo eliminamos. Si el rol es admin, eliminamos el admin correspondiente.
+    // Para eliminar, determinamos el tipo de usuario por su rol
     if ($accion === 'eliminar') {
         $barberoId = (int)($_POST['barbero_id'] ?? 0);
-        $barbero = Barbero::obtenerPorId($barberoId);
-        if ($barbero) {
-            $barbero->eliminar(); 
+        $usuarioId = (int)($_POST['usuario_id'] ?? 0);
+        $rolSeleccionado = $_POST['rol'] ?? '';
+
+        if ($rolSeleccionado === 'admin') {
+            // Eliminar admin
+            if ($usuarioId) {
+                $admin = Administrador::obtenerPorId($usuarioId);
+                if ($admin) {
+                    $admin->eliminar();
+                    $procesado = true;
+                }
+            }
+        } else {
+            // Eliminar barbero
+            $barbero = Barbero::obtenerPorId($barberoId);
+            if ($barbero) {
+                $barbero->eliminar();
+                $procesado = true;
+            }
         }
     }
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php");
-    exit;
+    // Si se procesó correctamente, redirigir
+    if ($procesado) {
+        header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php");
+        exit;
+    }
 }
 
 // Obtener todos los barberos para mostrar en la tabla
-$barberos = Barbero::obtenerTodos(); 
+$barberos = Barbero::obtenerTodos();
 // Para resaltar el formulario de edición si se accede con ?editar=ID
 $editandoId = $_GET['editar'] ?? null;
-$barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 ?>
 
 <!DOCTYPE html>
@@ -175,12 +210,19 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 
         <section class="equipo-grid">
             <?php foreach ($barberos as $barber): ?>
-                <section class="barbero-card <?= ($editandoId == $barber->getBarberoId()) ? 'editing' : '' ?>">
-                    <?php if ($editandoId == $barber->getBarberoId() && $barber->getBarberoId() !== null): ?>
+                <?php 
+                    // Determinar si es barbero o admin
+                    $esBarbero = $barber->getBarberoId() !== null;
+                    $idActual = $esBarbero ? $barber->getBarberoId() : $barber->getUsuarioId();
+                    $estanEditando = ($editandoId === (string)$idActual);
+                ?>
+                <section class="barbero-card <?= $estanEditando ? 'editing' : '' ?>">
+                    <?php if ($estanEditando && $esBarbero): ?>
                         
                         <form action="" method="POST" class="edit-form">
                             <input type="hidden" name="accion" value="actualizar">
                             <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
+                            <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
                             
                             <label>Nombre</label>
                             <input type="text" name="nombre" value="<?= htmlspecialchars($barber->getNombre()) ?>" required>
@@ -211,9 +253,27 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
                                 <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php" class="btn-cancel">CANCELAR</a>
                             </section>
                         </form>
+                    <?php elseif ($estanEditando && !$esBarbero): ?>
+                        
+                        <form action="" method="POST" class="edit-form">
+                            <input type="hidden" name="accion" value="actualizar">
+                            <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
+                            <input type="hidden" name="rol" value="<?= htmlspecialchars($barber->getRol()) ?>">
+                            
+                            <label>Nombre</label>
+                            <input type="text" name="nombre" value="<?= htmlspecialchars($barber->getNombre()) ?>" required>
+                            
+                            <label>Email</label>
+                            <input type="email" name="email" value="<?= htmlspecialchars($barber->getEmail()) ?>" required>
+
+                            <section class="form-buttons">
+                                <button type="submit" class="btn-save">GUARDAR</button>
+                                <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php" class="btn-cancel">CANCELAR</a>
+                            </section>
+                        </form>
                     <?php else: ?>
                             <div class="card-image">
-                                <img src="/barberia_catracha/<?= htmlspecialchars($barber->getFotoUrl() ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->getNombre()) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
+                                <img src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->getNombre()) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
                             </div>
                         <section class="info">
                             <h3><?= htmlspecialchars($barber->getNombre()) ?></h3>
@@ -221,17 +281,15 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
                             <p class="role-text"><?= strtoupper($barber->getRol() ?? 'Barbero') ?></p>
                             
                             <div class="actions-group">
-                                <?php if($barber->getBarberoId()): ?>
-                                    <a href="?editar=<?= $barber->getBarberoId() ?>" class="btn-edit">EDITAR</a>
-                                    
-                                    <form action="" method="POST" class="delete-form" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este miembro?');">
-                                        <input type="hidden" name="accion" value="eliminar">
-                                        <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
-                                        <button type="submit" class="btn-delete">ELIMINAR</button>
-                                    </form>
-                                <?php else: ?>
-                                    <span class="role-text" style="color:#aaa; font-size:0.8rem;">(Edición avanzada de Admins en progreso)</span>
-                                <?php endif; ?>
+                                <a href="?editar=<?= $idActual ?>" class="btn-edit">EDITAR</a>
+                                
+                                <form action="" method="POST" class="delete-form" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este miembro?');">
+                                    <input type="hidden" name="accion" value="eliminar">
+                                    <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
+                                    <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
+                                    <input type="hidden" name="rol" value="<?= htmlspecialchars($barber->getRol()) ?>">
+                                    <button type="submit" class="btn-delete">ELIMINAR</button>
+                                </form>
                             </div>
                         </section>
                     <?php endif; ?>

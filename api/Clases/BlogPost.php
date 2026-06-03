@@ -6,7 +6,7 @@ class BlogPost {
     private string $titulo;
     private string $contenido;
     private ?string $imagenUrl;
-    private int $autorId;
+    private ?int $autorId;
     private ?string $fechaPublicacion;
     private ?string $etiquetas;
     private ?string $instagramEmbed;
@@ -62,18 +62,41 @@ class BlogPost {
     }
 
     public function getImagenUrl(): ?string {
-        return $this->imagenUrl;
+        if (empty($this->imagenUrl)) {
+            return null;
+        }
+
+        $url = trim($this->imagenUrl);
+
+        // Si contiene protocolo (http://, https://), es URL absoluta
+        if (str_contains($url, '://')) {
+            return $url;
+        }
+
+        // Si comienza con /, es ruta absoluta
+        if (str_starts_with($url, '/')) {
+            return $url;
+        }
+
+        // Normalizar y añadir prefijo de barberia_catracha
+        $normalized = ltrim($url, '/');
+
+        if (str_starts_with($normalized, 'assets/')) {
+            return '/barberia_catracha/' . $normalized;
+        }
+
+        return '/barberia_catracha/assets/img/' . $normalized;
     }
 
     public function setImagenUrl(?string $imagenUrl): void {
         $this->imagenUrl = $imagenUrl;
     }
 
-    public function getAutorId(): int {
+    public function getAutorId(): ?int {
         return $this->autorId;
     }
 
-    public function setAutorId(int $autorId): void {
+    public function setAutorId(?int $autorId): void {
         $this->autorId = $autorId;
     }
 
@@ -99,14 +122,6 @@ class BlogPost {
 
     public function setInstagramEmbed(?string $instagramEmbed): void {
         $this->instagramEmbed = $instagramEmbed;
-    }
-
-    // --- GETTERS PARA ACCESO DIRECTO A PROPIEDADES ---
-    public function __get($name) {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
-        return null;
     }
 
     // Método para guardar o actualizar el post en la base de datos
@@ -166,7 +181,22 @@ class BlogPost {
                 LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id
                 ORDER BY p.fecha_publicacion DESC";
 
-        return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $db->query($sql);
+        
+        $posts = [];
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $posts[] = new BlogPost(
+                $data['titulo'],
+                $data['contenido'],
+                $data['autor_id'],
+                $data['imagen_url'],
+                $data['etiquetas'],
+                $data['post_id'],
+                $data['fecha_publicacion'],
+                $data['instagram_embed']
+            );
+        }
+        return $posts;
     }
 
     // Método para obtener un post por ID

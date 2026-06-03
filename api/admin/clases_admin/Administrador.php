@@ -5,7 +5,7 @@ require_once 'Usuario.php';
 class Administrador extends Usuario {
 
 // El constructor del administrador establece el rol como 'admin' y permite configurar su estado activo
-    public function __construct($nombre, $email, $activo = true, $usuarioId) {
+    public function __construct($nombre, $email, $activo = true, $usuarioId = null) {
         parent::__construct($nombre, $email, 'admin', $activo, $usuarioId);
     }
 
@@ -47,6 +47,21 @@ class Administrador extends Usuario {
     // Ubicación
     public function puedeGestionarUbicacion(): bool { 
         return true; 
+    }
+
+    // --- MÉTODO ESTÁTICO PARA OBTENER ADMINISTRADOR POR ID ---
+    public static function obtenerPorId($usuarioId): ?Administrador {
+        $usuario = Usuario::obtenerPorId($usuarioId);
+        
+        if ($usuario && $usuario->getRol() === 'admin') {
+            return new Administrador(
+                $usuario->getNombre(),
+                $usuario->getEmail(),
+                $usuario->getActivo(),
+                $usuario->getUsuarioId()
+            );
+        }
+        return null;
     }
 }
 ?>

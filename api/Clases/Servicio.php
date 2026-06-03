@@ -84,14 +84,6 @@ class Servicio {
         $this->categoria = $categoria;
     }
 
-    // --- GETTERS PARA ACCESO DIRECTO A PROPIEDADES ---
-    public function __get($name) {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
-        return null;
-    }
-
     // Método para guardar o actualizar el servicio en la base de datos
     public function guardar(): bool {
         $db = BD::obtenerConexion();
@@ -143,7 +135,19 @@ class Servicio {
         $db = BD::obtenerConexion();
 
         $stmt = $db->query("SELECT * FROM servicios ORDER BY categoria ASC, nombre ASC");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $servicios = [];
+        while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $servicios[] = new Servicio(
+                $data['nombre'],
+                $data['descripcion'],
+                $data['precio'],
+                $data['duracion_minutos'],
+                $data['servicio_id'],
+                $data['categoria']
+            );
+        }
+        return $servicios;
     }
 
     // Método para obtener un servicio por ID
