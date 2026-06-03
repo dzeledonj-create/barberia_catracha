@@ -1,13 +1,14 @@
 <?php
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
+require_once __DIR__ . '/../../Clases/Reserva.php';
+ini_set('session.save_path', sys_get_temp_dir());
+session_start();
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario) {
     header("Location: ../login.php");
     exit;
 }
-
-require_once __DIR__ . '/../../Clases/Reserva.php';
 
 // Procesar acciones de aceptar, cancelar o eliminar reserva
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

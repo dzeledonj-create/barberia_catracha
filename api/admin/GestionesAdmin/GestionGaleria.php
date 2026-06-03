@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../../Clases/MuralSugerencia.php';
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
+ini_set('session.save_path', sys_get_temp_dir());
+session_start();
 
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario) {

@@ -1,12 +1,16 @@
 <?php
 require_once __DIR__ . '/../../Clases/Barbero.php';
 require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
-require_once __DIR__ . '/../clases_admin/Administrador.php'; 
+require_once __DIR__ . '/../clases_admin/Administrador.php';
+ini_set('session.save_path', sys_get_temp_dir());
+session_start();
 
 //Obtenemos el usuario actual desde la sesión
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario) {
     header("Location: ../login.php");
+    exit;
+}
 if (!$usuario instanceof Administrador) {
     header("Location: /barberia_catracha/api/login.php");
     exit;
@@ -55,13 +59,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $nuevoAdmin = new Administrador($_POST['nombre'], $_POST['email'], isset($_POST['activo']));
                 $nuevoAdmin->crear();
             } else {
-                $barbero->SetNombre($_POST['nombre'] ?? $barbero->getNombre());
-                $barbero->SetEmail($_POST['email'] ?? $barbero->getEmail());
-                $barbero->SetEspecialidad($_POST['especialidad'] ?? $barbero->getEspecialidad());
-                $barbero->SetDescripcion($_POST['descripcion'] ?? $barbero->getDescripcion());
-                $barbero->SetEtiquetas($_POST['etiquetas'] ?? $barbero->getEtiquetas());
-                $barbero->SetFotoUrl($_POST['foto_url'] ?? $barbero->getFotoUrl());
-                $barbero->SetActivo(isset($_POST['activo']));
+                $barbero->setNombre($_POST['nombre'] ?? $barbero->getNombre());
+                $barbero->setEmail($_POST['email'] ?? $barbero->getEmail());
+                $barbero->setEspecialidad($_POST['especialidad'] ?? $barbero->getEspecialidad());
+                $barbero->setDescripcion($_POST['descripcion'] ?? $barbero->getDescripcion());
+                $barbero->setEtiquetas($_POST['etiquetas'] ?? $barbero->getEtiquetas());
+                $barbero->setFotoUrl($_POST['foto_url'] ?? $barbero->getFotoUrl());
+                $barbero->setActivo(isset($_POST['activo']));
                 $barbero->guardar();
             }
         }
@@ -171,36 +175,36 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
 
         <section class="equipo-grid">
             <?php foreach ($barberos as $barber): ?>
-                <section class="barbero-card <?= ($editandoId == $barber->barberoId) ? 'editing' : '' ?>">
-                    <?php if ($editandoId == $barber->barberoId && $barber->barberoId !== null): ?>
+                <section class="barbero-card <?= ($editandoId == $barber->getBarberoId()) ? 'editing' : '' ?>">
+                    <?php if ($editandoId == $barber->getBarberoId() && $barber->getBarberoId() !== null): ?>
                         
                         <form action="" method="POST" class="edit-form">
                             <input type="hidden" name="accion" value="actualizar">
-                            <input type="hidden" name="barbero_id" value="<?= $barber->barberoId ?>">
+                            <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
                             
                             <label>Nombre</label>
-                            <input type="text" name="nombre" value="<?= htmlspecialchars($barber->nombre) ?>" required>
+                            <input type="text" name="nombre" value="<?= htmlspecialchars($barber->getNombre()) ?>" required>
                             
                             <label>Email</label>
-                            <input type="email" name="email" value="<?= htmlspecialchars($barber->email) ?>" required>
+                            <input type="email" name="email" value="<?= htmlspecialchars($barber->getEmail()) ?>" required>
                             
                             <label>Especialidad</label>
-                            <input type="text" name="especialidad" value="<?= htmlspecialchars($barber->especialidad ?? '') ?>">
+                            <input type="text" name="especialidad" value="<?= htmlspecialchars($barber->getEspecialidad() ?? '') ?>">
                             
                             <label>Rol de Sistema</label>
                             <select name="rol" required>
-                                <option value="barbero" <?= ($barber->rol === 'barbero') ? 'selected' : '' ?>>Barbero Profesional</option>
-                                <option value="admin" <?= ($barber->rol === 'admin') ? 'selected' : '' ?>>Administrador del Sistema</option>
+                                <option value="barbero" <?= ($barber->getRol() === 'barbero') ? 'selected' : '' ?>>Barbero Profesional</option>
+                                <option value="admin" <?= ($barber->getRol() === 'admin') ? 'selected' : '' ?>>Administrador del Sistema</option>
                             </select>
 
                             <label>Descripción</label>
-                            <textarea name="descripcion" rows="3"><?= htmlspecialchars($barber->descripcion ?? '') ?></textarea>
+                            <textarea name="descripcion" rows="3"><?= htmlspecialchars($barber->getDescripcion() ?? '') ?></textarea>
                             
                             <label>Etiquetas</label>
-                            <input type="text" name="etiquetas" value="<?= htmlspecialchars($barber->etiquetas ?? '') ?>">
+                            <input type="text" name="etiquetas" value="<?= htmlspecialchars($barber->getEtiquetas() ?? '') ?>">
                             
                             <label>Foto URL</label>
-                            <input type="text" name="foto_url" value="<?= htmlspecialchars($barber->fotoUrl ?? '') ?>">
+                            <input type="text" name="foto_url" value="<?= htmlspecialchars($barber->getFotoUrl() ?? '') ?>">
 
                             <section class="form-buttons">
                                 <button type="submit" class="btn-save">GUARDAR</button>
@@ -209,20 +213,20 @@ $barberoAEditar = $editandoId ? Barbero::obtenerPorId($editandoId) : null;
                         </form>
                     <?php else: ?>
                             <div class="card-image">
-                                <img src="/barberia_catracha/<?= htmlspecialchars($barber->fotoUrl ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->nombre) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
+                                <img src="/barberia_catracha/<?= htmlspecialchars($barber->getFotoUrl() ?? 'assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->getNombre()) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
                             </div>
                         <section class="info">
-                            <h3><?= htmlspecialchars($barber->nombre) ?></h3>
-                            <p class="rank"><?= htmlspecialchars($barber->especialidad ?? 'Admin') ?></p>
-                            <p class="role-text"><?= strtoupper($barber->rol ?? 'Barbero') ?></p>
+                            <h3><?= htmlspecialchars($barber->getNombre()) ?></h3>
+                            <p class="rank"><?= htmlspecialchars($barber->getEspecialidad() ?? 'Admin') ?></p>
+                            <p class="role-text"><?= strtoupper($barber->getRol() ?? 'Barbero') ?></p>
                             
                             <div class="actions-group">
-                                <?php if($barber->barberoId): ?>
-                                    <a href="?editar=<?= $barber->barberoId ?>" class="btn-edit">EDITAR</a>
+                                <?php if($barber->getBarberoId()): ?>
+                                    <a href="?editar=<?= $barber->getBarberoId() ?>" class="btn-edit">EDITAR</a>
                                     
                                     <form action="" method="POST" class="delete-form" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este miembro?');">
                                         <input type="hidden" name="accion" value="eliminar">
-                                        <input type="hidden" name="barbero_id" value="<?= $barber->barberoId ?>">
+                                        <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
                                         <button type="submit" class="btn-delete">ELIMINAR</button>
                                     </form>
                                 <?php else: ?>
