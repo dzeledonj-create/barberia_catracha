@@ -39,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $procesado = false;
     
     // Validar que el rol seleccionado es válido
-    if ($accion === 'crear') {
-        if ($rolSeleccionado === 'admin') {
+    if ($accion === 'crear') { // Crear nuevo miembro del equipo
+        if ($rolSeleccionado === 'admin') {// Si el rol es admin, se crea un nuevo administrador sin perfil de barbero
             // Crea una instancia de Administrador con los datos del formulario
             $nuevoAdmin = new Administrador(
                 $_POST['nombre'] ?? '',

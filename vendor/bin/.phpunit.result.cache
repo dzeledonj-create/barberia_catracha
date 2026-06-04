@@ -1,1 +1,1 @@
-{"version":2,"defects":[],"times":{"ReservaTest::testCrearReservaEsObjetoReserva":0.005,"ReservaTest::testReservaTieneFecha":0.002,"ServicioTest::testCrearServicio":0.001}}
+{"version":2,"defects":{"ServicioTest::testCrearServicio":8,"ReservaTest::testReservaTieneFecha":8},"times":{"ReservaTest::testCrearReservaEsObjetoReserva":0.014,"ReservaTest::testReservaTieneFecha":0.007,"ServicioTest::testCrearServicio":0.002}}

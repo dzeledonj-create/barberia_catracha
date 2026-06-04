@@ -21,9 +21,9 @@ class ServicioTest extends TestCase
         );
 
         //Para verificar que las propiedades del servicio se asignaron correctamente
-        $this->assertEquals("Corte Test", $servicio->nombre);
-        $this->assertEquals("Descripción test", $servicio->descripcion);
-        $this->assertEquals(15, $servicio->precio);
-        $this->assertEquals(30, $servicio->duracionMinutos);
+        $this->assertEquals("Corte Test", $servicio->getNombre());// Verificar que el nombre del servicio es correcto
+        $this->assertEquals("Descripción test", $servicio->getDescripcion());
+        $this->assertEquals(15, $servicio->getPrecio());
+        $this->assertEquals(30, $servicio->getDuracionMinutos());
     }
 }
