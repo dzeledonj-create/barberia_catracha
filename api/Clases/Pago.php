@@ -141,8 +141,21 @@ class Pago {
                 FROM pagos p
                 JOIN reservas r ON p.reserva_id = r.reserva_id
                 ORDER BY p.fecha_pago DESC";
-
-        return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+//$reservaId, $monto, $metodoPago, $estadoPago = "pagado", $pagoId = null, $fechaPago = null
+       // return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+       $pagos = [];
+       $stmt = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+       foreach ($stmt as $row) {
+        $pagos[] = new Pago(
+            $row['reserva_id'],
+            $row['monto'],
+            $row['metodo_pago'],
+            $row['estado_pago'],
+            $row['pago_id'],
+            $row['fecha_pago']
+        );
+       }
+       return $pagos;
     }
 
     // Método para obtener un pago por ID

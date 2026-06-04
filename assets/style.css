@@ -3054,10 +3054,33 @@ body.admin-panel {
     margin-bottom: 25px;
 }
  
-.add-form-grid {
+..add-form-grid {
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+/* Estilo de campo de subida de imagen dentro del gestor de equipo */
+.input-group input[type="file"] {
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    background-color: #0d0d0d;
+    padding: 10px 12px;
+    color: #eee;
+}
+
+.input-group input[type="file"]::-webkit-file-upload-button {
+    border: none;
+    background: #d99c2b;
+    color: #000;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.input-group input[type="file"]::-webkit-file-upload-button:hover {
+    background: #f0ad32;
 }
  
 .form-row {
@@ -3179,8 +3202,13 @@ body.admin-panel .barbero-card {
     border: 1px solid #1e1e1e;
     overflow: hidden;
     position: relative;
-    transition: border-color 0.3s ease;
-    border-radius: 0;
+    transition: border-color 0.3s ease, transform 0.25s ease;
+    border-radius: 18px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+body.admin-panel .barbero-card:hover {
+    transform: translateY(-2px);
 }
  
 body.admin-panel .barbero-card:hover {

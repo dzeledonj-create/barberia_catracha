@@ -29,6 +29,49 @@ if (!$usuario instanceof Administrador) {
 }
 
 // --- PROCESAMIENTO DEL FORMULARIO UNIFICADO ---
+
+function guardarImagenEquipo(string $campoFoto, ?string $rutaActual = null): array {
+    if (empty($_FILES[$campoFoto]) || $_FILES[$campoFoto]['error'] === UPLOAD_ERR_NO_FILE) {
+        return ['path' => $rutaActual, 'uploaded' => false, 'error' => ''];
+    }
+
+    $archivo = $_FILES[$campoFoto];
+    if ($archivo['error'] !== UPLOAD_ERR_OK) {
+        $errores = [
+            UPLOAD_ERR_INI_SIZE => 'El archivo excede el tamaño máximo del servidor.',
+            UPLOAD_ERR_FORM_SIZE => 'El archivo excede el tamaño máximo permitido.',
+            UPLOAD_ERR_PARTIAL => 'El archivo se subió parcialmente.',
+            UPLOAD_ERR_NO_FILE => 'No se seleccionó ningún archivo.',
+            UPLOAD_ERR_NO_TMP_DIR => 'Falta el directorio temporal.',
+            UPLOAD_ERR_CANT_WRITE => 'No se pudo escribir el archivo en disco.',
+            UPLOAD_ERR_EXTENSION => 'La subida fue detenida por una extensión.',
+        ];
+        return ['path' => $rutaActual, 'uploaded' => false, 'error' => $errores[$archivo['error']] ?? 'Error desconocido al subir la imagen.'];
+    }
+
+    if (!is_uploaded_file($archivo['tmp_name'])) {
+        return ['path' => $rutaActual, 'uploaded' => false, 'error' => 'El archivo no es una subida válida.'];
+    }
+
+    $uploadDir = __DIR__ . '/../../../assets/img/equipo/';
+    if (!is_dir($uploadDir)) {
+        @mkdir($uploadDir, 0755, true);
+    }
+
+    $ext = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
+    if (!preg_match('/^[a-z0-9]+$/i', $ext)) {
+        $ext = 'jpg';
+    }
+    $filename = time() . '_' . bin2hex(random_bytes(4)) . ($ext ? '.' . $ext : '');
+    $destino = $uploadDir . $filename;
+
+    if (!move_uploaded_file($archivo['tmp_name'], $destino)) {
+        return ['path' => $rutaActual, 'uploaded' => false, 'error' => 'No se pudo guardar el archivo en el servidor.'];
+    }
+
+    return ['path' => 'assets/img/equipo/' . $filename, 'uploaded' => true, 'error' => ''];
+}
+
 // Verificar que el formulario se ha enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtiene la acción enviada (crear, actualizar, eliminar, autorizar_vista)
@@ -40,36 +83,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Validar que el rol seleccionado es válido
     if ($accion === 'crear') { // Crear nuevo miembro del equipo
-        if ($rolSeleccionado === 'admin') {// Si el rol es admin, se crea un nuevo administrador sin perfil de barbero
-            // Crea una instancia de Administrador con los datos del formulario
+        $uploadResult = guardarImagenEquipo('foto', 'assets/img/default-user.jpg');
+
+        if ($rolSeleccionado === 'admin') {// Si el rol es admin, se crea un nuevo administrador
             $nuevoAdmin = new Administrador(
                 $_POST['nombre'] ?? '',
                 $_POST['email'] ?? '',
                 true
             );
-            $nuevoAdmin->crear(); 
+            $nuevoAdmin->crear();
             $procesado = true;
-        } else {
-            // Crea una instancia de Barbero con todos los datos del formulario
-            // Manejo de subida de imagen (si se sube un archivo, lo guardamos en assets/img/equipo/)
-            $fotoPath = $_POST['foto_url'] ?? 'assets/img/default-user.jpg';
-            $imageUploaded = false;
-            if (isset($_FILES['foto']) && isset($_FILES['foto']['tmp_name']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = __DIR__ . '/../../../assets/img/equipo/';
-                if (!is_dir($uploadDir)) {@mkdir($uploadDir, 0755, true);} 
-                $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-                $filename = time() . '_' . bin2hex(random_bytes(4)) . ($ext ? '.' . $ext : '');
-                $dest = $uploadDir . $filename;
-                if (move_uploaded_file($_FILES['foto']['tmp_name'], $dest)) {
-                    $fotoPath = 'assets/img/equipo/' . $filename;
-                    $imageUploaded = true;
-                }
-            }
 
+            if ($uploadResult['uploaded']) {
+                try {
+                    $db = BD::obtenerConexion();
+                    $sqlBarbero = "INSERT INTO barberos (usuario_id, especialidad, foto_url, descripcion, etiquetas";
+                    $sqlBarbero .= Barbero::tieneColumnaMostrarEnVista() ? ", mostrar_en_vista" : "";
+                    $sqlBarbero .= ") VALUES (?, ?, ?, ?, ?";
+                    $sqlBarbero .= Barbero::tieneColumnaMostrarEnVista() ? ", ?" : "";
+                    $sqlBarbero .= ")";
+
+                    $params = [
+                        $nuevoAdmin->getUsuarioId(),
+                        'Administrador',
+                        $uploadResult['path'],
+                        'Administrador del sistema.',
+                        ''
+                    ];
+                    if (Barbero::tieneColumnaMostrarEnVista()) {
+                        $params[] = false;
+                    }
+                    $stmt = $db->prepare($sqlBarbero);
+                    $stmt->execute($params);
+                    $_SESSION['flash_message'] = 'Imagen subida correctamente.';
+                } catch (Exception $e) {
+                    $_SESSION['flash_message'] = 'Administrador creado, pero no se pudo guardar la imagen.';
+                }
+            } elseif ($uploadResult['error']) {
+                $_SESSION['flash_message'] = 'Administrador creado. ' . $uploadResult['error'];
+            }
+        } else {
             $barbero = new Barbero(
                 $_POST['nombre'] ?? '',
                 $_POST['especialidad'] ?? '',
-                $fotoPath,
+                $uploadResult['path'],
                 true,
                 null,
                 $_POST['descripcion'] ?? '',
@@ -77,12 +134,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'barbero',
                 $_POST['email'] ?? ''
             );
-            // Guarda el barbero en la base de datos
+
             if ($barbero->guardar()) {
                 $procesado = true;
-                if ($imageUploaded) {
+                if ($uploadResult['uploaded']) {
                     $_SESSION['flash_message'] = 'Imagen subida correctamente.';
                 }
+            } elseif ($uploadResult['error']) {
+                $_SESSION['flash_message'] = $uploadResult['error'];
             }
         }
     }
@@ -125,43 +184,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     }
 
-                    // Si se sube una foto y existe un perfil de barbero vinculado, actualizar su foto
-                    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                    $uploadResult = guardarImagenEquipo('foto');
+
+                    if (!empty($_POST['foto_delete']) && $_POST['foto_delete'] == '1') {
                         try {
                             $db = BD::obtenerConexion();
-                            $stmt = $db->prepare("SELECT barbero_id FROM barberos WHERE usuario_id = ? LIMIT 1");
+                            $q = $db->prepare("SELECT foto_url FROM barberos WHERE usuario_id = ? LIMIT 1");
+                            $q->execute([$usuarioId]);
+                            $current = $q->fetchColumn();
+                            if ($current) {
+                                $possible = ltrim($current, '/');
+                                if (strpos($possible, 'assets/img/equipo/') !== false) {
+                                    $oldFull = __DIR__ . '/../../../' . $possible;
+                                    if (is_file($oldFull)) @unlink($oldFull);
+                                }
+                            }
+                            $upd = $db->prepare("UPDATE barberos SET foto_url = ? WHERE usuario_id = ?");
+                            $upd->execute(['assets/img/default-user.jpg', $usuarioId]);
+                            $_SESSION['flash_message'] = 'Imagen eliminada correctamente.';
+                        } catch (Exception $e) {
+                            // No bloqueamos la actualización si falla la limpieza.
+                        }
+                    }
+
+                    if ($uploadResult['uploaded']) {
+                        try {
+                            $db = BD::obtenerConexion();
+                            $stmt = $db->prepare("SELECT barbero_id, foto_url FROM barberos WHERE usuario_id = ? LIMIT 1");
                             $stmt->execute([$usuarioId]);
                             $barberoRow = $stmt->fetch(PDO::FETCH_ASSOC);
+                            $current = $barberoRow['foto_url'] ?? null;
+
                             if ($barberoRow) {
-                                        // Obtener foto actual para eliminarla después si corresponde
-                                        $q = $db->prepare("SELECT foto_url FROM barberos WHERE usuario_id = ? LIMIT 1");
-                                        $q->execute([$usuarioId]);
-                                        $current = $q->fetchColumn();
+                                $upd = $db->prepare("UPDATE barberos SET foto_url = ? WHERE usuario_id = ?");
+                                $upd->execute([$uploadResult['path'], $usuarioId]);
+                            } else {
+                                $sqlInsert = "INSERT INTO barberos (usuario_id, especialidad, foto_url, descripcion, etiquetas";
+                                $sqlInsert .= Barbero::tieneColumnaMostrarEnVista() ? ", mostrar_en_vista" : "";
+                                $sqlInsert .= ") VALUES (?, ?, ?, ?, ?";
+                                $sqlInsert .= Barbero::tieneColumnaMostrarEnVista() ? ", ?" : "";
+                                $sqlInsert .= ")";
 
-                                        $uploadDir = __DIR__ . '/../../../assets/img/equipo/';
-                                        if (!is_dir($uploadDir)) {@mkdir($uploadDir, 0755, true);} 
-                                        $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-                                        $filename = time() . '_' . bin2hex(random_bytes(4)) . ($ext ? '.' . $ext : '');
-                                        $dest = $uploadDir . $filename;
-                                        if (move_uploaded_file($_FILES['foto']['tmp_name'], $dest)) {
-                                            $fotoPath = 'assets/img/equipo/' . $filename;
-                                            $upd = $db->prepare("UPDATE barberos SET foto_url = ? WHERE usuario_id = ?");
-                                            $upd->execute([$fotoPath, $usuarioId]);
-
-                                            // Borrar fichero anterior si estaba en la carpeta de equipo
-                                            if ($current) {
-                                                $possible = ltrim($current, '/');
-                                                if (strpos($possible, 'assets/img/equipo/') !== false) {
-                                                    $oldFull = __DIR__ . '/../../../' . $possible;
-                                                    if (is_file($oldFull)) @unlink($oldFull);
-                                                }
-                                            }
-                                            $_SESSION['flash_message'] = 'Imagen subida correctamente.';
-                                        }
+                                $params = [
+                                    $usuarioId,
+                                    'Administrador',
+                                    $uploadResult['path'],
+                                    'Administrador del sistema.',
+                                    ''
+                                ];
+                                if (Barbero::tieneColumnaMostrarEnVista()) {
+                                    $params[] = false;
+                                }
+                                $ins = $db->prepare($sqlInsert);
+                                $ins->execute($params);
                             }
+
+                            if ($current) {
+                                $possible = ltrim($current, '/');
+                                if (strpos($possible, 'assets/img/equipo/') !== false) {
+                                    $oldFull = __DIR__ . '/../../../' . $possible;
+                                    if (is_file($oldFull)) @unlink($oldFull);
+                                }
+                            }
+
+                            $_SESSION['flash_message'] = 'Imagen subida correctamente.';
                         } catch (Exception $e) {
-                            // no bloqueamos la actualización del admin si falla la imagen
+                            $_SESSION['flash_message'] = 'Administrador actualizado, pero no se pudo guardar la nueva imagen.';
                         }
+                    } elseif ($uploadResult['error']) {
+                        $_SESSION['flash_message'] = 'Administrador actualizado. ' . $uploadResult['error'];
                     }
                     $procesado = true;
                 }
