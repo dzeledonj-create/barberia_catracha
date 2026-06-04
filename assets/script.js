@@ -620,6 +620,119 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAdmin(); });
 });
 
+// Mostrar notificaciones tipo toast
+window.showToast = function(msg) {
+    if (!msg) return;
+    const toast = document.createElement('div');
+    toast.className = 'toast-message';
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+    }, 3000);
+};
+
+function initEquipoImagePreview() {
+    document.querySelectorAll('input[type=file][name="foto"]').forEach(function(input) {
+        const form = input.closest('form');
+        let preview = form ? form.querySelector('img.preview-image') : null;
+
+        if (!preview) {
+            preview = document.createElement('img');
+            preview.className = 'preview-image';
+            if (input.parentNode) input.parentNode.appendChild(preview);
+        }
+
+        const hiddenUrl = form ? form.querySelector('input[type=hidden][name="foto_url"]') : null;
+        if (hiddenUrl && hiddenUrl.value) {
+            preview.src = hiddenUrl.value;
+        } else if (!preview.src) {
+            preview.src = '/barberia_catracha/assets/img/default-user.jpg';
+        }
+
+        input.addEventListener('change', function() {
+            const file = input.files && input.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+
+            const overlay = document.createElement('div');
+            overlay.className = 'image-preview-modal-overlay';
+
+            const box = document.createElement('div');
+            box.className = 'image-preview-modal-box';
+
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.maxWidth = '200px';
+            img.style.display = 'block';
+            img.style.margin = '0 auto 12px';
+
+            const msg = document.createElement('p');
+            msg.textContent = '¿Está seguro que quiere subir esta imagen?';
+            msg.style.margin = '0 0 12px';
+            msg.style.fontWeight = '600';
+
+            const btnAccept = document.createElement('button');
+            btnAccept.type = 'button';
+            btnAccept.textContent = 'Aceptar';
+            btnAccept.style.marginRight = '8px';
+            btnAccept.className = 'btn-save';
+
+            const btnCancel = document.createElement('button');
+            btnCancel.type = 'button';
+            btnCancel.textContent = 'Cancelar';
+            btnCancel.className = 'btn-cancel';
+
+            box.appendChild(img);
+            box.appendChild(msg);
+            box.appendChild(btnAccept);
+            box.appendChild(btnCancel);
+            overlay.appendChild(box);
+            document.body.appendChild(overlay);
+
+            const previousSrc = preview.src;
+
+            btnAccept.addEventListener('click', function() {
+                preview.src = url;
+                preview.style.display = 'block';
+                document.body.removeChild(overlay);
+            });
+
+            btnCancel.addEventListener('click', function() {
+                input.value = '';
+                preview.src = previousSrc || '/barberia_catracha/assets/img/default-user.jpg';
+                document.body.removeChild(overlay);
+                URL.revokeObjectURL(url);
+            });
+        });
+    });
+
+    document.querySelectorAll('.btn-delete-photo').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const form = btn.closest('form');
+            if (!form) return;
+            const hidden = form.querySelector('input[type=hidden][name="foto_delete"]');
+            const fileInput = form.querySelector('input[type=file][name="foto"]');
+            const preview = form.querySelector('img.preview-image');
+            if (hidden) hidden.value = '1';
+            if (fileInput) fileInput.value = '';
+            if (preview) preview.src = '/barberia_catracha/assets/img/default-user.jpg';
+            showToast('Foto marcada para eliminar. Pulsa GUARDAR para confirmar.');
+        });
+    });
+
+    const flashMessage = document.getElementById('flash-message');
+    if (flashMessage && flashMessage.dataset.message) {
+        showToast(flashMessage.dataset.message);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    initEquipoImagePreview();
+});
+
 // CONTROL DE RESPONSIVIDAD: Resetea el estado de los componentes de administración si se agranda la pantalla
 window.addEventListener('resize', function () {
     const adminSidebar = document.querySelector('.admin-sidebar');

@@ -51,10 +51,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $procesado = true;
         } else {
             // Crea una instancia de Barbero con todos los datos del formulario
+            // Manejo de subida de imagen (si se sube un archivo, lo guardamos en assets/img/equipo/)
+            $fotoPath = $_POST['foto_url'] ?? 'assets/img/default-user.jpg';
+            $imageUploaded = false;
+            if (isset($_FILES['foto']) && isset($_FILES['foto']['tmp_name']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = __DIR__ . '/../../../assets/img/equipo/';
+                if (!is_dir($uploadDir)) {@mkdir($uploadDir, 0755, true);} 
+                $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+                $filename = time() . '_' . bin2hex(random_bytes(4)) . ($ext ? '.' . $ext : '');
+                $dest = $uploadDir . $filename;
+                if (move_uploaded_file($_FILES['foto']['tmp_name'], $dest)) {
+                    $fotoPath = 'assets/img/equipo/' . $filename;
+                    $imageUploaded = true;
+                }
+            }
+
             $barbero = new Barbero(
                 $_POST['nombre'] ?? '',
                 $_POST['especialidad'] ?? '',
-                $_POST['foto_url'] ?? 'assets/img/default-user.jpg',
+                $fotoPath,
                 true,
                 null,
                 $_POST['descripcion'] ?? '',
@@ -65,6 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Guarda el barbero en la base de datos
             if ($barbero->guardar()) {
                 $procesado = true;
+                if ($imageUploaded) {
+                    $_SESSION['flash_message'] = 'Imagen subida correctamente.';
+                }
             }
         }
     }
@@ -86,7 +104,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $admin->setNombre($_POST['nombre'] ?? $admin->getNombre());
                     $admin->setEmail($_POST['email'] ?? $admin->getEmail());
                     $admin->setActivo(isset($_POST['activo']));
-                    $admin->actualizar();
+                    // Manejar petición de borrar foto si se solicitó
+                    if (!empty($_POST['foto_delete']) && $_POST['foto_delete'] == '1') {
+                        try {
+                            $db = BD::obtenerConexion();
+                            $q = $db->prepare("SELECT foto_url FROM barberos WHERE usuario_id = ? LIMIT 1");
+                            $q->execute([$usuarioId]);
+                            $current = $q->fetchColumn();
+                            if ($current) {
+                                $possible = ltrim($current, '/');
+                                if (strpos($possible, 'assets/img/equipo/') !== false) {
+                                    $oldFull = __DIR__ . '/../../../' . $possible;
+                                    if (is_file($oldFull)) @unlink($oldFull);
+                                }
+                            }
+                            $upd = $db->prepare("UPDATE barberos SET foto_url = ? WHERE usuario_id = ?");
+                            $upd->execute(['assets/img/default-user.jpg', $usuarioId]);
+                            $_SESSION['flash_message'] = 'Imagen eliminada correctamente.';
+                        } catch (Exception $e) {
+                        }
+                    }
+
+                    // Si se sube una foto y existe un perfil de barbero vinculado, actualizar su foto
+                    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                        try {
+                            $db = BD::obtenerConexion();
+                            $stmt = $db->prepare("SELECT barbero_id FROM barberos WHERE usuario_id = ? LIMIT 1");
+                            $stmt->execute([$usuarioId]);
+                            $barberoRow = $stmt->fetch(PDO::FETCH_ASSOC);
+                            if ($barberoRow) {
+                                        // Obtener foto actual para eliminarla después si corresponde
+                                        $q = $db->prepare("SELECT foto_url FROM barberos WHERE usuario_id = ? LIMIT 1");
+                                        $q->execute([$usuarioId]);
+                                        $current = $q->fetchColumn();
+
+                                        $uploadDir = __DIR__ . '/../../../assets/img/equipo/';
+                                        if (!is_dir($uploadDir)) {@mkdir($uploadDir, 0755, true);} 
+                                        $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+                                        $filename = time() . '_' . bin2hex(random_bytes(4)) . ($ext ? '.' . $ext : '');
+                                        $dest = $uploadDir . $filename;
+                                        if (move_uploaded_file($_FILES['foto']['tmp_name'], $dest)) {
+                                            $fotoPath = 'assets/img/equipo/' . $filename;
+                                            $upd = $db->prepare("UPDATE barberos SET foto_url = ? WHERE usuario_id = ?");
+                                            $upd->execute([$fotoPath, $usuarioId]);
+
+                                            // Borrar fichero anterior si estaba en la carpeta de equipo
+                                            if ($current) {
+                                                $possible = ltrim($current, '/');
+                                                if (strpos($possible, 'assets/img/equipo/') !== false) {
+                                                    $oldFull = __DIR__ . '/../../../' . $possible;
+                                                    if (is_file($oldFull)) @unlink($oldFull);
+                                                }
+                                            }
+                                            $_SESSION['flash_message'] = 'Imagen subida correctamente.';
+                                        }
+                            }
+                        } catch (Exception $e) {
+                            // no bloqueamos la actualización del admin si falla la imagen
+                        }
+                    }
                     $procesado = true;
                 }
             }
@@ -101,7 +177,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $barbero->setEspecialidad($_POST['especialidad'] ?? $barbero->getEspecialidad());
                 $barbero->setDescripcion($_POST['descripcion'] ?? $barbero->getDescripcion());
                 $barbero->setEtiquetas($_POST['etiquetas'] ?? $barbero->getEtiquetas());
-                $barbero->setFotoUrl($_POST['foto_url'] ?? $barbero->getFotoUrl());
+                // Si se sube una nueva foto, guardarla y asignarla; si no, conservar la actual
+                $currentFoto = $barbero->getFotoUrl();
+                $newFotoPath = null;
+                // Si se solicitó borrar la foto
+                if (!empty($_POST['foto_delete']) && $_POST['foto_delete'] == '1') {
+                    // eliminar fichero actual si existe en carpeta equipo
+                    if ($currentFoto) {
+                        $possibleOld = ltrim($currentFoto, '/');
+                        if (strpos($possibleOld, 'assets/img/equipo/') !== false) {
+                            $oldFullPath = __DIR__ . '/../../../' . $possibleOld;
+                            if (is_file($oldFullPath)) @unlink($oldFullPath);
+                        }
+                    }
+                    $newFotoPath = 'assets/img/default-user.jpg';
+                    $_SESSION['flash_message'] = 'Imagen eliminada correctamente.';
+                }
+
+                if (isset($_FILES['foto']) && isset($_FILES['foto']['tmp_name']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = __DIR__ . '/../../../assets/img/equipo/';
+                    if (!is_dir($uploadDir)) {@mkdir($uploadDir, 0755, true);} 
+                    $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+                    $filename = time() . '_' . bin2hex(random_bytes(4)) . ($ext ? '.' . $ext : '');
+                    $dest = $uploadDir . $filename;
+                    if (move_uploaded_file($_FILES['foto']['tmp_name'], $dest)) {
+                        $newFotoPath = 'assets/img/equipo/' . $filename;
+                        // Si la foto anterior estaba en assets/img/equipo/ borrarla
+                        if ($currentFoto) {
+                            $possibleOld = ltrim($currentFoto, '/');
+                            if (strpos($possibleOld, 'assets/img/equipo/') !== false) {
+                                $oldFullPath = __DIR__ . '/../../../' . $possibleOld;
+                                if (is_file($oldFullPath)) @unlink($oldFullPath);
+                            }
+                        }
+                        $_SESSION['flash_message'] = 'Imagen subida correctamente.';
+                    }
+                }
+                $barbero->setFotoUrl($newFotoPath ?? $currentFoto);
                 $barbero->setActivo(isset($_POST['activo']));
                 if ($barbero->guardar()) {
                     $procesado = true;
@@ -195,7 +307,7 @@ $editandoId = $_GET['editar'] ?? null;
             </div>
             
             <!-- Formulario de creación: envía a la misma página con accion=crear -->
-            <form action="" method="POST" class="add-form-grid">
+            <form action="" method="POST" enctype="multipart/form-data" class="add-form-grid">
                 <input type="hidden" name="accion" value="crear">
                 
                 <div class="form-row">
@@ -230,8 +342,11 @@ $editandoId = $_GET['editar'] ?? null;
 
                 <div class="form-row">
                     <div class="input-group">
-                        <label>URL de la Foto</label>
-                        <input type="text" name="foto_url" placeholder="assets/img/equipo/foto.jpg">
+                        <label>Foto (subir desde dispositivo)</label>
+                        <input type="file" name="foto" accept="image/*">
+                        <input type="hidden" name="foto_delete" value="0">
+                        <img class="preview-image" src="/barberia_catracha/assets/img/default-user.jpg" alt="Vista previa" />
+                        <button type="button" class="btn-delete-photo">Eliminar foto</button>
                     </div>
                     <div class="input-group">
                         <label>Etiquetas (separadas por coma)</label>
@@ -268,7 +383,7 @@ $editandoId = $_GET['editar'] ?? null;
                 <section class="barbero-card <?= $estanEditando ? 'editing' : '' ?>">
                     <?php if ($estanEditando && $esBarbero): ?>
                         <!-- Formulario de edición completo para barberos -->
-                        <form action="" method="POST" class="edit-form">
+                        <form action="" method="POST" enctype="multipart/form-data" class="edit-form">
                             <input type="hidden" name="accion" value="actualizar">
                             <!-- IDs necesarios para identificar al barbero y su usuario en el backend -->
                             <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
@@ -296,8 +411,12 @@ $editandoId = $_GET['editar'] ?? null;
                             <label>Etiquetas</label>
                             <input type="text" name="etiquetas" value="<?= htmlspecialchars($barber->getEtiquetas() ?? '') ?>">
                             
-                            <label>Foto URL</label>
-                            <input type="text" name="foto_url" value="<?= htmlspecialchars($barber->getFotoUrl() ?? '') ?>">
+                            <label>Foto (subir desde dispositivo)</label>
+                            <input type="file" name="foto" accept="image/*">
+                            <input type="hidden" name="foto_url" value="<?= htmlspecialchars($barber->getFotoUrl() ?? '') ?>">
+                            <input type="hidden" name="foto_delete" value="0">
+                            <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
+                            <button type="button" class="btn-delete-photo" style="margin-top:8px;">Eliminar foto</button>
 
                             <section class="form-buttons">
                                 <button type="submit" class="btn-save">GUARDAR</button>
@@ -307,7 +426,7 @@ $editandoId = $_GET['editar'] ?? null;
                         </form>
                     <?php elseif ($estanEditando && !$esBarbero): ?>
                         <!-- Formulario de edición simplificado para administradores puros (sin perfil de barbero) -->
-                        <form action="" method="POST" class="edit-form">
+                        <form action="" method="POST" enctype="multipart/form-data" class="edit-form">
                             <input type="hidden" name="accion" value="actualizar">
                             <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
                             <!-- El rol se envía como campo oculto porque los admins no cambian de rol aquí -->
@@ -318,6 +437,12 @@ $editandoId = $_GET['editar'] ?? null;
                             
                             <label>Email</label>
                             <input type="email" name="email" value="<?= htmlspecialchars($barber->getEmail()) ?>" required>
+
+                            <label>Foto (subir desde dispositivo)</label>
+                            <input type="file" name="foto" accept="image/*">
+                            <input type="hidden" name="foto_delete" value="0">
+                            <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
+                            <button type="button" class="btn-delete-photo" style="margin-top:8px;">Eliminar foto</button>
 
                             <section class="form-buttons">
                                 <button type="submit" class="btn-save">GUARDAR</button>
@@ -349,7 +474,7 @@ $editandoId = $_GET['editar'] ?? null;
                                         </form>
                                     <?php else: ?>
                                         <!-- Indicador visual de que el barbero ya está autorizado en la vista cliente -->
-                                        <span class="role-text" style="color: #2a7a2a; font-size: 0.75rem;">AUTORIZADO EN VISTA</span>
+                                        <span class="role-text autorizado-en-vista">AUTORIZADO EN VISTA</span>
                                     <?php endif; ?>
                                 <?php endif; ?>
 
@@ -369,5 +494,8 @@ $editandoId = $_GET['editar'] ?? null;
             <?php endforeach; ?>
         </section>
     </main>
+
+    <div id="flash-message" data-message="<?= htmlspecialchars($_SESSION['flash_message'] ?? '', ENT_QUOTES, 'UTF-8') ?>"></div>
+    <?php unset($_SESSION['flash_message']); ?>
 </body>
 </html>

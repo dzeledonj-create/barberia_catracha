@@ -3474,6 +3474,100 @@ body.admin-panel .barbero-card.editing > img {
     color: #fff;
     border-color: #333;
 }
+
+.preview-image {
+    display: block;
+    max-width: 120px;
+    margin-top: 8px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.btn-delete-photo {
+    margin-top: 8px;
+    background-color: transparent;
+    color: #d99c2b;
+    border: 1px solid #d99c2b;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-delete-photo:hover {
+    background-color: #d99c2b;
+    color: #000;
+}
+
+.image-preview-modal-overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.image-preview-modal-box {
+    background: #fff;
+    padding: 22px;
+    border-radius: 14px;
+    max-width: 92%;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 2px 18px rgba(0, 0, 0, 0.2);
+}
+
+.image-preview-modal-box img {
+    max-width: 100%;
+    max-height: 220px;
+    margin: 0 auto 16px;
+    display: block;
+    border-radius: 12px;
+}
+
+.image-preview-modal-box p {
+    margin: 0 0 16px;
+    color: #111;
+    font-weight: 700;
+}
+
+.image-preview-modal-box .btn-save,
+.image-preview-modal-box .btn-cancel {
+    width: auto;
+    padding: 10px 18px;
+}
+
+.toast-message {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    z-index: 10000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+#flash-message {
+    display: none;
+}
+
+.role-text.autorizado-en-vista {
+    color: #2a7a2a;
+    font-size: 0.75rem;
+}
  
 /* ============================================================
    RESPONSIVE
