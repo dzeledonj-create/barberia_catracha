@@ -56,16 +56,16 @@ $posts = BlogPost::obtenerTodos();
                 <!-- MEDIA -->
                 <section class="blog-media">
 
-                    <?php if (!empty($post['instagram_embed'])): ?>
+                    <?php if (!empty($post->getInstagramEmbed())): ?>
 
                         <section class="instagram-wrapper">
-                            <?= $post['instagram_embed'] ?>
+                            <?= $post->getInstagramEmbed() ?>
                         </section>
 
-                    <?php elseif (!empty($post['imagen_url'])): ?>
+                    <?php elseif (!empty($post->getImagenUrl())): ?>
 
-                            <img src="/barberia_catracha/<?= htmlspecialchars(ltrim($post['imagen_url'], '/')) ?>"
-                                alt="<?= htmlspecialchars($post['titulo']) ?>">
+                            <img src="<?= htmlspecialchars($post->getImagenUrl()) ?>"
+                                alt="<?= htmlspecialchars($post->getTitulo()) ?>">
 
                     <?php else: ?>
 
@@ -82,8 +82,8 @@ $posts = BlogPost::obtenerTodos();
                     <span class="blog-tag">
 
                         <?php
-                        if (!empty($post['etiquetas'])) {
-                            echo htmlspecialchars($post['etiquetas']);
+                        if (!empty($post->getEtiquetas())) {
+                            echo htmlspecialchars($post->getEtiquetas());
                         } else {
                             echo 'BARBERÍA';
                         }
@@ -92,13 +92,13 @@ $posts = BlogPost::obtenerTodos();
                     </span>
 
                     <h2>
-                        <?= htmlspecialchars($post['titulo']) ?>
+                        <?= htmlspecialchars($post->getTitulo()) ?>
                     </h2>
 
                     <p>
 
                         <?php
-                        $texto = strip_tags($post['contenido']);
+                        $texto = strip_tags($post->getContenido());
                         echo htmlspecialchars(substr($texto, 0, 140));
                         ?>...
 

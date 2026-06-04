@@ -8,7 +8,7 @@ $bloques = [];
 
 foreach ($serviciosRaw as $s) {
     // Si el servicio no tiene 'categoria', lo mandamos a una sección general
-    $categoria = $s['categoria'] ?: 'otros'; 
+    $categoria = $s->getCategoria() ?: 'otros';
     $bloques[$categoria][] = $s;
 }
 ?>
@@ -44,15 +44,15 @@ foreach ($serviciosRaw as $s) {
                     <article class="item-row">
                         <header class="item-info">
                             <h3>
-                                <?= strtoupper($s['nombre']) ?>
-                                <?php if ($s['nombre'] == 'Tinte de colores'): ?> <small>(SOLO LUN, MAR Y MIÉ)</small> <?php endif; ?>
-                                <?php if ($s['nombre'] == 'Permanente'): ?> <small>(LUN A MIÉ)</small> <?php endif; ?>
+                                <?= strtoupper($s->getNombre()) ?>
+                                <?php if ($s->getNombre() === 'Tinte de colores'): ?> <small>(SOLO LUN, MAR Y MIÉ)</small> <?php endif; ?>
+                                <?php if ($s->getNombre() === 'Permanente'): ?> <small>(LUN A MIÉ)</small> <?php endif; ?>
                             </h3>
-                            <p class="descripcion"><?= $s['descripcion'] ?></p>
+                            <p class="descripcion"><?= htmlspecialchars($s->getDescripcion() ?? '') ?></p>
                         </header>
 
                         <aside class="item-precio">
-                            <span><?= number_format($s['precio'], 2) ?>€ / <?= $s['duracion_minutos'] ?> MIN</span>
+                            <span><?= number_format($s->getPrecio(), 2) ?>€ / <?= $s->getDuracionMinutos() ?> MIN</span>
                         </aside>
                     </article>
                 <?php endforeach; ?>

@@ -339,4 +339,7 @@ ADD CONSTRAINT reservas_barbero_id_fkey
     FOREIGN KEY (barbero_id) REFERENCES barberos(barbero_id) ON DELETE SET NULL;
 
 
+ALTER TABLE barberos
+ADD COLUMN mostrar_en_vista BOOLEAN DEFAULT FALSE;
+
 COMMIT;

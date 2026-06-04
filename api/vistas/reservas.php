@@ -119,22 +119,22 @@ foreach ($relaciones as $rel) {
 
                 <div class="servicios-grid">
                     <?php foreach ($servicios as $servicio): 
-                        $nombreLower = mb_strtolower($servicio['nombre']);
+                        $nombreLower = mb_strtolower($servicio->getNombre());
                         $cat = 'otros';
                         if (str_contains($nombreLower, 'corte') || str_contains($nombreLower, 'pelo') || str_contains($nombreLower, 'cejas')) { $cat = 'corte'; }
                         if (str_contains($nombreLower, 'barba')) { $cat = (str_contains($nombreLower, 'corte')) ? 'otros' : 'barba'; }
                         if (str_contains($nombreLower, 'tinte') || str_contains($nombreLower, 'color') || str_contains($nombreLower, 'mechas')) { $cat = 'tinte'; }
                     ?>
-                        <label class="card-option servicio-card" data-cat="<?= $cat ?>" data-duracion="<?= htmlspecialchars($servicio['duracion_minutos']) ?>">
-                            <input type="radio" name="servicio_id" value="<?= $servicio['servicio_id'] ?>" required>
+                        <label class="card-option servicio-card" data-cat="<?= $cat ?>" data-duracion="<?= htmlspecialchars($servicio->getDuracionMinutos()) ?>">
+                            <input type="radio" name="servicio_id" value="<?= $servicio->getServicioId() ?>" required>
                             <div class="card-content">
                                 <div class="card-info">
-                                    <h3><?= htmlspecialchars($servicio['nombre']) ?></h3>
-                                    <p><?= htmlspecialchars($servicio['descripcion']) ?></p>
+                                    <h3><?= htmlspecialchars($servicio->getNombre()) ?></h3>
+                                    <p><?= htmlspecialchars($servicio->getDescripcion() ?? '') ?></p>
                                 </div>
                                 <div class="card-meta">
-                                    <span class="precio"><?= number_format($servicio['precio'], 2) ?> €</span>
-                                    <span class="duracion"><?= $servicio['duracion_minutos'] ?> min</span>
+                                    <span class="precio"><?= number_format($servicio->getPrecio(), 2) ?> €</span>
+                                    <span class="duracion"><?= $servicio->getDuracionMinutos() ?> min</span>
                                 </div>
                             </div>
                         </label>

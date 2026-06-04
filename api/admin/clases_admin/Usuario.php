@@ -88,7 +88,7 @@ class Usuario {
      * Actualiza los datos del usuario actual en la base de datos de manera segura.
      */
     public function actualizar(): void {
-        if ($this->usuarioId === null) {
+        if ($this->usuarioId === null) { // No podemos actualizar un usuario que no tiene ID asignado
             throw new Exception("El usuario debe tener un ID para ser actualizado.");
         }
 
@@ -121,7 +121,7 @@ class Usuario {
 
         $conexion = BD::obtenerConexion();
         try {
-            $conexion->beginTransaction();
+            $conexion->beginTransaction();// Iniciamos una transacción para asegurar la integridad de los datos
 
             // Eliminar el usuario primero para evitar conflictos con claves foráneas en barberos
             $stmtU = $conexion->prepare("DELETE FROM usuarios WHERE usuario_id = ?");

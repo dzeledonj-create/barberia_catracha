@@ -1,6 +1,6 @@
 {
     // Configuración de conexión a la base de datos para SQLTools
-    "sqltools.connections": [
+    "sqltools.connections": [// Puedes agregar múltiples conexiones aquí
         {
             "ssh": "Disabled",
             "previewLimit": 50,
@@ -12,7 +12,7 @@
             "username": "postgres"
         }
     ],
-    "emeraldwalk.runonsave": {
+    "emeraldwalk.runonsave": {// Configuración para ejecutar comandos al guardar archivos
         "commands": [
             {
                 "match": "\\.php$",
