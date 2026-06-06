@@ -82,28 +82,29 @@ class Barbero {
     public function setEspecialidad(?string $especialidad): void {
         $this->especialidad = $especialidad;
     }
-
+    // Método para obtener la URL de la foto del barbero, con lógica para manejar rutas relativas y absolutas
     public function getFotoUrl(): ?string {
+        // Si no se ha establecido una foto, retornamos null
         if ($this->fotoUrl === null) {
             return null;
         }
-
+        // Normalizamos la URL para manejar diferentes formatos de entrada
         $url = trim($this->fotoUrl);
-
+        // Si la URL ya es absoluta (contiene '://'), la retornamos tal cual
         if (str_contains($url, '://')) {
             return $url;
         }
-
+        // Si la URL comienza con '/', la consideramos como una ruta absoluta desde la raíz del servidor        
         if (str_starts_with($url, '/')) {
             return $url;
         }
-
+        // Para rutas relativas, asumimos que están dentro de 'assets/img/' y construimos la URL completa
         $normalized = ltrim($url, '/');
-
+        // Si la ruta ya comienza con 'assets/', la retornamos con el prefijo del proyecto
         if (str_starts_with($normalized, 'assets/')) {
             return '/barberia_catracha/' . $normalized;
         }
-
+        // Para cualquier otra ruta relativa, la colocamos dentro de 'assets/img/' por defecto
         return '/barberia_catracha/assets/img/' . $normalized;
     }
 
@@ -142,21 +143,23 @@ class Barbero {
     public function setMostrarEnVista(bool $mostrarEnVista): void {
         $this->mostrarEnVista = $mostrarEnVista;
     }
-
+    // Método estático para verificar si la columna 'mostrar_en_vista' existe en la tabla 'barberos'
     public static function tieneColumnaMostrarEnVista(): bool {
+        // Si ya hemos verificado antes, retornamos el resultado almacenado para evitar consultas repetidas
         if (self::$tieneMostrarEnVista !== null) {
             return self::$tieneMostrarEnVista;
         }
-
+        // Realizamos una consulta a la base de datos para verificar la existencia de la columna 'mostrar_en_vista' en la tabla 'barberos'
         $db = BD::obtenerConexion();
         $stmt = $db->prepare(
             "SELECT 1 FROM information_schema.columns WHERE table_name = 'barberos' AND column_name = 'mostrar_en_vista' LIMIT 1"
         );
+        // Ejecutamos la consulta y almacenamos el resultado en la propiedad estática para futuras referencias
         $stmt->execute();
         self::$tieneMostrarEnVista = (bool)$stmt->fetchColumn();
         return self::$tieneMostrarEnVista;
     }
-
+    // Método para guardar o actualizar el barbero en la base de datos
     public function guardar(): bool {
         $db = BD::obtenerConexion();
 
@@ -193,6 +196,7 @@ class Barbero {
                     $this->descripcion,
                     $this->etiquetas
                 ];
+                // Si la columna 'mostrar_en_vista' existe, incluimos su valor en los parámetros de la consulta
                 if (self::tieneColumnaMostrarEnVista()) {
                     $params[] = $this->mostrarEnVista;
                 }
@@ -215,6 +219,7 @@ class Barbero {
                     $this->descripcion,
                     $this->etiquetas
                 ];
+                // Si la columna 'mostrar_en_vista' existe, incluimos su valor en los parámetros de la consulta
                 if (self::tieneColumnaMostrarEnVista()) {
                     $params[] = $this->mostrarEnVista;
                 }
@@ -242,7 +247,7 @@ class Barbero {
             return false;
         }
     }
-
+    // Método para eliminar el barbero de la base de datos
     public function eliminar(): bool {
         if ($this->usuarioId === null) {
             return false;
@@ -275,24 +280,25 @@ class Barbero {
             return false;
         }
     }
-
+    // Método para obtener todos los barberos, incluyendo su información de usuario y estado activo
     public static function obtenerTodos(): array {
         $db = BD::obtenerConexion();
+        // Construimos la consulta SQL para obtener todos los barberos junto con su información de usuario
         $mostrarEnVistaCampo = self::tieneColumnaMostrarEnVista() ? 'b.mostrar_en_vista' : 'FALSE AS mostrar_en_vista';
-
+        // Incluimos una condición para mostrar también a los administradores que tengan 'mostrar_en_vista' activado, si la columna existe
         $stmt = $db->query("SELECT u.usuario_id, u.nombre, u.activo, u.rol, u.email, 
                                 b.barbero_id, b.especialidad, b.foto_url, b.descripcion, b.etiquetas, " . $mostrarEnVistaCampo . "
                             FROM usuarios u
                             LEFT JOIN barberos b ON u.usuario_id = b.usuario_id 
                             WHERE u.rol IN ('barbero', 'admin')
                             ORDER BY u.usuario_id DESC");
-        
+        // Procesamos los resultados de la consulta y creamos instancias de Barbero para cada registro obtenido
         $barberos = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
+            // Para los usuarios con rol 'admin' que no tengan un perfil de barbero, asignamos valores predeterminados para especialidad y descripción
             $defaultEspecialidad = $data['rol'] === 'admin' ? 'Administrador' : 'Barbero profesional';
             $defaultDescripcion = $data['rol'] === 'admin' ? 'Administrador del sistema.' : 'Barbero del equipo.';
-
+            // Creamos una instancia de Barbero con los datos obtenidos, utilizando valores predeterminados para campos específicos si es un admin sin perfil de barbero
             $barberos[] = new Barbero(
                 $data['nombre'],
                 $data['especialidad'] ?? $defaultEspecialidad,
@@ -309,17 +315,18 @@ class Barbero {
         }
         return $barberos;
     }
-
+    // Método para obtener solo los barberos activos, con lógica para incluir administradores que tengan 'mostrar_en_vista' activado
     public static function obtenerActivos(): array {
         $db = BD::obtenerConexion();
+        // Construimos la consulta SQL para obtener solo los barberos activos, incluyendo a los administradores que tengan 'mostrar_en_vista' activado si la columna existe
         $mostrarEnVistaCampo = self::tieneColumnaMostrarEnVista() ? 'b.mostrar_en_vista' : 'FALSE AS mostrar_en_vista';
         $condicionAdmin = self::tieneColumnaMostrarEnVista() ? " OR (u.rol = 'admin' AND b.mostrar_en_vista = TRUE)" : '';
-
+        // La consulta selecciona los barberos activos y también incluye a los administradores que tengan 'mostrar_en_vista' activado, si la columna existe
         $stmt = $db->query("SELECT b.*, u.nombre, u.activo, u.rol, u.email, u.usuario_id, " . $mostrarEnVistaCampo . "
                             FROM barberos b
                             INNER JOIN usuarios u ON b.usuario_id = u.usuario_id
                             WHERE u.activo = TRUE AND (u.rol = 'barbero'" . $condicionAdmin . ")");
-
+        // Procesamos los resultados de la consulta y creamos instancias de Barbero para cada registro obtenido
         $barberos = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $barberos[] = new Barbero(
@@ -339,11 +346,11 @@ class Barbero {
 
         return $barberos;
     }
-
+    // Método para obtener un barbero por su ID, incluyendo su información de usuario y estado activo
     public static function obtenerPorId($barberoId): ?Barbero {
         $db = BD::obtenerConexion();
         $mostrarEnVistaCampo = self::tieneColumnaMostrarEnVista() ? ', b.mostrar_en_vista' : ', FALSE AS mostrar_en_vista';
-
+        // Construimos la consulta SQL para obtener un barbero específico por su ID, incluyendo su información de usuario y estado activo
         $stmt = $db->prepare("SELECT b.*, u.nombre, u.activo, u.rol, u.email" . $mostrarEnVistaCampo . " 
                               FROM barberos b 
                               INNER JOIN usuarios u ON b.usuario_id = u.usuario_id 
@@ -352,7 +359,7 @@ class Barbero {
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$data) return null;
-
+        // Creamos una instancia de Barbero con los datos obtenidos, incluyendo la información de usuario y el estado activo
         return new Barbero(
             $data['nombre'],
             $data['especialidad'],
@@ -367,12 +374,12 @@ class Barbero {
             isset($data['mostrar_en_vista']) ? (bool)$data['mostrar_en_vista'] : false
         );
     }
-
+    //  Método para autorizar que el barbero se muestre en la vista pública, solo si la columna 'mostrar_en_vista' existe en la base de datos
     public function autorizarEnVista(): bool {
         if (!self::tieneColumnaMostrarEnVista()) {
             return false;
         }
-
+        // Si la columna existe, actualizamos el valor de 'mostrar_en_vista' para este barbero y guardamos los cambios en la base de datos
         $this->mostrarEnVista = true;
         return $this->guardar();
     }

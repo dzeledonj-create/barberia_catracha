@@ -88,6 +88,7 @@ class Cliente {
                     $sql = "UPDATE clientes 
                             SET nombre = ?, apellido = ?, telefono = ?, email = ?
                             WHERE cliente_id = ?";
+                    // Ejecutamos la consulta de actualización con los datos del cliente existente
                     $stmt = $db->prepare($sql);
                     return $stmt->execute([
                         $this->nombre,
@@ -98,18 +99,19 @@ class Cliente {
                     ]);
                 }
             }
-
+            // Si no existe un cliente con ese email, procedemos a crear uno nuevo
             $sql = "INSERT INTO clientes (nombre, apellido, telefono, email)
                     VALUES (?, ?, ?, ?)
                     RETURNING cliente_id";
-
+            // Ejecutamos la consulta y obtenemos el ID generado para el nuevo cliente
             $stmt = $db->prepare($sql);
+            // Ejecutamos la consulta de inserción con los datos del nuevo cliente
             $stmt->execute([$this->nombre, $this->apellido, $this->telefono, $this->email]);
-
+            // Asignamos el ID generado al cliente actual para futuras referencias
             $this->clienteId = $stmt->fetchColumn();
             return true;
         }
-
+        // Si el cliente ya tiene un ID, actualizamos sus datos en la base de datos
         $sql = "UPDATE clientes 
                 SET nombre = ?, apellido = ?, telefono = ?, email = ?
                 WHERE cliente_id = ?";
@@ -127,15 +129,15 @@ class Cliente {
     // Método para obtener un cliente por su email
     public static function obtenerPorEmail(string $email): ?Cliente {
         $db = BD::obtenerConexion();
-
+        // Preparamos la consulta para buscar un cliente por su email
         $stmt = $db->prepare("SELECT * FROM clientes WHERE email = ? LIMIT 1");
         $stmt->execute([$email]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        // Si no se encuentra ningún cliente con ese email, retornamos null
         if (!$data) {
             return null;
         }
-
+        // Si se encuentra un cliente, creamos una instancia de Cliente con los datos obtenidos y la retornamos
         return new Cliente(
             $data['nombre'], 
             $data['apellido'], 
