@@ -44,6 +44,26 @@ class Horario {
         return self::obtenerPorDiaSemana($diaSemana);
     }
 
+    // Genera los bloques horarios reservables (cada $intervaloMinutos) para la fecha dada, según la hora de apertura y cierre configuradas
+    public static function generarBloquesHorarios($fecha, int $intervaloMinutos = 30): array {
+        $horario = self::obtenerHorarioPorFecha($fecha);
+
+        if (!$horario || !empty($horario['cerrado']) || !$horario['hora_apertura'] || !$horario['hora_cierre']) {
+            return [];
+        }
+
+        $bloques = [];
+        $actual = strtotime($horario['hora_apertura']);
+        $cierre = strtotime($horario['hora_cierre']);
+
+        while ($actual < $cierre) {
+            $bloques[] = date('H:i', $actual);
+            $actual = strtotime("+{$intervaloMinutos} minutes", $actual);
+        }
+
+        return $bloques;
+    }
+
     // Método para actualizar el horario de un día específico
     public static function actualizar($horarioId, $horaApertura, $horaCierre, $cerrado) {
         $db = BD::obtenerConexion();

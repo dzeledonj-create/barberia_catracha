@@ -22,4 +22,4 @@
     </section>
 </aside>
 
-<script src="../../assets/script.js?v=<?= time() ?>"></script>
+<script src="../../../assets/script.js?v=<?= time() ?>"></script>

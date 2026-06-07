@@ -2,6 +2,7 @@
 require_once __DIR__ . '/BD.php';
 require_once __DIR__ . '/Cliente.php';
 require_once __DIR__ . '/Barbero.php';
+require_once __DIR__ . '/Horario.php';
 
 class Reserva {
     private ?int $reservaId;
@@ -379,14 +380,15 @@ class Reserva {
 
     public static function obtenerReservasDelDia($fecha): array {
         $db = BD::obtenerConexion();
-        $sql = "SELECT r.*, 
+        $sql = "SELECT r.*,
                        c.nombre AS cliente_nombre,
                        c.apellido AS cliente_apellido,
-                       b.nombre AS barbero_nombre,
+                       u.nombre AS barbero_nombre,
                        s.nombre AS servicio_nombre
                 FROM reservas r
                 JOIN clientes c ON r.cliente_id = c.cliente_id
-                JOIN barberos b ON r.barbero_id = b.barbero_id
+                LEFT JOIN barberos b ON r.barbero_id = b.barbero_id
+                LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id
                 JOIN servicios s ON r.servicio_id = s.servicio_id
                 WHERE DATE(r.fecha_hora) = ?
                 ORDER BY r.fecha_hora ASC";
@@ -410,5 +412,65 @@ class Reserva {
             return false;
         }
         return self::estaDisponible($barberoId, $fechaHora, $servicioId);
+    }
+
+    // Formatea una fecha (Y-m-d) como "lunes, 7 de junio" para encabezar la agenda del día
+    public static function formatearFechaAgenda(string $fecha): string {
+        $dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        $meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        $ts = strtotime($fecha);
+        $diaSemana = mb_strtolower($dias[(int)date('w', $ts)]);
+        $mes = $meses[(int)date('n', $ts) - 1];
+        return $diaSemana . ', ' . (int)date('j', $ts) . ' de ' . $mes;
+    }
+
+    // Agrupa las reservas activas de un día por barbero y bloque horario, listas para pintar la agenda
+    public static function obtenerAgendaDelDiaPorBarbero($fecha): array {
+        $agenda = [];
+        foreach (self::obtenerReservasDelDia($fecha) as $reserva) {
+            if ($reserva['estado'] === 'cancelada') {
+                continue;
+            }
+            $horaBloque = date('H:i', strtotime($reserva['fecha_hora']));
+            $agenda[(int)$reserva['barbero_id']][$horaBloque] = $reserva;
+        }
+        return $agenda;
+    }
+
+    // Valida los datos del formulario "Nueva Reserva", crea el cliente y la reserva, y devuelve el mensaje para mostrar al usuario
+    public static function registrarDesdeFormulario(array $datos): string {
+        $nombre = trim($datos['client_nombre'] ?? '');
+        $apellido = trim($datos['client_apellido'] ?? '');
+        $telefono = trim($datos['client_phone'] ?? '');
+        $email = trim($datos['client_email'] ?? '');
+        $servicioId = $datos['servicio_id'] ?? '';
+        $barberoId = $datos['barbero_id'] ?? '';
+        $fecha = trim($datos['fecha'] ?? '');
+        $hora = trim($datos['hora'] ?? '');
+
+        $datosValidos = $nombre !== '' && $apellido !== '' && $telefono !== ''
+            && ctype_digit((string)$servicioId) && ctype_digit((string)$barberoId)
+            && preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)
+            && in_array($hora, Horario::generarBloquesHorarios($fecha), true);
+
+        if (!$datosValidos) {
+            return 'Completa todos los campos obligatorios para crear la reserva.';
+        }
+
+        if (strtotime("$fecha $hora") < time()) {
+            return 'No se pueden crear reservas en una fecha y hora que ya pasaron.';
+        }
+
+        $cliente = new Cliente($nombre, $apellido, $telefono, $email !== '' ? $email : null);
+        if (!$cliente->guardar()) {
+            return 'No se pudo guardar la información del cliente.';
+        }
+
+        $fechaHora = $fecha . ' ' . $hora . ':00';
+        $reserva = new self($cliente->getClienteId(), (int)$barberoId, (int)$servicioId, $fechaHora, 'confirmada');
+
+        return $reserva->guardar()
+            ? 'Reserva creada correctamente.'
+            : 'No se pudo crear la reserva. El barbero ya tiene esa hora ocupada.';
     }
 }

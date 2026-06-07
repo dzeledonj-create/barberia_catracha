@@ -3054,7 +3054,7 @@ body.admin-panel {
     margin-bottom: 25px;
 }
  
-..add-form-grid {
+.add-form-grid {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -3597,6 +3597,563 @@ body.admin-panel .barbero-card.editing > img {
     font-size: 0.75rem;
 }
  
+/* ============================================================
+   AGENDA DEL DÍA — GestionReservas.php (.agenda-reservas)
+   ============================================================ */
+
+.agenda-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.agenda-cabecera h2 {
+    margin: 0;
+}
+
+.agenda-btn-nueva {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #d99c2b;
+    color: #000;
+    border: none;
+    padding: 10px 18px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.agenda-btn-nueva:hover {
+    background-color: #f0ad32;
+}
+
+.agenda-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.agenda-date-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.agenda-nav-btn {
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    color: #aaa;
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.agenda-nav-btn:hover {
+    border-color: #d99c2b;
+    color: #d99c2b;
+}
+
+.agenda-fecha-actual {
+    text-align: center;
+    min-width: 170px;
+}
+
+.agenda-fecha-actual strong {
+    display: block;
+    text-transform: capitalize;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.agenda-hoy {
+    display: inline-block;
+    margin-top: 2px;
+    color: #d99c2b;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.agenda-toolbar input[type="date"] {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+}
+
+/* Leyenda de barberos */
+.agenda-leyenda {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.agenda-leyenda-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #aaa;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.agenda-leyenda-libre {
+    margin-left: auto;
+}
+
+.agenda-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #555;
+}
+
+.agenda-dot-libre {
+    background: #1c1c1c;
+    border: 1px solid #333;
+}
+
+.agenda-dot-gold   { background: #d99c2b; }
+.agenda-dot-azul   { background: #4d9de0; }
+.agenda-dot-morado { background: #a06cd5; }
+.agenda-dot-verde  { background: #4CAF50; }
+
+.agenda-texto-gold   { color: #d99c2b; }
+.agenda-texto-azul   { color: #4d9de0; }
+.agenda-texto-morado { color: #a06cd5; }
+.agenda-texto-verde  { color: #4CAF50; }
+
+.agenda-fondo-gold   { background: rgba(217, 156, 43, 0.12); border-color: rgba(217, 156, 43, 0.5); }
+.agenda-fondo-azul   { background: rgba(77, 157, 224, 0.12); border-color: rgba(77, 157, 224, 0.5); }
+.agenda-fondo-morado { background: rgba(160, 108, 213, 0.12); border-color: rgba(160, 108, 213, 0.5); }
+.agenda-fondo-verde  { background: rgba(76, 175, 80, 0.12); border-color: rgba(76, 175, 80, 0.5); }
+
+.agenda-borde-gold   { border-color: rgba(217, 156, 43, 0.5); }
+.agenda-borde-azul   { border-color: rgba(77, 157, 224, 0.5); }
+.agenda-borde-morado { border-color: rgba(160, 108, 213, 0.5); }
+.agenda-borde-verde  { border-color: rgba(76, 175, 80, 0.5); }
+
+/* Tabla de la agenda */
+.agenda-tabla-wrap {
+    overflow-x: auto;
+}
+
+.agenda-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 520px;
+}
+
+.agenda-tabla th {
+    text-align: left;
+    padding: 10px 8px;
+    color: #d99c2b;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #1e1e1e;
+    white-space: nowrap;
+}
+
+.agenda-tabla th .agenda-dot {
+    margin-right: 4px;
+}
+
+.agenda-col-hora {
+    width: 70px;
+}
+
+.agenda-tabla td {
+    padding: 5px;
+    border-top: 1px solid rgba(255,255,255,0.03);
+    vertical-align: middle;
+}
+
+.agenda-hora-celda {
+    color: #777;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.agenda-celda {
+    min-width: 130px;
+}
+
+.agenda-reserva-card {
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 8px 10px;
+}
+
+.agenda-reserva-cliente {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.agenda-reserva-servicio {
+    margin: 2px 0 4px;
+    font-size: 0.72rem;
+    color: #999;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.agenda-reserva-estado {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.agenda-celda-libre {
+    width: 100%;
+    height: 38px;
+    background: transparent;
+    border: 1px dashed #2a2a2a;
+    border-radius: 4px;
+    color: #444;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.agenda-celda-libre:hover {
+    border-color: rgba(217, 156, 43, 0.5);
+    color: #d99c2b;
+    background: rgba(217, 156, 43, 0.05);
+}
+
+/* Resumen de huecos por barbero */
+.agenda-resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.agenda-resumen-card {
+    background: #161616;
+    border: 1px solid #1e1e1e;
+    padding: 14px;
+}
+
+.agenda-resumen-titulo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.agenda-resumen-card strong {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.agenda-resumen-card p {
+    margin: 2px 0 0;
+    color: #777;
+    font-size: 0.75rem;
+}
+
+.agenda-resumen-card span {
+    display: block;
+    margin-top: 2px;
+    color: #555;
+    font-size: 0.72rem;
+}
+
+/* ============================================================
+   MODAL — NUEVA RESERVA (.modal-overlay / .modal-box)
+   ============================================================ */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+body.modal-abierto {
+    overflow: hidden;
+}
+
+.modal-box {
+    background: #111;
+    border: 1px solid #1e1e1e;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px;
+    border-bottom: 1px solid #1e1e1e;
+    position: sticky;
+    top: 0;
+    background: #111;
+    z-index: 1;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-header p {
+    margin: 4px 0 0;
+    color: #777;
+    font-size: 0.8rem;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #777;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: #fff;
+}
+
+.modal-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.modal-section-titulo {
+    margin: 0 0 10px;
+    color: #777;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.modal-body .input-box {
+    margin-bottom: 12px;
+}
+
+.modal-body .input-box:last-child {
+    margin-bottom: 0;
+}
+
+.modal-body input[type="text"],
+.modal-body input[type="tel"],
+.modal-body input[type="date"] {
+    width: 100%;
+    background: #1c1c1c;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    border-radius: 4px;
+}
+
+.modal-body input:focus {
+    outline: none;
+    border-color: #d99c2b;
+}
+
+.modal-opciones-grid,
+.modal-barberos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+}
+
+.modal-opcion-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #1c1c1c;
+    border: 1px solid #2a2a2a;
+    color: #ccc;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-opcion-btn:hover {
+    border-color: #555;
+}
+
+.modal-opcion-btn.seleccionado {
+    border-color: #d99c2b;
+    background: rgba(217, 156, 43, 0.08);
+    color: #fff;
+}
+
+.modal-opcion-precio {
+    color: #d99c2b;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.modal-horas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.modal-hora-btn {
+    background: #1c1c1c;
+    border: 1px solid #2a2a2a;
+    color: #aaa;
+    padding: 8px;
+    font-size: 0.78rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.modal-hora-btn:hover {
+    border-color: #d99c2b;
+    color: #d99c2b;
+}
+
+.modal-hora-btn.seleccionado {
+    background: #d99c2b;
+    border-color: #d99c2b;
+    color: #000;
+    font-weight: 800;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px 20px;
+    position: sticky;
+    bottom: 0;
+    background: #111;
+}
+
+.btn-cancelar-modal,
+.btn-confirmar-modal {
+    flex: 1;
+    padding: 12px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.btn-cancelar-modal {
+    background: transparent;
+    border: 1px solid #333;
+    color: #aaa;
+}
+
+.btn-cancelar-modal:hover {
+    border-color: #555;
+    color: #fff;
+}
+
+.btn-confirmar-modal {
+    background: #d99c2b;
+    border: 1px solid #d99c2b;
+    color: #000;
+}
+
+.btn-confirmar-modal:hover:not(:disabled) {
+    background: #f0ad32;
+}
+
+.btn-confirmar-modal:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.modal-hora-btn:disabled,
+.agenda-celda-libre:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.modal-hora-btn:disabled:hover,
+.agenda-celda-libre:disabled:hover {
+    border-color: #2a2a2a;
+    color: #aaa;
+    background: #1c1c1c;
+}
+
+.modal-aviso-sin-horarios {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid rgba(217, 156, 43, 0.4);
+    border-radius: 4px;
+    color: #d99c2b;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+    .agenda-resumen { grid-template-columns: repeat(2, 1fr); }
+    .modal-opciones-grid,
+    .modal-barberos-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */

@@ -749,6 +749,191 @@ window.addEventListener('resize', function () {
 });
 
 // ==========================================================================
+// 8. AGENDA DEL DÍA Y MODAL "NUEVA RESERVA" (Panel Admin · GestionReservas.php)
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', function () {
+    const agenda = document.querySelector('.agenda-reservas');
+    if (!agenda) return;
+
+    const btnDiaAnterior = document.getElementById('agenda-dia-anterior');
+    const btnDiaSiguiente = document.getElementById('agenda-dia-siguiente');
+    const inputFechaAgenda = document.getElementById('agenda-fecha-input');
+
+    // Suma (o resta) días a una fecha en formato 'YYYY-MM-DD' sin desfases de zona horaria (todo el cálculo se hace en UTC)
+    function sumarDias(fechaStr, dias) {
+        const [anio, mes, dia] = fechaStr.split('-').map(Number);
+        const fecha = new Date(Date.UTC(anio, mes - 1, dia));
+        fecha.setUTCDate(fecha.getUTCDate() + dias);
+
+        const dosDigitos = (n) => String(n).padStart(2, '0');
+        return `${fecha.getUTCFullYear()}-${dosDigitos(fecha.getUTCMonth() + 1)}-${dosDigitos(fecha.getUTCDate())}`;
+    }
+
+    // Navega a la agenda de otra fecha actualizando el parámetro de la URL
+    function irAFechaAgenda(fechaStr) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('fecha_agenda', fechaStr);
+        window.location.href = url.toString();
+    }
+
+    if (btnDiaAnterior && inputFechaAgenda) {
+        btnDiaAnterior.addEventListener('click', () => irAFechaAgenda(sumarDias(inputFechaAgenda.value, -1)));
+    }
+    if (btnDiaSiguiente && inputFechaAgenda) {
+        btnDiaSiguiente.addEventListener('click', () => irAFechaAgenda(sumarDias(inputFechaAgenda.value, 1)));
+    }
+    if (inputFechaAgenda) {
+        inputFechaAgenda.addEventListener('change', () => irAFechaAgenda(inputFechaAgenda.value));
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('modal-nueva-reserva');
+    if (!modal) return;
+
+    const form = document.getElementById('form-nueva-reserva');
+    const inputNombre = document.getElementById('nr-nombre');
+    const inputApellido = document.getElementById('nr-apellido');
+    const inputTelefono = document.getElementById('nr-telefono');
+    const inputServicioId = document.getElementById('nr-servicio-id');
+    const inputBarberoId = document.getElementById('nr-barbero-id');
+    const inputFecha = document.getElementById('nr-fecha');
+    const inputHora = document.getElementById('nr-hora');
+    const avisoSinHorarios = document.getElementById('nr-aviso-sin-horarios');
+    const btnConfirmar = document.getElementById('confirmar-modal-reserva');
+    const btnCerrar = document.getElementById('cerrar-modal-reserva');
+    const btnCancelar = document.getElementById('cancelar-modal-reserva');
+
+    const botonesServicio = modal.querySelectorAll('.nr-servicio-btn');
+    const botonesBarbero = modal.querySelectorAll('.nr-barbero-btn');
+    const botonesHora = modal.querySelectorAll('.modal-hora-btn');
+
+    // Habilita "Confirmar Reserva" únicamente cuando todos los campos obligatorios están completos
+    function actualizarBotonConfirmar() {
+        const completo = inputNombre.value.trim() !== ''
+            && inputApellido.value.trim() !== ''
+            && inputTelefono.value.trim() !== ''
+            && inputServicioId.value !== ''
+            && inputBarberoId.value !== ''
+            && inputFecha.value !== ''
+            && inputHora.value !== '';
+        btnConfirmar.disabled = !completo;
+    }
+
+    // Marca visualmente el botón elegido dentro de un grupo (servicio, barbero u hora) y guarda su valor
+    function elegirOpcion(grupoBotones, boton, inputDestino, valor) {
+        grupoBotones.forEach(b => b.classList.remove('seleccionado'));
+        boton.classList.add('seleccionado');
+        inputDestino.value = valor;
+        actualizarBotonConfirmar();
+    }
+
+    // Deshabilita los horarios que ya pasaron cuando la fecha elegida es hoy, y avisa si no queda ninguno disponible
+    function actualizarDisponibilidadHoras() {
+        const ahora = new Date();
+        const dosDigitos = (n) => String(n).padStart(2, '0');
+        const fechaHoy = `${ahora.getFullYear()}-${dosDigitos(ahora.getMonth() + 1)}-${dosDigitos(ahora.getDate())}`;
+        const horaActual = `${dosDigitos(ahora.getHours())}:${dosDigitos(ahora.getMinutes())}`;
+        const esHoy = inputFecha.value === fechaHoy;
+
+        let quedaAlgunHorario = false;
+        botonesHora.forEach(btn => {
+            const yaPaso = esHoy && btn.dataset.time <= horaActual;
+            btn.disabled = yaPaso;
+            if (yaPaso && btn.classList.contains('seleccionado')) {
+                btn.classList.remove('seleccionado');
+                inputHora.value = '';
+            }
+            if (!yaPaso) quedaAlgunHorario = true;
+        });
+
+        if (avisoSinHorarios) avisoSinHorarios.hidden = quedaAlgunHorario;
+        actualizarBotonConfirmar();
+    }
+
+    botonesServicio.forEach(btn => {
+        btn.addEventListener('click', () => elegirOpcion(botonesServicio, btn, inputServicioId, btn.dataset.id));
+    });
+    botonesBarbero.forEach(btn => {
+        btn.addEventListener('click', () => elegirOpcion(botonesBarbero, btn, inputBarberoId, btn.dataset.id));
+    });
+    botonesHora.forEach(btn => {
+        btn.addEventListener('click', () => elegirOpcion(botonesHora, btn, inputHora, btn.dataset.time));
+    });
+
+    [inputNombre, inputApellido, inputTelefono, inputFecha].forEach(campo => {
+        campo.addEventListener('input', actualizarBotonConfirmar);
+    });
+
+    // Al cambiar la fecha, recalculamos qué horarios siguen disponibles (por si la fecha pasa a ser "hoy" o deja de serlo)
+    inputFecha.addEventListener('change', actualizarDisponibilidadHoras);
+
+    // Limpia toda selección visual y los valores ocultos del formulario
+    function limpiarSelecciones() {
+        [...botonesServicio, ...botonesBarbero, ...botonesHora].forEach(b => b.classList.remove('seleccionado'));
+        inputServicioId.value = '';
+        inputBarberoId.value = '';
+        inputHora.value = '';
+    }
+
+    // Marca como seleccionado el botón cuyo dataset coincide con el valor recibido (usado para precargar datos)
+    function preseleccionar(grupoBotones, inputDestino, datasetKey, valor) {
+        if (!valor) return;
+        const boton = [...grupoBotones].find(b => b.dataset[datasetKey] === String(valor));
+        if (boton) {
+            boton.classList.add('seleccionado');
+            inputDestino.value = valor;
+        }
+    }
+
+    // Abre el modal y, si viene de una celda de la agenda, precarga fecha/hora/barbero
+    function abrirModal(prefill) {
+        prefill = prefill || {};
+        form.reset();
+        limpiarSelecciones();
+
+        if (prefill.date) inputFecha.value = prefill.date;
+        preseleccionar(botonesHora, inputHora, 'time', prefill.time);
+        preseleccionar(botonesBarbero, inputBarberoId, 'id', prefill.barberId);
+
+        actualizarDisponibilidadHoras();
+        modal.removeAttribute('hidden');
+        document.body.classList.add('modal-abierto');
+    }
+
+    function cerrarModal() {
+        modal.setAttribute('hidden', '');
+        document.body.classList.remove('modal-abierto');
+    }
+
+    // Cualquier elemento con [data-modal-trigger] abre el modal, precargando los datos de su dataset
+    document.querySelectorAll('[data-modal-trigger]').forEach(disparador => {
+        disparador.addEventListener('click', () => {
+            abrirModal({
+                date: disparador.dataset.date || '',
+                time: disparador.dataset.time || '',
+                barberId: disparador.dataset.barberId || '',
+            });
+        });
+    });
+
+    if (btnCerrar) btnCerrar.addEventListener('click', cerrarModal);
+    if (btnCancelar) btnCancelar.addEventListener('click', cerrarModal);
+
+    // Cierra el modal al hacer clic en el fondo oscuro, sin afectar al cuadro de diálogo
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) cerrarModal();
+    });
+
+    // Accesibilidad: cierra el modal con la tecla Escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hasAttribute('hidden')) cerrarModal();
+    });
+
+    actualizarBotonConfirmar();
+});
+
+// ==========================================================================
 // 7. CIERRE DEFENSIVO: DISPARADOR MANUAL DE DOM READY
 // ==========================================================================
 // Si por razones de rendimiento de carga el script se ejecuta de manera asíncrona ('async' o 'defer')
