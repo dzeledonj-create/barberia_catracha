@@ -77,7 +77,7 @@
                 <div class="card-icon">📍</div>
                 <div class="card-info">
                     <h3>UBICACIÓN</h3>
-                    <p>Cómo llegar</p>
+                    <p>Dónde encontrarnos</p>
                 </div>
                 <div class="card-arrow">›</div>
             </a>
