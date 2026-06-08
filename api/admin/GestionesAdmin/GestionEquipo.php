@@ -142,8 +142,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($uploadResult['uploaded']) {
                     $_SESSION['flash_message'] = 'Imagen subida correctamente.';
                 }
-            } elseif ($uploadResult['error']) {
-                $_SESSION['flash_message'] = $uploadResult['error'];
+            } else {
+                // guardar() falla, p.ej., si el correo ya está registrado (usuarios.email es UNIQUE).
+                // La imagen ya se subió al servidor en guardarImagenEquipo(); si no la borramos aquí
+                // queda huérfana en assets/img/equipo/ porque el barbero nunca llegó a crearse.
+                if ($uploadResult['uploaded']) {
+                    $huerfano = __DIR__ . '/../../../' . $uploadResult['path'];
+                    if (is_file($huerfano)) {
+                        @unlink($huerfano);
+                    }
+                }
+                $_SESSION['flash_message'] = $uploadResult['error']
+                    ?: 'No se pudo crear el barbero. Comprueba que el correo electrónico no esté ya registrado.';
             }
         }
     }
