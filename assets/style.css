@@ -1534,6 +1534,71 @@ img { max-width: 100%; height: auto; display: block; }
     letter-spacing: 2px;
 }
 
+/* Mensajes de confirmación / error de la reserva */
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.alert-icono {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.alert-texto strong {
+    display: block;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.alert-texto p {
+    margin: 0;
+    color: #cfcfcf;
+    line-height: 1.5;
+}
+
+.alert-success {
+    background: rgba(217, 156, 43, 0.08);
+    border: 1px solid #d99c2b;
+}
+
+.alert-success .alert-icono {
+    background: #d99c2b;
+    color: #0a0a0a;
+}
+
+.alert-success .alert-texto strong {
+    color: #d99c2b;
+}
+
+.alert-error {
+    background: rgba(220, 53, 69, 0.08);
+    border: 1px solid #dc3545;
+}
+
+.alert-error .alert-icono {
+    background: #dc3545;
+    color: #ffffff;
+}
+
+.alert-error .alert-texto strong {
+    color: #dc3545;
+}
+
 /* Barra de Pasos */
 .pasos-bar {
     display: flex;
@@ -1598,6 +1663,13 @@ img { max-width: 100%; height: auto; display: block; }
     margin-bottom: 25px;
     border-left: 4px solid #d99c2b;
     padding-left: 12px;
+}
+
+.paso-ayuda {
+    color: #999;
+    font-size: 0.9rem;
+    margin-top: -15px;
+    margin-bottom: 20px;
 }
 
 /* Estilo de Tarjetas y Opciones */
@@ -3386,7 +3458,13 @@ body.admin-panel .barbero-card.editing > img {
     max-height: 420px;
     overflow-y: auto;
 }
- 
+
+/* Dentro de la ventana flotante de edición, el propio .modal-box ya controla el scroll */
+.modal-box .edit-form {
+    max-height: none;
+    overflow-y: visible;
+}
+
 .edit-form label {
     color: #555;
     font-size: 0.65rem;
@@ -3436,7 +3514,23 @@ body.admin-panel .barbero-card.editing > img {
     min-height: 80px;
     line-height: 1.5;
 }
- 
+
+.checkbox-label {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    accent-color: #d99c2b;
+    cursor: pointer;
+}
+
 .form-buttons {
     display: flex;
     gap: 8px;

@@ -64,6 +64,10 @@ $barberoServicios = [];
 foreach ($relaciones as $rel) {
     $barberoServicios[$rel['barbero_id']][] = $rel['servicio_id'];
 }
+
+// Reservas activas (no canceladas) para validar en el navegador si un barbero ya está ocupado a la hora elegida
+$stmtOcupadas = $db->query("SELECT barbero_id, fecha_hora FROM reservas WHERE estado != 'cancelada'");
+$reservasOcupadas = $stmtOcupadas->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -86,16 +90,28 @@ foreach ($relaciones as $rel) {
 
         <div class="pasos-bar">
             <div class="paso-item activo" data-paso="0"><span class="paso-numero">1</span><span class="paso-texto">Servicio</span></div>
-            <div class="paso-item" data-paso="1"><span class="paso-numero">2</span><span class="paso-texto">Barbero</span></div>
-            <div class="paso-item" data-paso="2"><span class="paso-numero">3</span><span class="paso-texto">Fecha y Hora</span></div>
+            <div class="paso-item" data-paso="1"><span class="paso-numero">2</span><span class="paso-texto">Fecha y Hora</span></div>
+            <div class="paso-item" data-paso="2"><span class="paso-numero">3</span><span class="paso-texto">Barbero</span></div>
             <div class="paso-item" data-paso="3"><span class="paso-numero">4</span><span class="paso-texto">Tus Datos</span></div>
             <div class="paso-item" data-paso="4"><span class="paso-numero">5</span><span class="paso-texto">Confirmación</span></div>
         </div>
 
         <?php if ($mensajeExito !== null): ?>
-            <div class="alert success"><?= htmlspecialchars($mensajeExito) ?></div>
+            <div class="alert alert-success">
+                <span class="alert-icono">&#10003;</span>
+                <div class="alert-texto">
+                    <strong>¡Reserva confirmada!</strong>
+                    <p><?= htmlspecialchars($mensajeExito) ?></p>
+                </div>
+            </div>
         <?php elseif ($mensajeError !== null): ?>
-            <div class="alert error"><?= htmlspecialchars($mensajeError) ?></div>
+            <div class="alert alert-error">
+                <span class="alert-icono">&#9888;</span>
+                <div class="alert-texto">
+                    <strong>No se pudo completar la reserva</strong>
+                    <p><?= htmlspecialchars($mensajeError) ?></p>
+                </div>
+            </div>
         <?php endif; ?>
 
         <div class="seguimiento-live" id="seguimiento-live">
@@ -146,9 +162,30 @@ foreach ($relaciones as $rel) {
             </div>
 
             <div class="reserva-step" id="step-2">
+                <h2>Elige fecha y hora</h2>
+                <div class="agenda-container">
+                    <div class="calendario-box">
+                        <input type="text" id="datepicker" name="fecha" placeholder="Selecciona una fecha" readonly required>
+                        <input type="hidden" name="hora" id="hora-seleccionada">
+                    </div>
+                    <div class="horas-box">
+                        <h3>Horas disponibles</h3>
+                        <div id="horas-grid" class="horas-grid">
+                            <p class="select-date-msg">Por favor, selecciona una fecha primero.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn-atras">Atrás</button>
+                    <button type="button" class="btn-siguiente" id="btn-validar-hora">Siguiente Paso</button>
+                </div>
+            </div>
+
+            <div class="reserva-step" id="step-3">
                 <h2>Selecciona tu barbero</h2>
+                <p class="paso-ayuda">Solo se muestran disponibles los barberos que pueden atenderte en la fecha y hora elegidas.</p>
                 <div class="barberos-grid">
-                    <?php foreach ($barberos as $barbero): 
+                    <?php foreach ($barberos as $barbero):
                         // Normalización inteligente de rutas de imágenes
                         $foto = $barbero->getFotoUrl() ?? '';
                         if (!empty($foto) && !str_starts_with($foto, 'http') && !str_starts_with($foto, '/') && !str_starts_with($foto, '../')) {
@@ -171,26 +208,6 @@ foreach ($relaciones as $rel) {
                 <div class="nav-buttons">
                     <button type="button" class="btn-atras">Atrás</button>
                     <button type="button" class="btn-siguiente">Siguiente Paso</button>
-                </div>
-            </div>
-
-            <div class="reserva-step" id="step-3">
-                <h2>Elige fecha y hora</h2>
-                <div class="agenda-container">
-                    <div class="calendario-box">
-                        <input type="text" id="datepicker" name="fecha" placeholder="Selecciona una fecha" readonly required>
-                        <input type="hidden" name="hora" id="hora-seleccionada">
-                    </div>
-                    <div class="horas-box">
-                        <h3>Horas disponibles</h3>
-                        <div id="horas-grid" class="horas-grid">
-                            <p class="select-date-msg">Por favor, selecciona una fecha primero.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="nav-buttons">
-                    <button type="button" class="btn-atras">Atrás</button>
-                    <button type="button" class="btn-siguiente" id="btn-validar-hora">Siguiente Paso</button>
                 </div>
             </div>
 
@@ -245,6 +262,7 @@ foreach ($relaciones as $rel) {
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     window.reservaScheduleData = <?= json_encode($horarios, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
+    window.reservasOcupadas = <?= json_encode($reservasOcupadas, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT); ?>;
 </script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 <script src="../../assets/script.js"></script>

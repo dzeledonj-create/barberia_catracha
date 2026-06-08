@@ -110,8 +110,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'Administrador del sistema.',
                         ''
                     ];
+                    // PDO convierte el bool PHP "false" en cadena vacía "", que PostgreSQL rechaza
+                    // para columnas boolean; se envía como entero (0/1) en su lugar.
                     if (Barbero::tieneColumnaMostrarEnVista()) {
-                        $params[] = false;
+                        $params[] = 0;
                     }
                     $stmt = $db->prepare($sqlBarbero);
                     $stmt->execute($params);
@@ -163,6 +165,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $admin->setNombre($_POST['nombre'] ?? $admin->getNombre());
                     $admin->setEmail($_POST['email'] ?? $admin->getEmail());
                     $admin->setActivo(isset($_POST['activo']));
+                    // Guarda los cambios de nombre, email y estado activo en la tabla usuarios
+                    try {
+                        $admin->actualizar();
+                    } catch (Exception $e) {
+                        $_SESSION['flash_message'] = 'No se pudo actualizar la información del administrador.';
+                    }
                     // Manejar petición de borrar foto si se solicitó
                     if (!empty($_POST['foto_delete']) && $_POST['foto_delete'] == '1') {
                         try {
@@ -232,8 +240,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     'Administrador del sistema.',
                                     ''
                                 ];
+                                // PDO convierte el bool PHP "false" en cadena vacía "", que PostgreSQL
+                                // rechaza para columnas boolean; se envía como entero (0/1) en su lugar.
                                 if (Barbero::tieneColumnaMostrarEnVista()) {
-                                    $params[] = false;
+                                    $params[] = 0;
                                 }
                                 $ins = $db->prepare($sqlInsert);
                                 $ins->execute($params);
@@ -310,6 +320,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $procesado = true;
                 }
             }
+        }
+
+        // Si la edición se procesó y ningún paso anterior dejó ya un mensaje más específico
+        // (foto subida/eliminada, error, etc.), mostramos la confirmación genérica de guardado.
+        if ($procesado && empty($_SESSION['flash_message'])) {
+            $_SESSION['flash_message'] = 'Los cambios se han guardado con éxito.';
         }
     }
 
@@ -461,127 +477,151 @@ $editandoId = $_GET['editar'] ?? null;
 
         <!-- Grid que muestra todos los miembros del equipo -->
         <section class="equipo-grid">
+            <?php $urlSinEditar = '/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php'; ?>
             <?php foreach ($barberos as $barber): ?>
-                <?php 
+                <?php
                     // Determinar si es barbero o admin
                     $esBarbero = $barber->getBarberoId() !== null;
-                    // Usa barbero_id si es barbero, o usuario_id si es admin puro
-                    $idActual = $esBarbero ? $barber->getBarberoId() : $barber->getUsuarioId();
+                    // Se usa siempre usuario_id para identificar quién se edita: barbero_id y usuario_id
+                    // son secuencias independientes y pueden coincidir (p.ej. ambos valen 1), lo que hacía
+                    // que ?editar=1 abriera a la vez el modal de un barbero y el de un admin distintos.
+                    $idActual = $barber->getUsuarioId();
                     // Comprueba si este miembro es el que se está editando actualmente
                     $estanEditando = ($editandoId === (string)$idActual);
                 ?>
-                <!-- Tarjeta del miembro; añade clase 'editing' si está en modo edición -->
-                <section class="barbero-card <?= $estanEditando ? 'editing' : '' ?>">
-                    <?php if ($estanEditando && $esBarbero): ?>
-                        <!-- Formulario de edición completo para barberos -->
-                        <form action="" method="POST" enctype="multipart/form-data" class="edit-form">
-                            <input type="hidden" name="accion" value="actualizar">
-                            <!-- IDs necesarios para identificar al barbero y su usuario en el backend -->
-                            <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
-                            <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
-                            
-                            <label>Nombre</label>
-                            <input type="text" name="nombre" value="<?= htmlspecialchars($barber->getNombre()) ?>" required>
-                            
-                            <label>Email</label>
-                            <input type="email" name="email" value="<?= htmlspecialchars($barber->getEmail()) ?>" required>
-                            
-                            <label>Especialidad</label>
-                            <input type="text" name="especialidad" value="<?= htmlspecialchars($barber->getEspecialidad() ?? '') ?>">
-                            
-                            <label>Rol de Sistema</label>
-                            <!-- Marca como seleccionado el rol actual del barbero -->
-                            <select name="rol" required>
-                                <option value="barbero" <?= ($barber->getRol() === 'barbero') ? 'selected' : '' ?>>Barbero Profesional</option>
-                                <option value="admin" <?= ($barber->getRol() === 'admin') ? 'selected' : '' ?>>Administrador del Sistema</option>
-                            </select>
+                <!-- Tarjeta del miembro (siempre en modo lectura; la edición se hace en la ventana flotante) -->
+                <section class="barbero-card">
+                    <div class="card-image">
+                        <!-- onerror reemplaza la imagen por la predeterminada si la URL falla -->
+                        <img src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->getNombre()) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
+                    </div>
+                    <section class="info">
+                        <h3><?= htmlspecialchars($barber->getNombre()) ?></h3>
+                        <p class="rank"><?= htmlspecialchars($barber->getEspecialidad() ?? 'Admin') ?></p>
+                        <p class="role-text"><?= strtoupper($barber->getRol() ?? 'Barbero') ?></p>
 
-                            <label>Descripción</label>
-                            <textarea name="descripcion" rows="3"><?= htmlspecialchars($barber->getDescripcion() ?? '') ?></textarea>
-                            
-                            <label>Etiquetas</label>
-                            <input type="text" name="etiquetas" value="<?= htmlspecialchars($barber->getEtiquetas() ?? '') ?>">
-                            
-                            <label>Foto (subir desde dispositivo)</label>
-                            <input type="file" name="foto" accept="image/*">
-                            <input type="hidden" name="foto_url" value="<?= htmlspecialchars($barber->getFotoUrl() ?? '') ?>">
-                            <input type="hidden" name="foto_delete" value="0">
-                            <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
-                            <button type="button" class="btn-delete-photo" style="margin-top:8px;">Eliminar foto</button>
+                        <div class="actions-group">
+                            <!-- Enlace que recarga la página con ?editar=ID para abrir la ventana flotante de edición -->
+                            <a href="?editar=<?= $idActual ?>" class="btn-edit">EDITAR</a>
 
-                            <section class="form-buttons">
-                                <button type="submit" class="btn-save">GUARDAR</button>
-                                <!-- Cancelar descarta los cambios volviendo a la vista sin ?editar en la URL -->
-                                <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php" class="btn-cancel">CANCELAR</a>
-                            </section>
-                        </form>
-                    <?php elseif ($estanEditando && !$esBarbero): ?>
-                        <!-- Formulario de edición simplificado para administradores puros (sin perfil de barbero) -->
-                        <form action="" method="POST" enctype="multipart/form-data" class="edit-form">
-                            <input type="hidden" name="accion" value="actualizar">
-                            <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
-                            <!-- El rol se envía como campo oculto porque los admins no cambian de rol aquí -->
-                            <input type="hidden" name="rol" value="<?= htmlspecialchars($barber->getRol()) ?>">
-                            
-                            <label>Nombre</label>
-                            <input type="text" name="nombre" value="<?= htmlspecialchars($barber->getNombre()) ?>" required>
-                            
-                            <label>Email</label>
-                            <input type="email" name="email" value="<?= htmlspecialchars($barber->getEmail()) ?>" required>
-
-                            <label>Foto (subir desde dispositivo)</label>
-                            <input type="file" name="foto" accept="image/*">
-                            <input type="hidden" name="foto_delete" value="0">
-                            <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
-                            <button type="button" class="btn-delete-photo" style="margin-top:8px;">Eliminar foto</button>
-
-                            <section class="form-buttons">
-                                <button type="submit" class="btn-save">GUARDAR</button>
-                                <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php" class="btn-cancel">CANCELAR</a>
-                            </section>
-                        </form>
-                    <?php else: ?>
-                        <!-- Vista de tarjeta normal (modo lectura, sin edición activa) -->
-                            <div class="card-image">
-                                <!-- onerror reemplaza la imagen por la predeterminada si la URL falla -->
-                                <img src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->getNombre()) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
-                            </div>
-                        <section class="info">
-                            <h3><?= htmlspecialchars($barber->getNombre()) ?></h3>
-                            <p class="rank"><?= htmlspecialchars($barber->getEspecialidad() ?? 'Admin') ?></p>
-                            <p class="role-text"><?= strtoupper($barber->getRol() ?? 'Barbero') ?></p>
-                            
-                            <div class="actions-group">
-                                <!-- Enlace que recarga la página con ?editar=ID para activar el formulario de edición -->
-                                <a href="?editar=<?= $idActual ?>" class="btn-edit">EDITAR</a>
-
-                                <?php if (Barbero::tieneColumnaMostrarEnVista() && $barber->getRol() === 'admin' && $barber->getBarberoId()): ?>
-                                    <?php if (!$barber->getMostrarEnVista()): ?>
-                                        <!-- Formulario para autorizar al admin-barbero a aparecer en la vista pública -->
-                                        <form action="" method="POST" class="delete-form">
-                                            <input type="hidden" name="accion" value="autorizar_vista">
-                                            <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
-                                            <button type="submit" class="btn-authorize">AUTORIZAR VISTA CLIENTE</button>
-                                        </form>
-                                    <?php else: ?>
-                                        <!-- Indicador visual de que el barbero ya está autorizado en la vista cliente -->
-                                        <span class="role-text autorizado-en-vista">AUTORIZADO EN VISTA</span>
-                                    <?php endif; ?>
+                            <?php if (Barbero::tieneColumnaMostrarEnVista() && $barber->getRol() === 'admin' && $barber->getBarberoId()): ?>
+                                <?php if (!$barber->getMostrarEnVista()): ?>
+                                    <!-- Formulario para autorizar al admin-barbero a aparecer en la vista pública -->
+                                    <form action="" method="POST" class="delete-form">
+                                        <input type="hidden" name="accion" value="autorizar_vista">
+                                        <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
+                                        <button type="submit" class="btn-authorize">AUTORIZAR VISTA CLIENTE</button>
+                                    </form>
+                                <?php else: ?>
+                                    <!-- Indicador visual de que el barbero ya está autorizado en la vista cliente -->
+                                    <span class="role-text autorizado-en-vista">AUTORIZADO EN VISTA</span>
                                 <?php endif; ?>
+                            <?php endif; ?>
 
-                                <!-- Formulario de eliminación con confirmación JavaScript antes de enviar -->
-                                <form action="" method="POST" class="delete-form" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este miembro?');">
-                                    <input type="hidden" name="accion" value="eliminar">
-                                    <!-- Se envían ambos IDs para que el backend decida qué eliminar según el rol -->
-                                    <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
-                                    <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
-                                    <input type="hidden" name="rol" value="<?= htmlspecialchars($barber->getRol()) ?>">
-                                    <button type="submit" class="btn-delete">ELIMINAR</button>
-                                </form>
-                            </div>
-                        </section>
-                    <?php endif; ?>
+                            <!-- Formulario de eliminación con confirmación JavaScript antes de enviar -->
+                            <form action="" method="POST" class="delete-form" onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este miembro?');">
+                                <input type="hidden" name="accion" value="eliminar">
+                                <!-- Se envían ambos IDs para que el backend decida qué eliminar según el rol -->
+                                <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
+                                <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
+                                <input type="hidden" name="rol" value="<?= htmlspecialchars($barber->getRol()) ?>">
+                                <button type="submit" class="btn-delete">ELIMINAR</button>
+                            </form>
+                        </div>
+                    </section>
                 </section>
+
+                <?php if ($estanEditando): ?>
+                <!-- Ventana flotante (modal) con el formulario de edición de este miembro -->
+                <div class="modal-overlay editar-modal-overlay">
+                    <div class="modal-box">
+                        <div class="modal-header">
+                            <h2>Editar <?= $esBarbero ? 'Barbero' : 'Administrador' ?></h2>
+                            <a href="<?= $urlSinEditar ?>" class="modal-close" aria-label="Cerrar edición">&times;</a>
+                        </div>
+
+                        <?php if ($esBarbero): ?>
+                            <!-- Formulario de edición completo para barberos -->
+                            <form action="" method="POST" enctype="multipart/form-data" class="edit-form">
+                                <input type="hidden" name="accion" value="actualizar">
+                                <!-- IDs necesarios para identificar al barbero y su usuario en el backend -->
+                                <input type="hidden" name="barbero_id" value="<?= $barber->getBarberoId() ?>">
+                                <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
+
+                                <label>Nombre</label>
+                                <input type="text" name="nombre" value="<?= htmlspecialchars($barber->getNombre()) ?>" required>
+
+                                <label>Email</label>
+                                <input type="email" name="email" value="<?= htmlspecialchars($barber->getEmail()) ?>" required>
+
+                                <label>Especialidad</label>
+                                <input type="text" name="especialidad" value="<?= htmlspecialchars($barber->getEspecialidad() ?? '') ?>">
+
+                                <label>Rol de Sistema</label>
+                                <!-- Marca como seleccionado el rol actual del barbero -->
+                                <select name="rol" required>
+                                    <option value="barbero" <?= ($barber->getRol() === 'barbero') ? 'selected' : '' ?>>Barbero Profesional</option>
+                                    <option value="admin" <?= ($barber->getRol() === 'admin') ? 'selected' : '' ?>>Administrador del Sistema</option>
+                                </select>
+
+                                <label>Descripción</label>
+                                <textarea name="descripcion" rows="3"><?= htmlspecialchars($barber->getDescripcion() ?? '') ?></textarea>
+
+                                <label>Etiquetas</label>
+                                <input type="text" name="etiquetas" value="<?= htmlspecialchars($barber->getEtiquetas() ?? '') ?>">
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="activo" value="1" <?= $barber->getActivo() ? 'checked' : '' ?>>
+                                    Activo
+                                </label>
+
+                                <label>Foto (subir desde dispositivo)</label>
+                                <input type="file" name="foto" accept="image/*">
+                                <input type="hidden" name="foto_url" value="<?= htmlspecialchars($barber->getFotoUrl() ?? '') ?>">
+                                <input type="hidden" name="foto_delete" value="0">
+                                <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
+                                <button type="button" class="btn-delete-photo" style="margin-top:8px;">Eliminar foto</button>
+
+                                <section class="form-buttons">
+                                    <button type="submit" class="btn-save">GUARDAR</button>
+                                    <!-- Cancelar cierra la ventana flotante volviendo a la vista sin ?editar en la URL -->
+                                    <a href="<?= $urlSinEditar ?>" class="btn-cancel">CANCELAR</a>
+                                </section>
+                            </form>
+                        <?php else: ?>
+                            <!-- Formulario de edición simplificado para administradores puros (sin perfil de barbero) -->
+                            <form action="" method="POST" enctype="multipart/form-data" class="edit-form">
+                                <input type="hidden" name="accion" value="actualizar">
+                                <input type="hidden" name="usuario_id" value="<?= $barber->getUsuarioId() ?>">
+                                <!-- El rol se envía como campo oculto porque los admins no cambian de rol aquí -->
+                                <input type="hidden" name="rol" value="<?= htmlspecialchars($barber->getRol()) ?>">
+
+                                <label>Nombre</label>
+                                <input type="text" name="nombre" value="<?= htmlspecialchars($barber->getNombre()) ?>" required>
+
+                                <label>Email</label>
+                                <input type="email" name="email" value="<?= htmlspecialchars($barber->getEmail()) ?>" required>
+
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="activo" value="1" <?= $barber->getActivo() ? 'checked' : '' ?>>
+                                    Activo
+                                </label>
+
+                                <label>Foto (subir desde dispositivo)</label>
+                                <input type="file" name="foto" accept="image/*">
+                                <input type="hidden" name="foto_delete" value="0">
+                                <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
+                                <button type="button" class="btn-delete-photo" style="margin-top:8px;">Eliminar foto</button>
+
+                                <section class="form-buttons">
+                                    <button type="submit" class="btn-save">GUARDAR</button>
+                                    <a href="<?= $urlSinEditar ?>" class="btn-cancel">CANCELAR</a>
+                                </section>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
             <?php endforeach; ?>
         </section>
     </main>

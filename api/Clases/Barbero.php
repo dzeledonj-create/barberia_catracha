@@ -197,8 +197,11 @@ class Barbero {
                     $this->etiquetas
                 ];
                 // Si la columna 'mostrar_en_vista' existe, incluimos su valor en los parámetros de la consulta
+                // Nota: PDO convierte un bool PHP "false" en cadena vacía "", que PostgreSQL rechaza
+                // como valor para columnas boolean ("invalid input syntax for type boolean"); por eso
+                // se envía como entero (0/1), que PostgreSQL sí acepta.
                 if (self::tieneColumnaMostrarEnVista()) {
-                    $params[] = $this->mostrarEnVista;
+                    $params[] = (int)$this->mostrarEnVista;
                 }
                 $stmtB->execute($params);
                 $this->barberoId = (int)$stmtB->fetchColumn();
@@ -221,7 +224,7 @@ class Barbero {
                 ];
                 // Si la columna 'mostrar_en_vista' existe, incluimos su valor en los parámetros de la consulta
                 if (self::tieneColumnaMostrarEnVista()) {
-                    $params[] = $this->mostrarEnVista;
+                    $params[] = (int)$this->mostrarEnVista;
                 }
                 $params[] = $this->barberoId;
                 $stmtB->execute($params);

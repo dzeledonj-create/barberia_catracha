@@ -57,13 +57,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // HORARIOS: Extraemos los datos inyectados por PHP desde el servidor en el objeto global de la ventana
     const scheduleData = window.reservaScheduleData || [];
+    const reservasOcupadas = window.reservasOcupadas || [];
     const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    
+
     // Convertimos el Array de horarios de PHP en un Objeto indexado por el día de la semana para búsquedas rápidas
     const horariosPorDia = scheduleData.reduce((map, horario) => {
         map[horario.dia_semana] = horario;
         return map;
     }, {});
+
+    // Determina si un barbero ya tiene una reserva activa que se solapa con el bloque de 30 min elegido
+    function barberoOcupado(barberoId, fechaStr, horaStr) {
+        if (!fechaStr || !horaStr) return false;
+
+        // fechaStr llega en formato d/m/Y (ej. "08/06/2026") desde el datepicker
+        const [dia, mes, anio] = fechaStr.split('/').map(Number);
+        const [horas, minutos] = horaStr.split(':').map(Number);
+        if (!dia || !mes || !anio || isNaN(horas) || isNaN(minutos)) return false;
+
+        const inicio = new Date(anio, mes - 1, dia, horas, minutos);
+        const fin = new Date(inicio.getTime() + 30 * 60000);
+
+        return reservasOcupadas.some(function (reserva) {
+            if (Number(reserva.barbero_id) !== Number(barberoId)) return false;
+
+            const ocupInicio = new Date(reserva.fecha_hora.replace(' ', 'T'));
+            const ocupFin = new Date(ocupInicio.getTime() + 30 * 60000);
+
+            return inicio < ocupFin && fin > ocupInicio;
+        });
+    }
 
     // Captura de elementos del DOM esenciales para el flujo de la reserva
     const servicios = document.querySelectorAll('input[name="servicio_id"]');
@@ -90,9 +113,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const isReservationSuccess = window.location.search.includes('reserva=ok');
 
     // Capturamos los botones de avance específicos de cada paso para controlar su estado (activar/desactivar)
-    const btnSiguienteStep1 = steps[0]?.querySelector('.btn-siguiente');
-    const btnSiguienteStep2 = steps[1]?.querySelector('.btn-siguiente');
-    const btnSiguienteStep3 = steps[2]?.querySelector('.btn-siguiente');
+    // Orden actual de los pasos: 1) Servicio  2) Fecha y hora  3) Barbero  4) Datos  5) Confirmación
+    const btnSiguienteServicio = steps[0]?.querySelector('.btn-siguiente');
+    const btnSiguienteFechaHora = steps[1]?.querySelector('.btn-siguiente');
+    const btnSiguienteBarbero = steps[2]?.querySelector('.btn-siguiente');
 
     // NAVEGACIÓN HISTORIAL: Forzamos el estado inicial en el historial del navegador para controlar el botón de "Atrás"
     const initialState = { step: pasoActual, reservationComplete: isReservationSuccess };
@@ -117,12 +141,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (pasosBar[index]) pasosBar[index].classList.add('activo');
 
         // Si estamos en el paso de Fecha/Hora (Paso 2), validamos si el botón siguiente debe estar activo o no
-        if (index === 2 && btnSiguienteStep3) {
-            btnSiguienteStep3.disabled = !horaHidden.value;
+        if (index === 1 && btnSiguienteFechaHora) {
+            btnSiguienteFechaHora.disabled = !horaHidden.value;
             if (horaHidden.value) {
-                btnSiguienteStep3.classList.remove('deshabilitado');
+                btnSiguienteFechaHora.classList.remove('deshabilitado');
             } else {
-                btnSiguienteStep3.classList.add('deshabilitado');
+                btnSiguienteFechaHora.classList.add('deshabilitado');
             }
         }
     }
@@ -182,9 +206,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function resetSelectedHour() {
         horaSeleccionada = null;
         if (horaHidden) horaHidden.value = '';
-        if (btnSiguienteStep3) {
-            btnSiguienteStep3.disabled = true;
-            btnSiguienteStep3.classList.add('deshabilitado');
+        if (btnSiguienteFechaHora) {
+            btnSiguienteFechaHora.disabled = true;
+            btnSiguienteFechaHora.classList.add('deshabilitado');
         }
         document.querySelectorAll('.hora-item.selected').forEach(btn => btn.classList.remove('selected'));
     }
@@ -252,9 +276,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 button.classList.add('selected');
                 
                 // Habilitamos el botón de continuar
-                if (btnSiguienteStep3) {
-                    btnSiguienteStep3.disabled = false;
-                    btnSiguienteStep3.classList.remove('deshabilitado');
+                if (btnSiguienteFechaHora) {
+                    btnSiguienteFechaHora.disabled = false;
+                    btnSiguienteFechaHora.classList.remove('deshabilitado');
                 }
                 // Actualizamos el ticket lateral
                 if (trackCita) {
@@ -274,16 +298,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 return { valido: false, mensaje: 'Debes seleccionar un servicio para poder avanzar.' };
             }
         }
-        if (index === 1) { // Paso 2: Barberos
-            const barberoSeleccionado = document.querySelector('input[name="barbero_id"]:checked');
-            if (!barberoSeleccionado) {
-                return { valido: false, mensaje: 'Por favor, selecciona un barbero antes de ir al siguiente paso.' };
-            }
-        }
-        if (index === 2) { // Paso 3: Calendario
+        if (index === 1) { // Paso 2: Fecha y hora
             const fechaInput = datepickerInput ? datepickerInput.value : '';
             if (!fechaInput || !horaHidden || !horaHidden.value) {
                 return { valido: false, mensaje: 'Selecciona una fecha y una de las horas disponibles.' };
+            }
+        }
+        if (index === 2) { // Paso 3: Barberos
+            const barberoSeleccionado = document.querySelector('input[name="barbero_id"]:checked');
+            if (!barberoSeleccionado) {
+                return { valido: false, mensaje: 'Por favor, selecciona un barbero antes de ir al siguiente paso.' };
             }
         }
         if (index === 3) { // Paso 4: Datos del cliente (Formulario final)
@@ -336,9 +360,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Inicializamos deshabilitados los botones de pasos para forzar la selección obligatoria del usuario
-    if (btnSiguienteStep1) { btnSiguienteStep1.disabled = true; btnSiguienteStep1.classList.add('deshabilitado'); }
-    if (btnSiguienteStep2) { btnSiguienteStep2.disabled = true; btnSiguienteStep2.classList.add('deshabilitado'); }
-    if (btnSiguienteStep3) { btnSiguienteStep3.disabled = true; btnSiguienteStep3.classList.add('deshabilitado'); }
+    if (btnSiguienteServicio) { btnSiguienteServicio.disabled = true; btnSiguienteServicio.classList.add('deshabilitado'); }
+    if (btnSiguienteFechaHora) { btnSiguienteFechaHora.disabled = true; btnSiguienteFechaHora.classList.add('deshabilitado'); }
+    if (btnSiguienteBarbero) { btnSiguienteBarbero.disabled = true; btnSiguienteBarbero.classList.add('deshabilitado'); }
 
     // EVENTO: Control de cambio de selección en los inputs de Servicio
     servicios.forEach(input => {
@@ -355,9 +379,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Habilita el avance al Paso 2
-            if (btnSiguienteStep1) {
-                btnSiguienteStep1.disabled = false;
-                btnSiguienteStep1.classList.remove('deshabilitado');
+            if (btnSiguienteServicio) {
+                btnSiguienteServicio.disabled = false;
+                btnSiguienteServicio.classList.remove('deshabilitado');
             }
 
             // Si el usuario cambia el servicio teniendo ya una fecha elegida, recalculamos las horas
@@ -374,14 +398,33 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!radio) return;
 
         radio.addEventListener('change', function () {
+            const fechaElegida = datepickerInput ? datepickerInput.value : '';
+            const horaElegida = horaHidden ? horaHidden.value : '';
+
+            // Si el barbero ya tiene una cita a esa hora, bloqueamos la selección y avisamos al cliente
+            if (barberoOcupado(card.dataset.id, fechaElegida, horaElegida)) {
+                radio.checked = false;
+                alert('Este barbero no está disponible a esa hora. Por favor, elige otra hora.');
+
+                if (trackBarbero) {
+                    trackBarbero.querySelector('span').innerText = 'Ninguno seleccionado';
+                    trackBarbero.classList.remove('completado');
+                }
+                if (btnSiguienteBarbero) {
+                    btnSiguienteBarbero.disabled = true;
+                    btnSiguienteBarbero.classList.add('deshabilitado');
+                }
+                return;
+            }
+
             barberoTexto = card.querySelector('h3').innerText;
             if (trackBarbero) {
                 trackBarbero.querySelector('span').innerText = barberoTexto;
                 trackBarbero.classList.add('completado');
             }
-            if (btnSiguienteStep2) {
-                btnSiguienteStep2.disabled = false;
-                btnSiguienteStep2.classList.remove('deshabilitado');
+            if (btnSiguienteBarbero) {
+                btnSiguienteBarbero.disabled = false;
+                btnSiguienteBarbero.classList.remove('deshabilitado');
             }
         });
     });
@@ -430,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            if (pasoActual === 2 && trackCita) {
+            if (pasoActual === 1 && trackCita) {
                 const fecha = datepickerInput ? datepickerInput.value : '';
                 trackCita.querySelector('span').innerText = `${fecha} a las ${horaSeleccionada}`;
                 trackCita.classList.add('completado');
@@ -729,8 +772,35 @@ function initEquipoImagePreview() {
     }
 }
 
+// Ventana flotante de edición de barbero/administrador en GestionEquipo: permite cerrarla
+// haciendo clic en el fondo oscuro o presionando Escape, además de los botones Cancelar/×
+function initEditarMiembroModal() {
+    const overlay = document.querySelector('.editar-modal-overlay');
+    if (!overlay) return;
+
+    const cerrarHref = overlay.querySelector('.modal-close')?.getAttribute('href');
+    if (!cerrarHref) return;
+
+    document.body.classList.add('modal-abierto');
+
+    function cerrar() {
+        window.location.href = cerrarHref;
+    }
+
+    // Clic en el fondo oscuro (fuera del cuadro de diálogo) cierra la ventana flotante
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) cerrar();
+    });
+
+    // Tecla Escape cierra la ventana flotante
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') cerrar();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     initEquipoImagePreview();
+    initEditarMiembroModal();
 });
 
 // CONTROL DE RESPONSIVIDAD: Resetea el estado de los componentes de administración si se agranda la pantalla
