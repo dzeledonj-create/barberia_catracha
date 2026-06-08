@@ -43,7 +43,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
         <?php if ($pendientes > 0): ?>
             <section class="admin-alert">
                 <strong>Notificación:</strong> Tienes <?= htmlspecialchars($pendientes) ?> reserva<?= $pendientes === 1 ? '' : 's' ?> pendiente<?= $pendientes === 1 ? '' : 's' ?>.
-                <a href="/admin/GestionesAdmin/GestionReservas.php">Ver reservas</a>
+                <a href="GestionReservas.php">Ver reservas</a>
             </section>
         <?php endif; ?>
 
