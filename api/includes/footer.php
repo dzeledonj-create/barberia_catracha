@@ -18,7 +18,7 @@
 
             <section class="footer-col">
                 <h4>Horario</h4>
-                <p>Lunes: 10:00 - 19:30</p>
+                <p>Lunes: 10:00 - 20:30</p>
                 <p>Martes - Sábado: 09:30 - 20:30</p>
                 <p>Domingo: 10:00 - 13:30</p>
             </section>
