@@ -22,6 +22,47 @@ if (!$usuario) {
     exit;
 }
 
+// --- ENDPOINT: guardar el push_token del navegador del barbero autenticado ---
+// Se atiende aquí, antes de exigir rol de administrador, porque cualquier barbero
+// con sesión iniciada debe poder activar y guardar sus propias notificaciones push.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'guardar_push_token') {
+    header('Content-Type: application/json');
+
+    $emailRecibido = trim($_POST['email'] ?? '');
+    $pushToken = trim($_POST['push_token'] ?? '');
+
+    if ($emailRecibido === '' || $pushToken === '') {
+        echo json_encode(['ok' => false, 'mensaje' => 'Faltan datos: correo o token de notificaciones.']);
+        exit;
+    }
+
+    // Cada usuario solo puede guardar su propio token; el administrador puede guardar el de cualquiera
+    if (!($usuario instanceof Administrador) && strcasecmp($usuario->getEmail(), $emailRecibido) !== 0) {
+        echo json_encode(['ok' => false, 'mensaje' => 'No puedes modificar el token de otro usuario.']);
+        exit;
+    }
+
+    try {
+        $db = BD::obtenerConexion();
+        if ($usuario instanceof Administrador) {
+            // El administrador no tiene fila en "barberos": su token se guarda
+            // directamente en su propia fila de "usuarios".
+            $stmt = $db->prepare("UPDATE usuarios SET push_token = ? WHERE usuario_id = ?");
+            $stmt->execute([$pushToken, $usuario->getUsuarioId()]);
+        } else {
+            $stmt = $db->prepare(
+                "UPDATE barberos SET push_token = ?
+                 WHERE usuario_id = (SELECT usuario_id FROM usuarios WHERE email = ? LIMIT 1)"
+            );
+            $stmt->execute([$pushToken, $emailRecibido]);
+        }
+        echo json_encode(['ok' => $stmt->rowCount() > 0]);
+    } catch (Exception $e) {
+        echo json_encode(['ok' => false, 'mensaje' => 'No se pudo guardar el token de notificaciones.']);
+    }
+    exit;
+}
+
 // Si el usuario no es administrador, redirige al login general
 if (!$usuario instanceof Administrador) {
     header("Location: /barberia_catracha/api/login.php");

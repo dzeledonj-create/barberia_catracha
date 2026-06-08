@@ -18,6 +18,15 @@ $pendientes = Reserva::contarPorEstado('pendiente');
 $confirmadas = Reserva::contarPorEstado('confirmada');
 $canceladas = Reserva::contarPorEstado('cancelada');
 $recientesReservas = Reserva::obtenerRecientes(5);
+
+// El banner para activar notificaciones push solo tiene sentido para los barberos:
+// son quienes reciben avisos de nuevas reservas en su propio dispositivo.
+$mostrarBannerPush = ($usuario->getRol() === 'barbero');
+
+// El administrador también puede activar notificaciones push: se le pide el
+// permiso del navegador automáticamente al iniciar sesión (si aún no respondió),
+// y además tiene un botón manual por si lo rechazó o quiere activarlas después.
+$esAdministrador = ($usuario instanceof Administrador);
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +39,16 @@ $recientesReservas = Reserva::obtenerRecientes(5);
 </head>
 <body>
 
+<?php if ($mostrarBannerPush): ?>
+<div id="push-banner" data-email="<?= htmlspecialchars($usuario->getEmail()) ?>">
+    <p>¿Quieres recibir <strong>notificaciones push</strong> en este navegador cuando tengas una nueva reserva?</p>
+    <div class="push-banner-acciones">
+        <button type="button" class="btn-activar-push">Activar</button>
+        <button type="button" class="btn-rechazar-push">Ahora no</button>
+    </div>
+</div>
+<?php endif; ?>
+
 <section class="admin-layout">
 
     <?php include_once __DIR__ . '/../includes/admin_sidebar.php'; ?>
@@ -39,6 +58,27 @@ $recientesReservas = Reserva::obtenerRecientes(5);
 
         <h1>Bienvenido al Panel</h1>
         <p class="admin-subtitle">Gestiona toda la barbería desde aquí.</p>
+
+        <?php if ($mostrarBannerPush): ?>
+            <section class="admin-actions">
+                <button type="button" class="btn-activar-push-perfil" id="btn-activar-push-perfil"
+                        data-email="<?= htmlspecialchars($usuario->getEmail()) ?>"
+                        style="background:var(--gold); color:#0a0a0a; border:none; border-radius:6px; padding:10px 18px; font-weight:600; cursor:pointer;">
+                    Activar notificaciones push
+                </button>
+            </section>
+        <?php endif; ?>
+
+        <?php if ($esAdministrador): ?>
+            <section class="admin-actions">
+                <button type="button" class="btn-activar-push-perfil" id="btn-activar-push-admin"
+                        data-email="<?= htmlspecialchars($usuario->getEmail()) ?>"
+                        data-auto-solicitar="1"
+                        style="background:var(--gold); color:#0a0a0a; border:none; border-radius:6px; padding:10px 18px; font-weight:600; cursor:pointer;">
+                    Activar notificaciones
+                </button>
+            </section>
+        <?php endif; ?>
 
         <?php if ($pendientes > 0): ?>
             <section class="admin-alert">

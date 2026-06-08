@@ -1004,6 +1004,286 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // ==========================================================================
+// SISTEMA DE NOTIFICACIONES (Notify): toasts visuales, notificaciones push
+// nativas del navegador y banner para pedir permiso. Código añadido sin
+// modificar nada de lo que ya existe arriba.
+// ==========================================================================
+const Notify = (() => {
+    const ICONOS = { success: '✓', error: '✕', info: 'i', warning: '!' };
+    const DURACION_MS = 4500;
+
+    function obtenerContenedor() {
+        let contenedor = document.getElementById('toast-container');
+        if (!contenedor) {
+            contenedor = document.createElement('div');
+            contenedor.id = 'toast-container';
+            document.body.appendChild(contenedor);
+        }
+        return contenedor;
+    }
+
+    function toast(tipo, mensaje) {
+        if (!mensaje) return;
+        const contenedor = obtenerContenedor();
+
+        const elemento = document.createElement('div');
+        elemento.className = 'toast ' + tipo;
+        elemento.setAttribute('role', 'status');
+
+        const icono = document.createElement('span');
+        icono.className = 'toast-icono';
+        icono.textContent = ICONOS[tipo] || ICONOS.info;
+
+        const texto = document.createElement('p');
+        texto.className = 'toast-texto';
+        texto.textContent = mensaje;
+
+        const cerrar = document.createElement('button');
+        cerrar.type = 'button';
+        cerrar.className = 'toast-cerrar';
+        cerrar.innerHTML = '&times;';
+        cerrar.setAttribute('aria-label', 'Cerrar notificación');
+
+        const barra = document.createElement('span');
+        barra.className = 'toast-barra';
+        barra.style.setProperty('--toast-duracion', (DURACION_MS / 1000) + 's');
+
+        elemento.appendChild(icono);
+        elemento.appendChild(texto);
+        elemento.appendChild(cerrar);
+        elemento.appendChild(barra);
+        contenedor.appendChild(elemento);
+
+        let cerrado = false;
+        function cerrarToast() {
+            if (cerrado) return;
+            cerrado = true;
+            elemento.classList.add('toast-saliendo');
+            setTimeout(function () {
+                if (elemento.parentNode) elemento.parentNode.removeChild(elemento);
+            }, 320);
+        }
+
+        cerrar.addEventListener('click', cerrarToast);
+        const temporizador = setTimeout(cerrarToast, DURACION_MS);
+        elemento.addEventListener('mouseenter', function () { clearTimeout(temporizador); });
+    }
+
+    // --- Notificación push nativa del navegador (API Notifications) ---
+    function push(titulo, opciones) {
+        if (!('Notification' in window) || Notification.permission !== 'granted') return;
+        try {
+            new Notification(titulo, Object.assign({
+                icon: '/barberia_catracha/assets/img/logo.png',
+                badge: '/barberia_catracha/assets/img/logo.png'
+            }, opciones || {}));
+        } catch (e) {
+            // Algunos navegadores móviles exigen un Service Worker para "new Notification";
+            // si falla, simplemente no se muestra la notificación nativa (el toast ya se mostró).
+        }
+    }
+
+    // Sin un proveedor de push real (FCM) no existe un "token" emitido por terceros;
+    // generamos y guardamos un identificador propio del navegador que sirve como token
+    // de referencia para que el barbero pueda recibir avisos en este dispositivo.
+    function obtenerTokenLocal() {
+        let token = localStorage.getItem('catracha_push_token');
+        if (!token) {
+            token = (window.crypto && typeof crypto.randomUUID === 'function')
+                ? crypto.randomUUID()
+                : ('tok_' + Date.now() + '_' + Math.random().toString(16).slice(2));
+            localStorage.setItem('catracha_push_token', token);
+        }
+        return token;
+    }
+
+    function guardarTokenEnServidor(email, token) {
+        const datos = new URLSearchParams();
+        datos.set('accion', 'guardar_push_token');
+        datos.set('email', email);
+        datos.set('push_token', token);
+
+        return fetch('/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: datos.toString()
+        }).then(function (respuesta) { return respuesta.json(); });
+    }
+
+    function activarPush(email) {
+        if (!('Notification' in window)) {
+            toast('warning', 'Tu navegador no admite notificaciones push.');
+            return Promise.resolve(false);
+        }
+
+        return Notification.requestPermission().then(function (permiso) {
+            if (permiso !== 'granted') {
+                toast('info', 'No se activaron las notificaciones push.');
+                return false;
+            }
+
+            const token = obtenerTokenLocal();
+
+            if (!email) {
+                toast('success', 'Notificaciones push activadas en este navegador.');
+                return true;
+            }
+
+            return guardarTokenEnServidor(email, token).then(function (resultado) {
+                if (resultado && resultado.ok) {
+                    toast('success', 'Notificaciones push activadas correctamente.');
+                } else {
+                    toast('warning', (resultado && resultado.mensaje) || 'No se pudo guardar el token de notificaciones.');
+                }
+                return Boolean(resultado && resultado.ok);
+            }).catch(function () {
+                toast('error', 'No se pudo conectar con el servidor para activar las notificaciones.');
+                return false;
+            });
+        });
+    }
+
+    // --- Banner inferior para pedir permiso de notificaciones push ---
+    // Solo aparece si la vista actual incluye #push-banner (lo añade el panel del
+    // barbero), una vez por sesión (sessionStorage) y 3 segundos tras cargar la página.
+    function inicializarBannerPush() {
+        const banner = document.getElementById('push-banner');
+        if (!banner) return;
+        if (!('Notification' in window) || Notification.permission !== 'default') return;
+        if (sessionStorage.getItem('catracha_push_banner_mostrado')) return;
+
+        const email = banner.dataset.email || '';
+        const btnActivar = banner.querySelector('.btn-activar-push');
+        const btnRechazar = banner.querySelector('.btn-rechazar-push');
+
+        setTimeout(function () {
+            sessionStorage.setItem('catracha_push_banner_mostrado', '1');
+            banner.classList.add('visible');
+        }, 3000);
+
+        function ocultarBanner() {
+            banner.classList.remove('visible');
+        }
+
+        if (btnActivar) {
+            btnActivar.addEventListener('click', function () {
+                activarPush(email).finally(ocultarBanner);
+            });
+        }
+        if (btnRechazar) {
+            btnRechazar.addEventListener('click', ocultarBanner);
+        }
+    }
+
+    // --- Mensajes contextuales de reservas ---
+    function reservaConfirmada(datos) {
+        datos = datos || {};
+        const partes = [];
+        if (datos.servicio) partes.push(datos.servicio);
+        if (datos.fecha) partes.push(datos.fecha);
+        if (datos.hora) partes.push(datos.hora);
+        const detalle = partes.length ? ' (' + partes.join(' · ') + ')' : '';
+        const saludo = datos.nombre ? datos.nombre + ', tu' : 'Tu';
+
+        toast('success', saludo + ' reserva se ha confirmado correctamente' + detalle + '.');
+        push('Reserva confirmada', { body: saludo + ' reserva ha sido confirmada' + detalle + '.' });
+    }
+
+    function reservaCancelada(datos) {
+        datos = datos || {};
+        const partes = [];
+        if (datos.fecha) partes.push(datos.fecha);
+        if (datos.hora) partes.push(datos.hora);
+        const detalle = partes.length ? ' (' + partes.join(' · ') + ')' : '';
+
+        toast('error', 'Tu reserva' + detalle + ' ha sido cancelada.');
+        push('Reserva cancelada', { body: 'Tu reserva' + detalle + ' ha sido cancelada.' });
+    }
+
+    return {
+        success: function (msg) { toast('success', msg); },
+        error: function (msg) { toast('error', msg); },
+        info: function (msg) { toast('info', msg); },
+        warning: function (msg) { toast('warning', msg); },
+        push: push,
+        activarPush: activarPush,
+        reservaConfirmada: reservaConfirmada,
+        reservaCancelada: reservaCancelada,
+        _inicializarBannerPush: inicializarBannerPush
+    };
+})();
+
+window.Notify = Notify;
+
+document.addEventListener('DOMContentLoaded', function () {
+    Notify._inicializarBannerPush();
+
+    // Botón persistente "Activar notificaciones push" en el panel del barbero
+    // (por si descarta el banner emergente y quiere activarlas más tarde).
+    const btnActivarPushPerfil = document.getElementById('btn-activar-push-perfil');
+    if (btnActivarPushPerfil) {
+        btnActivarPushPerfil.addEventListener('click', function () {
+            Notify.activarPush(btnActivarPushPerfil.dataset.email || '');
+        });
+    }
+
+    // Botón "Activar notificaciones" del administrador: además de quedar disponible
+    // para activarlas manualmente en cualquier momento, si el navegador todavía no
+    // tiene una respuesta guardada (permission === 'default') se solicita el permiso
+    // automáticamente al iniciar sesión, mostrando el popup nativo del navegador.
+    const btnActivarPushAdmin = document.getElementById('btn-activar-push-admin');
+    if (btnActivarPushAdmin) {
+        const emailAdmin = btnActivarPushAdmin.dataset.email || '';
+        btnActivarPushAdmin.addEventListener('click', function () {
+            Notify.activarPush(emailAdmin);
+        });
+        if (btnActivarPushAdmin.dataset.autoSolicitar === '1'
+            && 'Notification' in window
+            && Notification.permission === 'default') {
+            Notify.activarPush(emailAdmin);
+        }
+    }
+
+    // Conecta el formulario público de reservas (reservas.php) usando los campos
+    // reales: nombre, y el resumen #resumen-servicio/#resumen-fecha/#resumen-hora que
+    // ya rellena el flujo existente en el paso de confirmación. No se interfiere con
+    // el envío (sigue siendo un POST normal con redirección a reservas.php?reserva=ok);
+    // solo se guardan los datos elegidos para mostrarlos como notificación tras la recarga.
+    const formReserva = document.getElementById('form-reserva');
+    if (formReserva) {
+        formReserva.addEventListener('submit', function () {
+            const obtenerTexto = function (selector) {
+                const el = document.querySelector(selector);
+                return el ? el.textContent.trim() : '';
+            };
+            const nombreInput = formReserva.querySelector('input[name="nombre"]');
+
+            sessionStorage.setItem('catracha_reserva_pendiente', JSON.stringify({
+                nombre: nombreInput ? nombreInput.value.trim() : '',
+                servicio: obtenerTexto('#resumen-servicio'),
+                fecha: obtenerTexto('#resumen-fecha'),
+                hora: obtenerTexto('#resumen-hora')
+            }));
+        });
+    }
+
+    // Tras la redirección a reservas.php?reserva=ok, recuperamos los datos guardados
+    // y mostramos el aviso de Notify con los detalles reales de la cita confirmada.
+    const parametros = new URLSearchParams(window.location.search);
+    if (parametros.get('reserva') === 'ok') {
+        const pendienteJSON = sessionStorage.getItem('catracha_reserva_pendiente');
+        if (pendienteJSON) {
+            try {
+                Notify.reservaConfirmada(JSON.parse(pendienteJSON));
+            } catch (e) {
+                Notify.success('Tu reserva se ha guardado correctamente.');
+            }
+            sessionStorage.removeItem('catracha_reserva_pendiente');
+        }
+    }
+});
+
+// ==========================================================================
 // 7. CIERRE DEFENSIVO: DISPARADOR MANUAL DE DOM READY
 // ==========================================================================
 // Si por razones de rendimiento de carga el script se ejecuta de manera asíncrona ('async' o 'defer')
