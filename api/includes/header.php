@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../Clases/BD.php';
 ?>
 
 <header class="main-header">

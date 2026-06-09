@@ -1,5 +1,6 @@
 
 <?php
+require_once __DIR__ . '/../Clases/BD.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">

@@ -1,13 +1,14 @@
 <?php
 
 // ============================================================
-// CAMBIA ESTE VALOR: 'local' para tu PC, 'supabase' para producción
+// BASE DE DATOS: 'supabase' mientras se usa Supabase (local o producción)
+//                'local'    para PostgreSQL local propio
 define('ENTORNO', 'supabase');
-// ============================================================
 
-// Ruta base desde la raíz del dominio.
-// Local → '/barberia_catracha'  |  Hostinger (raíz) → ''
-define('BASE_PATH', ENTORNO === 'supabase' ? '' : '/barberia_catracha');
+// RUTA BASE: '/barberia_catracha' en XAMPP local (subcarpeta de htdocs)
+//            ''                   en Hostinger (raíz del dominio)
+define('BASE_PATH', '/barberia_catracha');
+// ============================================================
 
 class BD {
     private static $conexion = null;
