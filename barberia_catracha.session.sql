@@ -342,4 +342,12 @@ ADD CONSTRAINT reservas_barbero_id_fkey
 ALTER TABLE barberos
 ADD COLUMN mostrar_en_vista BOOLEAN DEFAULT FALSE;
 
+-- hay que ejecutarlos en local en clase
+
+ALTER TABLE barberos ADD COLUMN IF NOT EXISTS push_token TEXT DEFAULT NULL;
+
+ALTER TABLE usuarios
+    ADD COLUMN IF NOT EXISTS reset_token   VARCHAR(64),
+    ADD COLUMN IF NOT EXISTS token_expires TIMESTAMPTZ;
+
 COMMIT;

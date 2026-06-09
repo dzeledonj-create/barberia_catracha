@@ -73,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit">↪ ENTRAR AL PANEL</button>
         </form>
+        <a href="admin/solicitar_recuperacion.php" class="login-forgot">¿Olvidaste tu contraseña?</a>
     </section>
 
     <a href="vistas/index.php" class="volver-web">← Volver a la web</a>

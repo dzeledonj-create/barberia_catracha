@@ -1,0 +1,8 @@
+2026-06-09 00:39:08 ANTES_GUARDAR barberoId=1 servicioId=1
+2026-06-09 00:39:08 GUARDAR_OK
+2026-06-09 00:39:08 barbero=Ross servicio=Corte
+2026-06-09 00:39:08 telegram=true
+2026-06-09 02:08:16 ANTES_GUARDAR barberoId=2 servicioId=1
+2026-06-09 02:08:16 GUARDAR_OK
+2026-06-09 02:08:17 barbero=Rolando servicio=Corte
+2026-06-09 02:08:20 telegram=true

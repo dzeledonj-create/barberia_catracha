@@ -12,6 +12,16 @@ if (!$usuario) {
     exit;
 }
 
+// App ID de OneSignal para inicializar el SDK de Web Push en el navegador del barbero/
+// administrador. Es un identificador público (no la clave privada REST API), por lo
+// que es seguro incluirlo en el HTML. Vive en config_notificaciones.php (fuera de git).
+$configuracionNotificaciones = __DIR__ . '/../../config_notificaciones.php';
+$oneSignalAppId = '';
+if (is_file($configuracionNotificaciones)) {
+    require_once $configuracionNotificaciones;
+    $oneSignalAppId = defined('ONESIGNAL_APP_ID') ? ONESIGNAL_APP_ID : '';
+}
+
 // total de reservas por estado para mostrar estadísticas en el panel
 $totalReservas = Reserva::contarPorEstado('pendiente') + Reserva::contarPorEstado('confirmada') + Reserva::contarPorEstado('cancelada');
 $pendientes = Reserva::contarPorEstado('pendiente');
@@ -27,6 +37,22 @@ $recientesReservas = Reserva::obtenerRecientes(5);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin</title>
     <link rel="stylesheet" href="../../../assets/style.css">
+
+    <?php if ($oneSignalAppId !== ''): ?>
+    <!-- SDK de OneSignal: se inicializa aquí, en el panel del barbero/administrador,
+         para que pueda suscribirse a las notificaciones Web Push de nuevas reservas. -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function (OneSignal) {
+            await OneSignal.init({
+                appId: '<?= htmlspecialchars($oneSignalAppId, ENT_QUOTES) ?>',
+                serviceWorkerPath: '/barberia_catracha/OneSignalSDKWorker.js',
+                allowLocalhostAsSecureOrigin: true,
+            });
+        });
+    </script>
+    <?php endif; ?>
 </head>
 <body>
 
@@ -39,6 +65,14 @@ $recientesReservas = Reserva::obtenerRecientes(5);
 
         <h1>Bienvenido al Panel</h1>
         <p class="admin-subtitle">Gestiona toda la barbería desde aquí.</p>
+
+        <?php if ($oneSignalAppId !== ''): ?>
+            <section class="admin-actions">
+                <button type="button" class="btn-activar-onesignal" id="btn-activar-onesignal">
+                    Activar notificaciones
+                </button>
+            </section>
+        <?php endif; ?>
 
         <?php if ($pendientes > 0): ?>
             <section class="admin-alert">
@@ -101,6 +135,11 @@ $recientesReservas = Reserva::obtenerRecientes(5);
             <?php endif; ?>
         </section>
 
+        <?php if ($usuario instanceof UsuarioBarbero): ?>
+        <section class="admin-actions">
+            <a href="GestionReservas.php">Ver Reservas</a>
+        </section>
+        <?php else: ?>
         <section class="admin-actions">
             <a href="GestionServicios.php">Gestionar Servicios</a>
             <a href="GestionEquipo.php">Gestionar Equipo</a>
@@ -109,6 +148,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
             <a href="GestionBlog.php">Editar Blog</a>
             <a href="GestionUbicacion.php">Actualizar Ubicación</a>
         </section>
+        <?php endif; ?>
     </main>
 
 </section>

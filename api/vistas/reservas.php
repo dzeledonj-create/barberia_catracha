@@ -5,6 +5,7 @@ require_once __DIR__ . '/../Clases/Servicio.php';
 require_once __DIR__ . '/../Clases/Horario.php';
 require_once __DIR__ . '/../Clases/Reserva.php';
 require_once __DIR__ . '/../Clases/Cliente.php';
+require_once __DIR__ . '/../Notificaciones.php';
 
 $mensajeExito = null;
 $mensajeError = null;
@@ -41,7 +42,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $fechaHora->format('Y-m-d H:i:s')
                 );
 
+                $logFile = 'C:/xampp/htdocs/barberia_catracha/notif_debug.log';
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " ANTES_GUARDAR barberoId=$barberoId servicioId=$servicioId\n", FILE_APPEND);
+
                 if ($reserva->guardar()) {
+                    file_put_contents($logFile, date('Y-m-d H:i:s') . " GUARDAR_OK\n", FILE_APPEND);
+                    try {
+                        $barberoReservado  = Barbero::obtenerPorId($barberoId);
+                        $servicioReservado = Servicio::obtenerPorId($servicioId);
+                        file_put_contents($logFile, date('Y-m-d H:i:s') . " barbero=" . ($barberoReservado ? $barberoReservado->getNombre() : 'NULL') . " servicio=" . ($servicioReservado ? $servicioReservado->getNombre() : 'NULL') . "\n", FILE_APPEND);
+                        if ($barberoReservado && $servicioReservado) {
+                            $resultadoNotif = enviarNotificacionesReserva([
+                                'cliente'    => $cliente->getNombreCompleto(),
+                                'servicio'   => $servicioReservado->getNombre(),
+                                'barbero'    => $barberoReservado->getNombre(),
+                                'fecha_hora' => formatearFechaHoraNotificacion($reserva->getFechaHora()),
+                                'email'      => $cliente->getEmail() ?? '',
+                            ]);
+                            file_put_contents($logFile, date('Y-m-d H:i:s') . ' telegram=' . var_export($resultadoNotif['telegram'], true) . "\n", FILE_APPEND);
+                        }
+                    } catch (Throwable $e) {
+                        file_put_contents($logFile, date('Y-m-d H:i:s') . ' ERROR: ' . $e->getMessage() . "\n", FILE_APPEND);
+                    }
+
                     header('Location: reservas.php?reserva=ok');
                     exit;
                 }

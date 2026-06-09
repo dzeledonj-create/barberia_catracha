@@ -2,7 +2,9 @@
 require_once __DIR__ . '/BD.php';
 require_once __DIR__ . '/Cliente.php';
 require_once __DIR__ . '/Barbero.php';
+require_once __DIR__ . '/Servicio.php';
 require_once __DIR__ . '/Horario.php';
+require_once __DIR__ . '/../Notificaciones.php';
 
 class Reserva {
     private ?int $reservaId;
@@ -469,8 +471,26 @@ class Reserva {
         $fechaHora = $fecha . ' ' . $hora . ':00';
         $reserva = new self($cliente->getClienteId(), (int)$barberoId, (int)$servicioId, $fechaHora, 'confirmada');
 
-        return $reserva->guardar()
-            ? 'Reserva creada correctamente.'
-            : 'No se pudo crear la reserva. El barbero ya tiene esa hora ocupada.';
+        if (!$reserva->guardar()) {
+            return 'No se pudo crear la reserva. El barbero ya tiene esa hora ocupada.';
+        }
+
+        try {
+            $barberoObj  = Barbero::obtenerPorId($barberoId);
+            $servicioObj = Servicio::obtenerPorId($servicioId);
+            if ($barberoObj && $servicioObj) {
+                enviarNotificacionesReserva([
+                    'cliente'    => $cliente->getNombreCompleto(),
+                    'servicio'   => $servicioObj->getNombre(),
+                    'barbero'    => $barberoObj->getNombre(),
+                    'fecha_hora' => formatearFechaHoraNotificacion($reserva->getFechaHora()),
+                    'email'      => $cliente->getEmail() ?? '',
+                ]);
+            }
+        } catch (Throwable $e) {
+            // el fallo de notificación no debe bloquear la confirmación de la reserva
+        }
+
+        return 'Reserva creada correctamente.';
     }
 }

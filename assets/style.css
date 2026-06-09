@@ -4274,6 +4274,156 @@ body.modal-abierto {
  
     .add-member-panel { margin: 16px 16px 0; padding: 20px; }
     .separator-gold   { margin: 20px 16px; }
- 
+
     .content > header { padding: 20px; }
+}
+
+/* ==========================================================================
+   NOTIFICACIONES AUTOMÁTICAS DE RESERVAS — botón para activar Web Push (OneSignal)
+   ========================================================================== */
+
+.btn-activar-onesignal {
+    background-color: var(--gold);
+    color: var(--dark-bg);
+    border: none;
+    border-radius: 6px;
+    padding: 12px 22px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-activar-onesignal:hover {
+    background-color: var(--gold-dark);
+    transform: translateY(-1px);
+}
+
+.btn-activar-onesignal:active {
+    transform: translateY(0);
+}
+
+.btn-activar-onesignal[disabled] {
+    background-color: #2a2a2a;
+    color: var(--gray-text);
+    cursor: default;
+    transform: none;
+}
+
+/* ============================================================
+   CAMBIAR CONTRASEÑA
+   ============================================================ */
+.cp-box {
+    max-width: 440px;
+    padding: 32px;
+}
+
+.cp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.cp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.cp-field label {
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+}
+
+.cp-field input[type="password"] {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #fff;
+    padding: 13px 15px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cp-field input[type="password"]:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
+}
+
+.cp-field input[type="password"]::placeholder {
+    color: #555;
+    font-size: 0.88rem;
+}
+
+.cp-divider {
+    border-top: 1px solid #222;
+    margin: 2px 0;
+}
+
+.cp-submit {
+    align-self: flex-start;
+    margin-top: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-size: 0.82rem;
+}
+
+/* ============================================================
+   RECUPERACIÓN DE CONTRASEÑA
+   ============================================================ */
+.login-subtitle {
+    color: #777;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    margin-bottom: 22px;
+}
+
+.login-msg {
+    color: #4caf50;
+    font-size: 0.85rem;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+.login-forgot {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    color: #777;
+    font-size: 0.75rem;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: color 0.2s;
+}
+
+.login-forgot:hover {
+    color: #d99c2b;
+}
+
+.login-btn-link {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-top: 6px;
+    background-color: #d99c2b;
+    color: #000;
+    font-weight: 900;
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    box-sizing: border-box;
+}
+
+.login-btn-link:hover {
+    background-color: #f0ad32;
 }

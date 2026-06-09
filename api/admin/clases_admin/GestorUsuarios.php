@@ -24,7 +24,10 @@ class GestorUsuarios {
             return null;
         }
 
-        if ($password !== $data['password']) {
+        // Soporta contraseñas hasheadas (bcrypt) y plaintext heredadas
+        $valida = password_verify($password, $data['password'])
+               || $password === $data['password'];
+        if (!$valida) {
             return null;
         }
 

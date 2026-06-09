@@ -76,39 +76,45 @@ class Cliente {
     public function guardar(): bool {
         $db = BD::obtenerConexion();
 
-        // Si el cliente no tiene un ID, es una creación; de lo contrario, es una actualización
         if ($this->clienteId === null) {
-            // Antes de crear un nuevo cliente, verificamos si ya existe uno con el mismo email para evitar duplicados
-            if ($this->email) {
-                // Verificar si ya existe un cliente con el mismo email para evitar duplicados
-                $existingCliente = self::obtenerPorEmail($this->email);
-                if ($existingCliente) {
-                    // Si ya existe un cliente con ese email, actualizamos sus datos en lugar de crear uno nuevo
-                    $this->clienteId = $existingCliente->clienteId;
-                    $sql = "UPDATE clientes 
-                            SET nombre = ?, apellido = ?, telefono = ?, email = ?
-                            WHERE cliente_id = ?";
-                    // Ejecutamos la consulta de actualización con los datos del cliente existente
-                    $stmt = $db->prepare($sql);
-                    return $stmt->execute([
-                        $this->nombre,
-                        $this->apellido,
-                        $this->telefono,
-                        $this->email,
-                        $this->clienteId
-                    ]);
-                }
+            // La tabla tiene UNIQUE en telefono Y en email por separado, por lo que no es
+            // posible cubrir ambas restricciones con un solo ON CONFLICT. En su lugar:
+            // 1) buscamos un cliente existente que coincida por teléfono o por email,
+            // 2) si lo encontramos lo actualizamos, 3) si no, insertamos uno nuevo.
+            $existingId = null;
+
+            // Búsqueda por teléfono (prioritaria: identificador más fiable)
+            $stmtBuscar = $db->prepare("SELECT cliente_id FROM clientes WHERE telefono = ? LIMIT 1");
+            $stmtBuscar->execute([$this->telefono]);
+            $existingId = $stmtBuscar->fetchColumn() ?: null;
+
+            // Si no apareció por teléfono, intentamos por email
+            if ($existingId === null && $this->email !== null && $this->email !== '') {
+                $stmtBuscar = $db->prepare("SELECT cliente_id FROM clientes WHERE email = ? LIMIT 1");
+                $stmtBuscar->execute([$this->email]);
+                $existingId = $stmtBuscar->fetchColumn() ?: null;
             }
-            // Si no existe un cliente con ese email, procedemos a crear uno nuevo
-            $sql = "INSERT INTO clientes (nombre, apellido, telefono, email)
-                    VALUES (?, ?, ?, ?)
-                    RETURNING cliente_id";
-            // Ejecutamos la consulta y obtenemos el ID generado para el nuevo cliente
-            $stmt = $db->prepare($sql);
-            // Ejecutamos la consulta de inserción con los datos del nuevo cliente
+
+            if ($existingId !== null) {
+                $this->clienteId = (int)$existingId;
+                $stmt = $db->prepare(
+                    "UPDATE clientes SET nombre = ?, apellido = ?, telefono = ?, email = ?
+                     WHERE cliente_id = ?"
+                );
+                return $stmt->execute([
+                    $this->nombre, $this->apellido, $this->telefono, $this->email,
+                    $this->clienteId,
+                ]);
+            }
+
+            // Cliente nuevo: insertar
+            $stmt = $db->prepare(
+                "INSERT INTO clientes (nombre, apellido, telefono, email)
+                 VALUES (?, ?, ?, ?)
+                 RETURNING cliente_id"
+            );
             $stmt->execute([$this->nombre, $this->apellido, $this->telefono, $this->email]);
-            // Asignamos el ID generado al cliente actual para futuras referencias
-            $this->clienteId = $stmt->fetchColumn();
+            $this->clienteId = (int)$stmt->fetchColumn();
             return true;
         }
         // Si el cliente ya tiene un ID, actualizamos sus datos en la base de datos

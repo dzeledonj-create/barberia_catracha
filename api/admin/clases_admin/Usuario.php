@@ -142,6 +142,27 @@ class Usuario {
         }
     }
 
+    public function cambiarPassword(string $passwordActual, string $passwordNueva): bool {
+        if ($this->usuarioId === null) {
+            return false;
+        }
+        $db = BD::obtenerConexion();
+        $stmt = $db->prepare("SELECT password FROM usuarios WHERE usuario_id = ?");
+        $stmt->execute([$this->usuarioId]);
+        $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$fila) {
+            return false;
+        }
+        // Soporta contraseñas hasheadas (bcrypt) y plaintext heredadas
+        $valida = password_verify($passwordActual, $fila['password'])
+               || $passwordActual === $fila['password'];
+        if (!$valida) {
+            return false;
+        }
+        $stmt = $db->prepare("UPDATE usuarios SET password = ? WHERE usuario_id = ?");
+        return $stmt->execute([password_hash($passwordNueva, PASSWORD_DEFAULT), $this->usuarioId]);
+    }
+
     // --- MÉTODOS ESTÁTICOS DE CONSULTA (READ) ---
 
     /**

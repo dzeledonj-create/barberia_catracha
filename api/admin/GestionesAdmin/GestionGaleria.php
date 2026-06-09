@@ -9,6 +9,10 @@ if (!$usuario) {
     header("Location: ../login.php");
     exit;
 }
+if (!($usuario instanceof Administrador)) {
+    header("Location: GestionReservas.php");
+    exit;
+}
 
 
 /* CREAR */

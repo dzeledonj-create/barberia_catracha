@@ -4,10 +4,13 @@ require_once __DIR__ . '/../clases_admin/GestorUsuarios.php';
 ini_set('session.save_path', sys_get_temp_dir());
 session_start();
 
-// Verificar que el usuario es un administrador antes de permitir el acceso a esta página
 $usuario = GestorUsuarios::obtenerDesdeSesion();
 if (!$usuario) {
     header("Location: ../login.php");
+    exit;
+}
+if (!($usuario instanceof Administrador)) {
+    header("Location: GestionReservas.php");
     exit;
 }
 
