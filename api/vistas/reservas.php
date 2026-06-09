@@ -5,7 +5,6 @@ require_once __DIR__ . '/../Clases/Servicio.php';
 require_once __DIR__ . '/../Clases/Horario.php';
 require_once __DIR__ . '/../Clases/Reserva.php';
 require_once __DIR__ . '/../Clases/Cliente.php';
-require_once __DIR__ . '/../send_notification.php';
 
 $mensajeExito = null;
 $mensajeError = null;
@@ -43,20 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 );
 
                 if ($reserva->guardar()) {
-                    // Enviamos los correos de notificación (cliente + barbero) ya con la
-                    // reserva guardada y sus datos reales. Si el correo falla por la razón
-                    // que sea (SMTP no configurado, credenciales inválidas, etc.) la reserva
-                    // ya quedó guardada y el cliente debe ver la confirmación igualmente.
-                    try {
-                        $barberoReservado = Barbero::obtenerPorId($barberoId);
-                        $servicioReservado = Servicio::obtenerPorId($servicioId);
-                        if ($barberoReservado && $servicioReservado) {
-                            enviarNotificacionesReserva($cliente, $barberoReservado, $servicioReservado, $reserva);
-                        }
-                    } catch (Exception $e) {
-                        // No interrumpimos el flujo de la reserva por un fallo de envío de correo.
-                    }
-
                     header('Location: reservas.php?reserva=ok');
                     exit;
                 }
