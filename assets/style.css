@@ -73,6 +73,7 @@ img, picture, video, iframe, svg {
     display: flex;
     align-items: center;
     height: 100%;
+    text-decoration: none;
 }
 
 .icon img {
