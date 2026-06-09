@@ -37,6 +37,13 @@
                 <a href="https://www.facebook.com/rosvinjesusa/" target="_blank">Facebook</a>
             </section>
 
+            <section class="footer-col">
+                <h4>Políticas web</h4>
+                <a href="https://wa.me/34630846042" target="_blank">Aviso legal</a>
+                <a href="https://www.instagram.com/barberia.catracha/" target="_blank">Política de privacidad</a>
+                <a href="https://www.facebook.com/rosvinjesusa/" target="_blank">Política de cookies</a>
+            </section>
+
         </section>
 
         <!-- DERECHA: LOGO -->
