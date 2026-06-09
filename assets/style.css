@@ -4427,3 +4427,179 @@ body.modal-abierto {
 .login-btn-link:hover {
     background-color: #f0ad32;
 }
+
+/* ============================================================
+   RESPONSIVE GLOBAL PANEL ADMIN
+   ============================================================ */
+
+.admin-main,
+.content {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.admin-panel-box {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Scroll horizontal real para todas las tablas admin */
+.admin-panel-box:has(table),
+.table-responsive,
+.agenda-tabla-wrap,
+.calendar-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-panel-box table,
+.admin-table,
+.admin-table-servicios,
+.agenda-tabla,
+.reservas-list-table,
+.reservas-calendar-table {
+    min-width: 760px;
+    width: 100%;
+}
+
+/* Formularios admin adaptables */
+.admin-form-servicios,
+.admin-form-galeria,
+.admin-form-blog,
+.ubicacion-form-grid,
+.horario-admin-row {
+    grid-template-columns: 1fr;
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+    body.admin-panel,
+    .admin-layout {
+        display: block;
+    }
+
+    .admin-main,
+    .content {
+        margin-left: 0 !important;
+        width: 100%;
+        padding: 80px 22px 30px;
+    }
+
+    .admin-header-flex,
+    .reservas-admin-header,
+    .agenda-cabecera,
+    .agenda-toolbar,
+    .calendar-topbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-stats,
+    .admin-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .galeria-admin-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .blog-admin-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .add-member-panel,
+    .separator-gold {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* Móviles */
+@media (max-width: 600px) {
+    .admin-main,
+    .content {
+        padding: 75px 14px 24px;
+    }
+
+    .admin-main h1,
+    .content > header h1 {
+        font-size: 1.45rem;
+    }
+
+    .admin-small-title {
+        font-size: 0.6rem;
+        letter-spacing: 2px;
+    }
+
+    .admin-panel-box {
+        padding: 14px;
+    }
+
+    .admin-stats,
+    .admin-actions,
+    .galeria-admin-grid,
+    .blog-admin-grid,
+    .agenda-resumen {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form-servicios,
+    .admin-form-galeria,
+    .admin-form-blog,
+    .form-row,
+    .ubicacion-form-grid,
+    .horario-admin-row,
+    .form-group-grid,
+    .agenda-container {
+        grid-template-columns: 1fr !important;
+    }
+
+    .reservas-view-actions,
+    .modal-actions,
+    .form-buttons,
+    .resenas-botones {
+        flex-direction: column;
+    }
+
+    .reservas-view-btn,
+    .admin-btn,
+    .btn-save-new,
+    .btn-save,
+    .btn-cancel,
+    .btn-danger {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .admin-table th,
+    .admin-table td,
+    .admin-table-servicios th,
+    .admin-table-servicios td {
+        white-space: nowrap;
+        font-size: 0.78rem;
+        padding: 10px;
+    }
+
+    .modal-box {
+        max-height: 88vh;
+        width: 100%;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+    }
+
+    body.admin-panel .equipo-grid {
+        grid-template-columns: 1fr !important;
+        padding: 0 0 24px;
+    }
+
+    body.admin-panel .barbero-card .card-image,
+    body.admin-panel .barbero-card .card-image img,
+    body.admin-panel .barbero-card > img {
+        height: 280px;
+    }
+}
