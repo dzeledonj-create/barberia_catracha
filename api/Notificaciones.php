@@ -122,7 +122,7 @@ function enviarCorreoRecuperacion(string $email, string $token): bool {
 
     $protocolo = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host      = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $enlace    = $protocolo . '://' . $host . '/barberia_catracha/api/admin/recuperar_password.php?token=' . $token;
+    $enlace    = $protocolo . '://' . $host . BASE_PATH . '/api/admin/recuperar_password.php?token=' . $token;
 
     $nombre    = defined('MAIL_FROM_NAME') ? MAIL_FROM_NAME : 'Barbería Catracha';
     $cuerpoHtml = <<<HTML

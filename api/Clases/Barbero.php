@@ -102,10 +102,10 @@ class Barbero {
         $normalized = ltrim($url, '/');
         // Si la ruta ya comienza con 'assets/', la retornamos con el prefijo del proyecto
         if (str_starts_with($normalized, 'assets/')) {
-            return '/barberia_catracha/' . $normalized;
+            return BASE_PATH . '/' . $normalized;
         }
         // Para cualquier otra ruta relativa, la colocamos dentro de 'assets/img/' por defecto
-        return '/barberia_catracha/assets/img/' . $normalized;
+        return BASE_PATH . '/assets/img/' . $normalized;
     }
 
     public function setFotoUrl(?string $fotoUrl): void {

@@ -23,8 +23,8 @@
                     La experiencia premium que mereces en el corazón de Zaragoza.
                 </p>
                 <section class="buttons">
-                    <a href="/barberia_catracha/api/vistas/reservas.php" class="btn-reservas">RESERVA TU CITA AHORA</a>
-                    <a href="/barberia_catracha/api/vistas/servicios.php" class="btn-servicios">VER SERVICIOS</a>
+                    <a href="<?= BASE_PATH ?>/api/vistas/reservas.php" class="btn-reservas">RESERVA TU CITA AHORA</a>
+                    <a href="<?= BASE_PATH ?>/api/vistas/servicios.php" class="btn-servicios">VER SERVICIOS</a>
                 </section>
             </section>
         </section>
@@ -37,7 +37,7 @@
         <div class="title-underline"></div>
 
         <div class="explore-grid">
-            <a href="/barberia_catracha/api/vistas/servicios.php" class="explore-card">
+            <a href="<?= BASE_PATH ?>/api/vistas/servicios.php" class="explore-card">
                 <div class="card-icon">✂</div>
                 <div class="card-info">
                     <h3>SERVICIOS & PRECIOS</h3>
@@ -46,7 +46,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="/barberia_catracha/api/vistas/equipo.php" class="explore-card">
+            <a href="<?= BASE_PATH ?>/api/vistas/equipo.php" class="explore-card">
                 <div class="card-icon">👥</div>
                 <div class="card-info">
                     <h3>NUESTRO EQUIPO</h3>
@@ -55,7 +55,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="/barberia_catracha/api/vistas/galeria.php" class="explore-card">
+            <a href="<?= BASE_PATH ?>/api/vistas/galeria.php" class="explore-card">
                 <div class="card-icon">🖼</div>
                 <div class="card-info">
                     <h3>GALERÍA</h3>
@@ -64,7 +64,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="/barberia_catracha/api/vistas/reseñas.php" class="explore-card">
+            <a href="<?= BASE_PATH ?>/api/vistas/reseñas.php" class="explore-card">
                 <div class="card-icon"><i class="fa-solid fa-star"></i></div>
                 <div class="card-info">
                     <h3>RESEÑAS</h3>
@@ -73,7 +73,7 @@
                 <div class="card-arrow">›</div>
             </a>
 
-            <a href="/barberia_catracha/api/vistas/ubicacion.php" class="explore-card">
+            <a href="<?= BASE_PATH ?>/api/vistas/ubicacion.php" class="explore-card">
                 <div class="card-icon">📍</div>
                 <div class="card-info">
                     <h3>UBICACIÓN</h3>
@@ -85,7 +85,7 @@
     </div>
 
     <div class="bottom-cta-bar">
-        <a href="/barberia_catracha/api/vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
+        <a href="<?= BASE_PATH ?>/api/vistas/reservas.php">✂ RESERVAR CITA — EMPIEZA AQUÍ</a>
     </div>
 </section>
 

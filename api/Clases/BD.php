@@ -1,5 +1,14 @@
 <?php
 
+// ============================================================
+// CAMBIA ESTE VALOR: 'local' para tu PC, 'supabase' para producción
+define('ENTORNO', 'supabase');
+// ============================================================
+
+// Ruta base desde la raíz del dominio.
+// Local → '/barberia_catracha'  |  Hostinger (raíz) → ''
+define('BASE_PATH', ENTORNO === 'supabase' ? '' : '/barberia_catracha');
+
 class BD {
     private static $conexion = null;
 
@@ -8,12 +17,7 @@ class BD {
     public static function obtenerConexion(): PDO {
         if (self::$conexion === null) {
 
-            // ============================================================
-            // CAMBIA ESTE VALOR: 'local' para tu PC, 'supabase' para producción
-            $entorno = 'supabase';
-            // ============================================================
-
-            if ($entorno === 'supabase') {
+            if (ENTORNO === 'supabase') {
                 // Datos de Supabase (visibles en tu captura)
                 $host       = 'aws-1-eu-west-2.pooler.supabase.com';
                 $puerto     = '5432';
@@ -22,7 +26,7 @@ class BD {
                 $contrasena = 'ProyectoBarberua'; // <-- Pon aquí tu contraseña
                 $sslmode    = 'require';
             } else {
-                // Datos locales (tu PC)
+                // Datos locales
                 $host       = '192.168.4.24';
                 $puerto     = '5432';
                 $bd         = 'barberia_catracha';

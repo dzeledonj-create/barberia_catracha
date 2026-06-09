@@ -81,10 +81,10 @@ class MuralSugerencia {
         $normalized = ltrim($url, '/');
 
         if (str_starts_with($normalized, 'assets/')) {
-            return '/barberia_catracha/' . $normalized;
+            return BASE_PATH . '/' . $normalized;
         }
 
-        return '/barberia_catracha/assets/img/' . $normalized;
+        return BASE_PATH . '/assets/img/' . $normalized;
     }
 
     public function setImagenUrl(string $imagenUrl): void {

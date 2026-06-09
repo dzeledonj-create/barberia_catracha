@@ -29,7 +29,7 @@ if (isset($_POST['crear'])) {
 
     $servicio->guardar();
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php");
+    header("Location: " . BASE_PATH . "/api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -46,7 +46,7 @@ if (isset($_POST['editar'])) {
 
     $servicio->guardar();
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php");
+    header("Location: " . BASE_PATH . "/api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -58,7 +58,7 @@ if (isset($_GET['eliminar'])) {
         $servicio->eliminar();
     }
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php");
+    header("Location: " . BASE_PATH . "/api/admin/GestionesAdmin/GestionServicios.php");
     exit;
 }
 
@@ -148,7 +148,7 @@ if (isset($_GET['editar'])) {
 
                 <?php if ($servicioEditar): ?>
                     <button type="submit" name="editar">Guardar cambios</button>
-                    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionServicios.php" class="admin-btn-cancelar">Cancelar</a>
+                    <a href="<?= BASE_PATH ?>/api/admin/GestionesAdmin/GestionServicios.php" class="admin-btn-cancelar">Cancelar</a>
                 <?php else: ?>
                     <button type="submit" name="crear">Añadir servicio</button>
                 <?php endif; ?>

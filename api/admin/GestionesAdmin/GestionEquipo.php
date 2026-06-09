@@ -24,7 +24,7 @@ if (!$usuario) {
 
 // Si el usuario no es administrador, redirige al login general
 if (!$usuario instanceof Administrador) {
-    header("Location: /barberia_catracha/api/login.php");
+    header("Location: " . BASE_PATH . "/api/login.php");
     exit;
 }
 
@@ -385,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si se procesó correctamente, redirigir
     if ($procesado) {
         // Redirige a la misma página para evitar reenvío del formulario al recargar
-        header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php");
+        header("Location: " . BASE_PATH . "/api/admin/GestionesAdmin/GestionEquipo.php");
         exit;
     }
 }
@@ -403,7 +403,6 @@ $editandoId = $_GET['editar'] ?? null;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin - Gestión de Equipo</title>
     <link rel="stylesheet" href="../../../assets/style.css">
-    <link rel="stylesheet" href="/barberia_catracha/assets/style.css">
 </head>
 <body class="admin-panel">
     <!-- Barra lateral de navegación del panel admin -->
@@ -462,7 +461,7 @@ $editandoId = $_GET['editar'] ?? null;
                         <label>Foto (subir desde dispositivo)</label>
                         <input type="file" name="foto" accept="image/*">
                         <input type="hidden" name="foto_delete" value="0">
-                        <img class="preview-image" src="/barberia_catracha/assets/img/default-user.jpg" alt="Vista previa" />
+                        <img class="preview-image" src="<?= BASE_PATH ?>/assets/img/default-user.jpg" alt="Vista previa" />
                         <button type="button" class="btn-delete-photo">Eliminar foto</button>
                     </div>
                     <div class="input-group">
@@ -487,7 +486,7 @@ $editandoId = $_GET['editar'] ?? null;
 
         <!-- Grid que muestra todos los miembros del equipo -->
         <section class="equipo-grid">
-            <?php $urlSinEditar = '/barberia_catracha/api/admin/GestionesAdmin/GestionEquipo.php'; ?>
+            <?php $urlSinEditar = BASE_PATH . '/api/admin/GestionesAdmin/GestionEquipo.php'; ?>
             <?php foreach ($barberos as $barber): ?>
                 <?php
                     // Determinar si es barbero o admin
@@ -503,7 +502,7 @@ $editandoId = $_GET['editar'] ?? null;
                 <section class="barbero-card">
                     <div class="card-image">
                         <!-- onerror reemplaza la imagen por la predeterminada si la URL falla -->
-                        <img src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="<?= htmlspecialchars($barber->getNombre()) ?>" onerror="this.src='/barberia_catracha/assets/img/default-user.jpg'">
+                        <img src="<?= htmlspecialchars($barber->getFotoUrl() ?? (BASE_PATH . '/assets/img/default-user.jpg')) ?>" alt="<?= htmlspecialchars($barber->getNombre()) ?>" onerror="this.src='<?= BASE_PATH ?>/assets/img/default-user.jpg'">
                     </div>
                     <section class="info">
                         <h3><?= htmlspecialchars($barber->getNombre()) ?></h3>
@@ -589,7 +588,7 @@ $editandoId = $_GET['editar'] ?? null;
                                 <input type="file" name="foto" accept="image/*">
                                 <input type="hidden" name="foto_url" value="<?= htmlspecialchars($barber->getFotoUrl() ?? '') ?>">
                                 <input type="hidden" name="foto_delete" value="0">
-                                <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
+                                <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? (BASE_PATH . '/assets/img/default-user.jpg')) ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
                                 <button type="button" class="btn-delete-photo" style="margin-top:8px;">Eliminar foto</button>
 
                                 <section class="form-buttons">
@@ -620,7 +619,7 @@ $editandoId = $_GET['editar'] ?? null;
                                 <label>Foto (subir desde dispositivo)</label>
                                 <input type="file" name="foto" accept="image/*">
                                 <input type="hidden" name="foto_delete" value="0">
-                                <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? '/barberia_catracha/assets/img/default-user.jpg') ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
+                                <img class="preview-image" src="<?= htmlspecialchars($barber->getFotoUrl() ?? (BASE_PATH . '/assets/img/default-user.jpg')) ?>" alt="Vista previa" style="display:block;max-width:120px;margin-top:8px;" />
                                 <button type="button" class="btn-delete-photo" style="margin-top:8px;">Eliminar foto</button>
 
                                 <section class="form-buttons">

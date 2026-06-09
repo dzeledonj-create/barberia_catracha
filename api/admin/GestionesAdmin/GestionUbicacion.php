@@ -37,7 +37,7 @@ if (isset($_POST['guardar'])) {
     );
 }
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionUbicacion.php");
+    header("Location: " . BASE_PATH . "/api/admin/GestionesAdmin/GestionUbicacion.php");
     exit;
 }
 

@@ -56,7 +56,7 @@ if (isset($_POST['crear'])) {
 
     $post->guardar();
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php");
+    header("Location: " . BASE_PATH . "/api/admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -88,7 +88,7 @@ if (isset($_POST['editar'])) {
 
     $post->guardar();
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php");
+    header("Location: " . BASE_PATH . "/api/admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -100,7 +100,7 @@ if (isset($_GET['eliminar'])) {
         $post->eliminar();
     }
 
-    header("Location: /barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php");
+    header("Location: " . BASE_PATH . "/api/admin/GestionesAdmin/GestionBlog.php");
     exit;
 }
 
@@ -170,7 +170,7 @@ $posts = BlogPost::obtenerTodos();
                 </button>
 
                 <?php if ($postEditar): ?>
-                    <a href="/barberia_catracha/api/admin/GestionesAdmin/GestionBlog.php" class="admin-btn-cancelar">Cancelar</a>
+                    <a href="<?= BASE_PATH ?>/api/admin/GestionesAdmin/GestionBlog.php" class="admin-btn-cancelar">Cancelar</a>
                 <?php endif; ?>
 
             </form>

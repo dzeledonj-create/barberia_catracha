@@ -41,7 +41,7 @@
 
         <!-- DERECHA: LOGO -->
         <section class="footer-lado footer-logo">
-            <img src="/barberia_catracha/assets/img/logo.png" alt="logo barberia">
+            <img src="<?= BASE_PATH ?>/assets/img/logo.png" alt="logo barberia">
         </section>
 
     </section>
@@ -52,4 +52,5 @@
     </section>
 
 </footer>
-<script src="/barberia_catracha/assets/script.js"></script>
+<script>window.BASE_PATH = '<?= BASE_PATH ?>';</script>
+<script src="<?= BASE_PATH ?>/assets/script.js"></script>

@@ -47,8 +47,7 @@ $recientesReservas = Reserva::obtenerRecientes(5);
         OneSignalDeferred.push(async function (OneSignal) {
             await OneSignal.init({
                 appId: '<?= htmlspecialchars($oneSignalAppId, ENT_QUOTES) ?>',
-                serviceWorkerPath: '/barberia_catracha/OneSignalSDKWorker.js',
-                allowLocalhostAsSecureOrigin: true,
+                serviceWorkerPath: '<?= BASE_PATH ?>/OneSignalSDKWorker.js',
             });
         });
     </script>

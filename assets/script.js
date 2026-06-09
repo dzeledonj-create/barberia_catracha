@@ -692,7 +692,7 @@ function initEquipoImagePreview() {
         if (hiddenUrl && hiddenUrl.value) {
             preview.src = hiddenUrl.value;
         } else if (!preview.src) {
-            preview.src = '/barberia_catracha/assets/img/default-user.jpg';
+            preview.src = (window.BASE_PATH || '') + '/assets/img/default-user.jpg';
         }
 
         input.addEventListener('change', function() {
@@ -745,7 +745,7 @@ function initEquipoImagePreview() {
 
             btnCancel.addEventListener('click', function() {
                 input.value = '';
-                preview.src = previousSrc || '/barberia_catracha/assets/img/default-user.jpg';
+                preview.src = previousSrc || (window.BASE_PATH || '') + '/assets/img/default-user.jpg';
                 document.body.removeChild(overlay);
                 URL.revokeObjectURL(url);
             });
@@ -761,7 +761,7 @@ function initEquipoImagePreview() {
             const preview = form.querySelector('img.preview-image');
             if (hidden) hidden.value = '1';
             if (fileInput) fileInput.value = '';
-            if (preview) preview.src = '/barberia_catracha/assets/img/default-user.jpg';
+            if (preview) preview.src = (window.BASE_PATH || '') + '/assets/img/default-user.jpg';
             showToast('Foto marcada para eliminar. Pulsa GUARDAR para confirmar.');
         });
     });

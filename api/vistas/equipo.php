@@ -92,7 +92,7 @@ $barberos = Barbero::obtenerActivos();
 
         <!-- Llamada a la acción: botón para ir a la página de reservas -->
         <section class="equipo-cta">
-            <a href="/barberia_catracha/api/vistas/reservas.php" class="btn-reservar-equipo">
+            <a href="<?= BASE_PATH ?>/api/vistas/reservas.php" class="btn-reservar-equipo">
                 ELIGE TU BARBERO Y RESERVA
             </a>
         </section>
