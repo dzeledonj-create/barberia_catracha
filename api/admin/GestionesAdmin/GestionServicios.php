@@ -161,6 +161,7 @@ if (isset($_GET['editar'])) {
 
             <h2>Servicios registrados</h2>
 
+            <div class="table-responsive">
             <table class="admin-table-servicios" style="width: 100%; table-layout: auto;">
                 <thead>
                     <tr>
@@ -189,6 +190,7 @@ if (isset($_GET['editar'])) {
                         <?php endforeach; ?>
                 </tbody>
             </table>
+            </div>
 
         </section>
 

@@ -2743,12 +2743,7 @@ body.admin-panel {
     /* ensure top padding so content is not hidden under the fixed hamburger */
     .admin-main { margin-left: 0 !important; padding-top: 72px; }
 
-    /* Make admin panel boxes scrollable on smaller screens */
-    .admin-panel-box {
-        max-height: calc(100vh - 220px);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+  
 
     /* Tables inside admin panels should scroll horizontally and vertically if needed */
     .admin-panel-box table {
@@ -4601,5 +4596,71 @@ body.modal-abierto {
     body.admin-panel .barbero-card .card-image img,
     body.admin-panel .barbero-card > img {
         height: 280px;
+    }
+}
+
+/* FIX DEFINITIVO SCROLL TABLAS ADMIN */
+@media (max-width: 1024px) {
+    html,
+    body {
+        overflow-x: hidden;
+    }
+
+    .admin-main,
+    .content,
+    .admin-panel-box {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .admin-panel-box:has(table),
+    .table-responsive,
+    .agenda-tabla-wrap,
+    .calendar-scroll {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto !important;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 12px;
+    }
+
+    .admin-table,
+    .admin-table-servicios,
+    .agenda-tabla,
+    .reservas-list-table,
+    .reservas-calendar-table {
+        width: max-content !important;
+        min-width: 850px;
+    }
+
+    .admin-table th,
+    .admin-table td,
+    .admin-table-servicios th,
+    .admin-table-servicios td {
+        white-space: nowrap;
+    }
+}
+
+/* FIX GESTIÓN UBICACIÓN / FORMULARIOS LARGOS ADMIN */
+@media (max-width: 1024px) {
+    .admin-panel-box {
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+
+    .gestion-ubicacion-box {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    .horario-admin-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    .gestion-ubicacion-box input[type="text"],
+    .gestion-ubicacion-box input[type="time"] {
+        width: 100%;
     }
 }

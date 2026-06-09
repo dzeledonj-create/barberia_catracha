@@ -291,7 +291,8 @@ $agendaColores = ['gold', 'azul', 'morado', 'verde'];
                     <div style="margin-bottom:8px; display:flex; gap:8px; align-items:center;">
                         <button type="submit" name="eliminar_seleccionadas" onclick="return confirm('¿Eliminar reservas seleccionadas?')" class="btn btn-danger">Eliminar seleccionadas</button>
                     </div>
-
+                    
+                    <div class="table-responsive">
                     <table class="admin-table">
                         <thead>
                             <tr>
@@ -331,6 +332,7 @@ $agendaColores = ['gold', 'azul', 'morado', 'verde'];
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    </div>
                 </form>
 
             <?php endif; ?>
