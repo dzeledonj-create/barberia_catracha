@@ -39,9 +39,9 @@
 
             <section class="footer-col">
                 <h4>Políticas web</h4>
-                <a href="https://wa.me/34630846042" target="_blank">Aviso legal</a>
-                <a href="https://www.instagram.com/barberia.catracha/" target="_blank">Política de privacidad</a>
-                <a href="https://www.facebook.com/rosvinjesusa/" target="_blank">Política de cookies</a>
+                <a href="/barberia_catracha/api/politicaweb/avisolegal.php">Aviso legal</a>
+                <a href="/barberia_catracha/api/politicaweb/politicaprivacidad.php">Política de privacidad</a>
+                <a href="/barberia_catracha/api/politicaweb/politicacookies.php">Política de cookies</a>
             </section>
 
         </section>

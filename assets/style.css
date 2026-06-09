@@ -4665,3 +4665,119 @@ body.modal-abierto {
         width: 100%;
     }
 }
+
+/* ============================================================
+   PÁGINAS LEGALES
+   ============================================================ */
+
+.legal-page {
+    background: var(--dark-bg);
+    color: var(--white);
+    min-height: 70vh;
+}
+
+.legal-hero {
+    padding: 90px 20px 45px;
+    text-align: center;
+    background:
+        linear-gradient(rgba(0,0,0,0.78), rgba(0,0,0,0.92)),
+        url('img/barberia.png');
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid #1f1f1f;
+}
+
+.legal-hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.legal-hero p {
+    max-width: 700px;
+    margin: 0 auto;
+    color: var(--gray-text);
+    line-height: 1.7;
+}
+
+.legal-content {
+    padding: 70px 20px 90px;
+}
+
+.legal-card {
+    max-width: 950px;
+    margin: 0 auto;
+    background: #111;
+    border: 1px solid #222;
+    border-left: 4px solid var(--gold);
+    padding: 45px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.legal-card h2 {
+    color: var(--gold);
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 34px;
+    margin-bottom: 12px;
+}
+
+.legal-card h2:first-child {
+    margin-top: 0;
+}
+
+.legal-card p {
+    color: #c7c7c7;
+    font-size: 0.98rem;
+    line-height: 1.85;
+    margin-bottom: 16px;
+}
+
+.legal-card strong {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .legal-hero {
+        padding: 70px 16px 35px;
+    }
+
+    .legal-content {
+        padding: 45px 14px 65px;
+    }
+
+    .legal-card {
+        padding: 26px 20px;
+    }
+
+    .legal-card h2 {
+        font-size: 1rem;
+    }
+
+    .legal-card p {
+        font-size: 0.92rem;
+    }
+}
+
+.legal-list {
+    margin: 20px 0;
+    padding-left: 20px;
+}
+
+.legal-list li {
+    color: #c7c7c7;
+    margin-bottom: 10px;
+    line-height: 1.7;
+}
+
+.legal-link {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.legal-link:hover {
+    text-decoration: underline;
+}

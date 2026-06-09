@@ -16,13 +16,13 @@ require_once __DIR__ . '/../Clases/BD.php';
 
         <nav class="nav-menu">
             <ul>
-                <li><a href="index.php">INICIO</a></li>
-                <li><a href="servicios.php">SERVICIOS</a></li>
-                <li><a href="equipo.php">EQUIPO</a></li>
-                <li><a href="galeria.php">GALERÍA</a></li>
-                <li><a href="reseñas.php">RESEÑAS</a></li>
-                <li><a href="ubicacion.php">UBICACIÓN</a></li>
-                <li><a href="blog.php">BLOG</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/index.php">INICIO</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/servicios.php">SERVICIOS</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/equipo.php">EQUIPO</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/galeria.php">GALERÍA</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/reseñas.php">RESEÑAS</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/ubicacion.php">UBICACIÓN</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/blog.php">BLOG</a></li>
             </ul>
         </nav>
 
@@ -39,14 +39,13 @@ require_once __DIR__ . '/../Clases/BD.php';
 
         <nav id="hamburger-menu" class="hamburger-menu" aria-hidden="true">
             <ul>
-                <li><a href="index.php">INICIO</a></li>
-                <li><a href="servicios.php">SERVICIOS</a></li>
-                <li><a href="equipo.php">EQUIPO</a></li>
-                <li><a href="galeria.php">GALERÍA</a></li>
-                <li><a href="reseñas.php">RESEÑAS</a></li>
-                <li><a href="ubicacion.php">UBICACIÓN</a></li>
-                <li><a href="blog.php">BLOG</a></li>
-                <li class="menu-reservas"><a href="reservas.php">RESERVAS</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/index.php">INICIO</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/servicios.php">SERVICIOS</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/equipo.php">EQUIPO</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/galeria.php">GALERÍA</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/reseñas.php">RESEÑAS</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/ubicacion.php">UBICACIÓN</a></li>
+                <li><a href="<?= BASE_PATH ?>/api/vistas/blog.php">BLOG</a></li>
             </ul>
         </nav>
     </section>
