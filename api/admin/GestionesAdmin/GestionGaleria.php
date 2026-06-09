@@ -136,79 +136,78 @@ $sugerencias = MuralSugerencia::obtenerTodos();
 
         <section class="admin-panel-box">
 
-            <form method="POST"
-                  enctype="multipart/form-data"
-                  class="admin-form-galeria">
+            <form method="POST" enctype="multipart/form-data" class="admin-form-galeria">
 
-                <?php if ($sugerenciaEditar): ?>
-
-                    <input type="hidden"
-                           name="sugerencia_id"
-                           value="<?= $sugerenciaEditar->getSugerenciaId() ?>">
-
-                    <input type="hidden"
-                           name="imagen_actual"
-                           value="<?= htmlspecialchars($sugerenciaEditar->getImagenUrl()) ?>">
-
-                <?php endif; ?>
-
-                <input type="text"
-                       name="nombre_corte"
-                       placeholder="Título del corte"
-                       value="<?= $sugerenciaEditar ? htmlspecialchars($sugerenciaEditar->getNombreCorte()) : '' ?>"
-                       required>
-
-                <input type="text"
-                       name="descripcion"
-                       placeholder="Descripción"
-                       value="<?= $sugerenciaEditar ? htmlspecialchars($sugerenciaEditar->getDescripcion()) : '' ?>">
+                <input type="text" name="nombre_corte" placeholder="Título del corte" required>
+                <input type="text" name="descripcion" placeholder="Descripción">
 
                 <select name="estilo">
-
-                    <option value="Fade"
-                        <?= ($sugerenciaEditar && $sugerenciaEditar->getEstilo() === 'Fade') ? 'selected' : '' ?>>
-                        Fades
-                    </option>
-
-                    <option value="Barba"
-                        <?= ($sugerenciaEditar && $sugerenciaEditar->getEstilo() === 'Barba') ? 'selected' : '' ?>>
-                        Barba
-                    </option>
-
-                    <option value="Diseño"
-                        <?= ($sugerenciaEditar && $sugerenciaEditar->getEstilo() === 'Diseño') ? 'selected' : '' ?>>
-                        Diseños
-                    </option>
-
-                    <option value="Tinte"
-                        <?= ($sugerenciaEditar && $sugerenciaEditar->getEstilo() === 'Tinte') ? 'selected' : '' ?>>
-                        Tinte
-                    </option>
-
+                    <option value="Fade">Fades</option>
+                    <option value="Barba">Barba</option>
+                    <option value="Diseño">Diseños</option>
+                    <option value="Tinte">Tinte</option>
                 </select>
 
                 <input type="file" name="imagen">
 
                 <label class="admin-check">
-
-                    <input type="checkbox"
-                           name="activo"
-                        <?= (!$sugerenciaEditar || $sugerenciaEditar->getActivo()) ? 'checked' : '' ?>>
-
+                    <input type="checkbox" name="activo" checked>
                     Visible
-
                 </label>
 
-                <button type="submit"
-                        name="<?= $sugerenciaEditar ? 'editar' : 'crear' ?>">
-
-                    <?= $sugerenciaEditar ? 'Guardar cambios' : 'Añadir imagen' ?>
-
-                </button>
+                <button type="submit" name="crear">Añadir imagen</button>
 
             </form>
 
         </section>
+
+        <?php if ($sugerenciaEditar): ?>
+        <div class="modal-overlay editar-modal-overlay">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h2>Editar imagen</h2>
+                    <a href="GestionGaleria.php" class="modal-close" aria-label="Cerrar">&times;</a>
+                </div>
+                <form method="POST" enctype="multipart/form-data" class="edit-form">
+                    <input type="hidden" name="sugerencia_id" value="<?= $sugerenciaEditar->getSugerenciaId() ?>">
+                    <input type="hidden" name="imagen_actual" value="<?= htmlspecialchars($sugerenciaEditar->getImagenUrl()) ?>">
+
+                    <label>Título del corte</label>
+                    <input type="text" name="nombre_corte" value="<?= htmlspecialchars($sugerenciaEditar->getNombreCorte()) ?>" required>
+
+                    <label>Descripción</label>
+                    <input type="text" name="descripcion" value="<?= htmlspecialchars($sugerenciaEditar->getDescripcion()) ?>">
+
+                    <label>Estilo</label>
+                    <select name="estilo">
+                        <option value="Fade"    <?= $sugerenciaEditar->getEstilo() === 'Fade'   ? 'selected' : '' ?>>Fades</option>
+                        <option value="Barba"   <?= $sugerenciaEditar->getEstilo() === 'Barba'  ? 'selected' : '' ?>>Barba</option>
+                        <option value="Diseño"  <?= $sugerenciaEditar->getEstilo() === 'Diseño' ? 'selected' : '' ?>>Diseños</option>
+                        <option value="Tinte"   <?= $sugerenciaEditar->getEstilo() === 'Tinte'  ? 'selected' : '' ?>>Tinte</option>
+                    </select>
+
+                    <label>Nueva imagen (opcional)</label>
+                    <input type="file" name="imagen">
+
+                    <?php if ($sugerenciaEditar->getImagenUrl()): ?>
+                        <img src="<?= htmlspecialchars($sugerenciaEditar->getImagenUrl()) ?>"
+                             alt="Imagen actual"
+                             style="max-width:120px; margin-top:8px; display:block; border-radius:6px;">
+                    <?php endif; ?>
+
+                    <label class="admin-check" style="margin-top:12px;">
+                        <input type="checkbox" name="activo" <?= $sugerenciaEditar->getActivo() ? 'checked' : '' ?>>
+                        Visible
+                    </label>
+
+                    <section class="form-buttons">
+                        <button type="submit" name="editar" class="btn-save">GUARDAR</button>
+                        <a href="GestionGaleria.php" class="btn-cancel">CANCELAR</a>
+                    </section>
+                </form>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <section class="galeria-admin-grid">
 

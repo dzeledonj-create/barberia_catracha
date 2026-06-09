@@ -137,45 +137,49 @@ $posts = BlogPost::obtenerTodos();
 
         <section class="admin-panel-box">
 
-            <h2><?= $postEditar ? 'Editar publicación' : 'Nueva publicación' ?></h2>
+            <h2>Nueva publicación</h2>
 
             <form method="POST" class="admin-form-blog">
-
-                <?php if ($postEditar): ?>
-                    <input type="hidden" name="post_id" value="<?= $postEditar->getPostId() ?>">
-                    <input type="hidden" name="instagram_embed_actual" value="<?= htmlspecialchars($postEditar->getInstagramEmbed()) ?>">
-                <?php endif; ?>
-
-                <input type="text"
-                       name="titulo"
-                       placeholder="Título"
-                       value="<?= $postEditar ? htmlspecialchars($postEditar->getTitulo()) : '' ?>"
-                       required>
-
-                <input type="text"
-                       name="etiquetas"
-                       placeholder="Etiqueta"
-                       value="<?= $postEditar ? htmlspecialchars($postEditar->getEtiquetas()) : '' ?>">
-
-                <input type="text"
-                       name="instagram_url"
-                       placeholder="URL del reel de Instagram">
-
-                <textarea name="contenido"
-                          placeholder="Contenido"
-                          required><?= $postEditar ? htmlspecialchars($postEditar->getContenido()) : '' ?></textarea>
-
-                <button type="submit" name="<?= $postEditar ? 'editar' : 'crear' ?>">
-                    <?= $postEditar ? 'Guardar cambios' : 'Añadir reel' ?>
-                </button>
-
-                <?php if ($postEditar): ?>
-                    <a href="<?= BASE_PATH ?>/api/admin/GestionesAdmin/GestionBlog.php" class="admin-btn-cancelar">Cancelar</a>
-                <?php endif; ?>
-
+                <input type="text" name="titulo" placeholder="Título" required>
+                <input type="text" name="etiquetas" placeholder="Etiqueta">
+                <input type="text" name="instagram_url" placeholder="URL del reel de Instagram">
+                <textarea name="contenido" placeholder="Contenido" required></textarea>
+                <button type="submit" name="crear">Añadir reel</button>
             </form>
 
         </section>
+
+        <?php if ($postEditar): ?>
+        <div class="modal-overlay editar-modal-overlay">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h2>Editar publicación</h2>
+                    <a href="<?= BASE_PATH ?>/api/admin/GestionesAdmin/GestionBlog.php" class="modal-close" aria-label="Cerrar">&times;</a>
+                </div>
+                <form method="POST" class="edit-form">
+                    <input type="hidden" name="post_id" value="<?= $postEditar->getPostId() ?>">
+                    <input type="hidden" name="instagram_embed_actual" value="<?= htmlspecialchars($postEditar->getInstagramEmbed()) ?>">
+
+                    <label>Título</label>
+                    <input type="text" name="titulo" value="<?= htmlspecialchars($postEditar->getTitulo()) ?>" required>
+
+                    <label>Etiqueta</label>
+                    <input type="text" name="etiquetas" value="<?= htmlspecialchars($postEditar->getEtiquetas()) ?>">
+
+                    <label>Nueva URL de reel (opcional, reemplaza el actual)</label>
+                    <input type="text" name="instagram_url" placeholder="URL del reel de Instagram">
+
+                    <label>Contenido</label>
+                    <textarea name="contenido" required><?= htmlspecialchars($postEditar->getContenido()) ?></textarea>
+
+                    <section class="form-buttons">
+                        <button type="submit" name="editar" class="btn-save">GUARDAR</button>
+                        <a href="<?= BASE_PATH ?>/api/admin/GestionesAdmin/GestionBlog.php" class="btn-cancel">CANCELAR</a>
+                    </section>
+                </form>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <section class="blog-admin-grid">
 

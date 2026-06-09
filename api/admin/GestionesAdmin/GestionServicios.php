@@ -96,66 +96,54 @@ if (isset($_GET['editar'])) {
 
         <section class="admin-panel-box">
 
-            <h2>
-                <?= $servicioEditar ? 'Editar servicio' : 'Añadir servicio' ?>
-            </h2>
+            <h2>Añadir servicio</h2>
 
             <form method="POST" class="admin-form-servicios">
 
-                <?php if ($servicioEditar): ?>
-                    <input type="hidden" name="servicio_id" value="<?= $servicioEditar->getServicioId() ?>">
-                <?php endif; ?>
-
-                <input 
-                    type="text" 
-                    name="nombre" 
-                    placeholder="Nombre del servicio"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getNombre()) : '' ?>"
-                    required
-                >
-
-                <input 
-                    type="text" 
-                    name="descripcion" 
-                    placeholder="Descripción"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getDescripcion()) : '' ?>"
-                >
-
-                <input 
-                    type="number" 
-                    step="0.01" 
-                    name="precio" 
-                    placeholder="Precio"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getPrecio()) : '' ?>"
-                    required
-                >
-
-                <input 
-                    type="number" 
-                    name="duracion_minutos" 
-                    placeholder="Duración en minutos"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getDuracionMinutos()) : '' ?>"
-                    required
-                >
-
-                <input 
-                    type="text" 
-                    name="categoria" 
-                    placeholder="Categoría"
-                    value="<?= $servicioEditar ? htmlspecialchars($servicioEditar->getCategoria()) : '' ?>"
-                    required
-                >
-
-                <?php if ($servicioEditar): ?>
-                    <button type="submit" name="editar">Guardar cambios</button>
-                    <a href="<?= BASE_PATH ?>/api/admin/GestionesAdmin/GestionServicios.php" class="admin-btn-cancelar">Cancelar</a>
-                <?php else: ?>
-                    <button type="submit" name="crear">Añadir servicio</button>
-                <?php endif; ?>
+                <input type="text" name="nombre" placeholder="Nombre del servicio" required>
+                <input type="text" name="descripcion" placeholder="Descripción">
+                <input type="number" step="0.01" name="precio" placeholder="Precio" required>
+                <input type="number" name="duracion_minutos" placeholder="Duración en minutos" required>
+                <input type="text" name="categoria" placeholder="Categoría" required>
+                <button type="submit" name="crear">Añadir servicio</button>
 
             </form>
 
         </section>
+
+        <?php if ($servicioEditar): ?>
+        <div class="modal-overlay editar-modal-overlay">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h2>Editar servicio</h2>
+                    <a href="<?= BASE_PATH ?>/api/admin/GestionesAdmin/GestionServicios.php" class="modal-close" aria-label="Cerrar">&times;</a>
+                </div>
+                <form method="POST" class="edit-form">
+                    <input type="hidden" name="servicio_id" value="<?= $servicioEditar->getServicioId() ?>">
+
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" value="<?= htmlspecialchars($servicioEditar->getNombre()) ?>" required>
+
+                    <label>Descripción</label>
+                    <input type="text" name="descripcion" value="<?= htmlspecialchars($servicioEditar->getDescripcion()) ?>">
+
+                    <label>Precio (€)</label>
+                    <input type="number" step="0.01" name="precio" value="<?= htmlspecialchars($servicioEditar->getPrecio()) ?>" required>
+
+                    <label>Duración (minutos)</label>
+                    <input type="number" name="duracion_minutos" value="<?= htmlspecialchars($servicioEditar->getDuracionMinutos()) ?>" required>
+
+                    <label>Categoría</label>
+                    <input type="text" name="categoria" value="<?= htmlspecialchars($servicioEditar->getCategoria()) ?>" required>
+
+                    <section class="form-buttons">
+                        <button type="submit" name="editar" class="btn-save">GUARDAR</button>
+                        <a href="<?= BASE_PATH ?>/api/admin/GestionesAdmin/GestionServicios.php" class="btn-cancel">CANCELAR</a>
+                    </section>
+                </form>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <section class="admin-panel-box">
 
