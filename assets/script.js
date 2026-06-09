@@ -485,6 +485,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (pasoActual === 4 && typeof generarResumenTicket === 'function') {
                     generarResumenTicket();
                 }
+                // Al entrar en el paso 5, resetear siempre el checkbox (el botón se actualiza automáticamente vía CSS :has)
+                if (pasoActual === 4) {
+                    const checkPolitica = document.getElementById('acepto-politica');
+                    if (checkPolitica) checkPolitica.checked = false;
+                }
             }
         });
     });
@@ -497,6 +502,17 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // POLÍTICA DE PRIVACIDAD: bloquea el envío si el checkbox no está marcado (el estilo del botón lo controla el CSS :has)
+    const checkPolitica = document.getElementById('acepto-politica');
+    if (checkPolitica) {
+        document.getElementById('form-reserva')?.addEventListener('submit', function (e) {
+            if (!checkPolitica.checked) {
+                e.preventDefault();
+                checkPolitica.focus();
+            }
+        });
+    }
 
     // FILTRO POR CATEGORÍAS (UI de Servicios: Cortes, Barba, Tintes, etc.)
     const botonesFiltro = document.querySelectorAll('.filtro-btn');
@@ -1060,6 +1076,42 @@ function initRecuperarPassword() {
         }
     });
 }
+
+// ==========================================================================
+// BANNER DE CONSENTIMIENTO DE COOKIES
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', function () {
+    const banner = document.getElementById('cookie-banner');
+    if (!banner) return;
+
+    const btnTodas = document.getElementById('cookie-permitir-todas');
+    const btnNecesarias = document.getElementById('cookie-solo-necesarias');
+    const btnBloquear = document.getElementById('cookie-bloquear-todas');
+
+    // Si el usuario aún no ha elegido, mostramos el banner
+    if (!localStorage.getItem('barberia_cookies')) {
+        banner.classList.add('activo');
+    }
+
+    btnTodas.addEventListener('click', function () {
+        localStorage.setItem('barberia_cookies', 'all');
+        banner.classList.remove('activo');
+        console.log('Cookies: se activan todas (necesarias, análisis y terceros).');
+    });
+
+    btnNecesarias.addEventListener('click', function () {
+        localStorage.setItem('barberia_cookies', 'necessary');
+        banner.classList.remove('activo');
+        console.log('Cookies: se permiten las necesarias para reservas, se bloquean análisis y terceros.');
+    });
+
+    btnBloquear.addEventListener('click', function () {
+        localStorage.setItem('barberia_cookies', 'blocked');
+        banner.classList.remove('activo');
+        // ADVERTENCIA: bloquear todas las cookies podría afectar al funcionamiento de las reservas online
+        console.log('Cookies: se bloquean todas (incluidas las necesarias para reservas).');
+    });
+});
 
 // ==========================================================================
 // 7. CIERRE DEFENSIVO: DISPARADOR MANUAL DE DOM READY

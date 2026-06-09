@@ -59,5 +59,25 @@
     </section>
 
 </footer>
+
+<!-- BANNER DE CONSENTIMIENTO DE COOKIES -->
+<div id="cookie-banner" class="cookie-banner">
+    <div class="cookie-banner-texto">
+        <h4>Uso de cookies</h4>
+        <p>
+            Utilizamos cookies técnicas necesarias para el funcionamiento de las reservas online,
+            cookies de análisis para mejorar tu experiencia, y cookies de terceros
+            (Google Maps, Instagram, Google Reviews) para mostrar contenido externo.
+            Puedes consultar más información en nuestra
+            <a href="<?= BASE_PATH ?>/api/politicaweb/politicacookies.php" target="_blank">Política de Cookies</a>.
+        </p>
+    </div>
+    <div class="cookie-banner-botones">
+        <button type="button" id="cookie-permitir-todas" class="cookie-btn cookie-btn-dorado">Permitir todas</button>
+        <button type="button" id="cookie-solo-necesarias" class="cookie-btn cookie-btn-borde">Solo necesarias</button>
+        <button type="button" id="cookie-bloquear-todas" class="cookie-btn cookie-btn-borde">Bloquear todas</button>
+    </div>
+</div>
+
 <script>window.BASE_PATH = '<?= BASE_PATH ?>';</script>
 <script src="<?= BASE_PATH ?>/assets/script.js"></script>

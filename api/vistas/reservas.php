@@ -266,9 +266,20 @@ $reservasOcupadas = $stmtOcupadas->fetchAll(PDO::FETCH_ASSOC);
                         <div class="ticket-line total"><strong>Precio total:</strong> <span id="resumen-precio">-</span></div>
                     </div>
                 </div>
+                <div class="reserva-politica">
+                    <label class="reserva-politica-label">
+                        <input type="checkbox" id="acepto-politica" required>
+                        <span>He leído y acepto la
+                            <a href="<?= BASE_PATH ?>/api/politicaweb/politicaprivacidad.php" target="_blank" class="reserva-politica-link">
+                                Política de Privacidad
+                            </a>
+                            para el tratamiento de mis datos personales.
+                        </span>
+                    </label>
+                </div>
                 <div class="nav-buttons">
                     <button type="button" class="btn-atras">Atrás</button>
-                    <button type="submit" class="btn-confirmar">Confirmar Reserva</button>
+                    <button type="submit" class="btn-confirmar" id="btn-confirmar-reserva">Confirmar Reserva</button>
                 </div>
             </div>
 
