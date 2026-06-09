@@ -4,13 +4,15 @@ require_once __DIR__ . '/../Clases/BD.php';
 
 <header class="main-header">
     <section class="container">
-        <section class="icon">
-            <img src="../../assets/img/logo.png" alt="logo barberia">
-        </section>
-        <section class="logo">
-            <span class="text-white">BARBERÍA</span> 
-            <span class="text-gold">CATRACHA</span>
-        </section>
+        <a href="<?= BASE_PATH ?>/api/vistas/index.php" class="icon">
+            <section class="icon">
+                <img src="../../assets/img/logo.png" alt="logo barberia">
+            </section>
+            <section class="logo">
+                <span class="text-white">BARBERÍA</span>
+                <span class="text-gold">CATRACHA</span>
+            </section>
+        </a>
 
         <nav class="nav-menu">
             <ul>
