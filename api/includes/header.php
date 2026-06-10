@@ -27,7 +27,7 @@ require_once __DIR__ . '/../Clases/BD.php';
         </nav>
 
         <section class="cta">
-            <a href="reservas.php" class="btn-reserve">RESERVAR</a>
+            <a href="<?= BASE_PATH ?>/api/vistas/reservas.php" class="btn-reserve">RESERVAR</a>
         </section>
         
         <!-- Hamburger button for mobile menu -->
